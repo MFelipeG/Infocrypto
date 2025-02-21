@@ -5,89 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CriptoNews - Últimas Notícias e Preços</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #1e1e2f;
-      color: #ffffff;
-    }
-
-    header {
-      background: linear-gradient(90deg, #09eab4, #2c2443);
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2.5em;
-    }
-
-    header p {
-      font-size: 1em;
-    }
-
-    .prices-container,
-    .news-container {
-      padding: 20px;
-    }
-
-    .prices-container {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
-
-    .price-card {
-      background-color: #09eab4;
-      padding: 15px;
-      border-radius: 10px;
-      color: #000000;
-      text-align: center;
-    }
-
-    .news-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-
-    .news-item {
-      background-color: #2c2443;
-      border-radius: 10px;
-      overflow: hidden;
-      text-align: center;
-    }
-
-    .news-item img {
-      width: 100%;
-      height: auto;
-    }
-
-    .news-item h3 {
-      padding: 10px;
-      font-size: 1.2em;
-    }
-
-    .news-item p {
-      padding: 10px;
-      font-size: 0.9em;
-    }
-
-    footer {
-      background-color: #2c2443;
-      color: white;
-      text-align: center;
-      padding: 10px;
-    }
+    /* ... (seu CSS) ... */
   </style>
 </head>
 <body>
   <header>
     <h1>CriptoNews</h1>
-    <p>Preços ao vivo, notícias e análises do mercado de criptomoedas!</p>
+    <p>Preços ao vivo e notícias!</p>
   </header>
 
   <div class="prices-container" id="prices-container">
@@ -123,7 +47,10 @@
             if (data.status === 'ok') {
                 const newsContainer = document.getElementById('news-container');
                 newsContainer.innerHTML = data.items.map(item => {
-                    const imageUrl = item.enclosure && item.enclosure.link ? item.enclosure.link : '';
+                    let imageUrl = '';
+                    if (item.enclosure && item.enclosure.link) {
+                        imageUrl = item.enclosure.link; // Pega a primeira imagem
+                    }
 
                     return `
                         <div class="news-item">
