@@ -8,7 +8,87 @@
   <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial"></script>
   <style>
-    /* ... (seu CSS) ... */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #1e1e2f;
+      color: #ffffff;
+    }
+
+    header {
+      background: linear-gradient(90deg, #09eab4, #2c2443);
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+
+    header p {
+      font-size: 1em;
+    }
+
+    .prices-container,
+    .news-container {
+      padding: 20px;
+    }
+
+    .prices-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .price-card {
+      background-color: #09eab4;
+      padding: 15px;
+      border-radius: 10px;
+      color: #000000;
+      text-align: center;
+    }
+
+    .chart-container {
+      padding: 20px;
+    }
+
+    .news-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .news-item {
+      background-color: #2c2443;
+      border-radius: 10px;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .news-item img {
+      width: 100%;
+      height: auto;
+    }
+
+    .news-item h3 {
+      padding: 10px;
+      font-size: 1.2em;
+    }
+
+    .news-item p {
+      padding: 10px;
+      font-size: 0.9em;
+    }
+
+    footer {
+      background-color: #2c2443;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
   </style>
 </head>
 <body>
@@ -43,7 +123,21 @@
   </footer>
 
 <script>
-    // ... (fetchCryptoPrices, fetchRSSFeeds) ...
+    async function fetchCryptoPrices() {
+        try {
+            const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
+            const data = await response.json();
+            
+            document.getElementById('prices-container').innerHTML = `
+                <div class="price-card"><h3>Bitcoin (BTC)</h3><p>Preço Atual: $${data.bitcoin.usd}</p></div>
+                <div class="price-card"><h3>Ethereum (ETH)</h3><p>Preço Atual: $${data.ethereum.usd}</p></div>
+                <div class="price-card"><h3>Solana (SOL)</h3><p>Preço Atual: $${data.solana.usd}</p></div>`;
+        } catch (error) {
+            console.error('Erro ao buscar preços:', error);
+        }
+    }
+
+    let chart;
 
     async function fetchCandleData(timeframe, crypto) {
        try {
@@ -101,7 +195,28 @@
         renderChart(timeframe, crypto);
     }
 
-    // ... (inicialização) ...
-</script>
-</body>
-</html>
+    async function fetchRSSFeeds() {
+        try {
+            const response = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://cointelegraph.com/rss');
+            const data = await response.json();
+
+            if (data.status === 'ok') {
+                const newsContainer = document.getElementById('news-container');
+                newsContainer.innerHTML = data.items.map(item => {
+                    const imageUrl = item.enclosure && item.enclosure.link ? item.enclosure.link : '';
+
+                    return `
+                        <div class="news-item">
+                            ${imageUrl ? `<img src="${imageUrl}" alt="${item.title}">` : ''}
+                            <h3>${item.title}</h3>
+                            <p>${item.description}</p>
+                            <a href="${item.link}" target="_blank">Leia mais</a>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                console.error('Erro ao buscar feeds RSS:', data.message);
+            }
+        } catch (error) {
+            console.error('Erro ao buscar feeds RSS:',
+                          
