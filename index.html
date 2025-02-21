@@ -96,12 +96,9 @@
     <p>Preços ao vivo, notícias e análises do mercado de criptomoedas!</p>
   </header>
 
-  <!-- Preços ao Vivo -->
   <div class="prices-container" id="prices-container">
-    <!-- Preços serão carregados aqui -->
-  </div>
+    </div>
 
-  <!-- Gráfico de Velas -->
   <div class="chart-container">
     <h2 style="text-align:center;">Gráfico de Velas</h2>
     <select id="timeframe" onchange="updateChart()" style="margin-bottom:10px;">
@@ -112,12 +109,9 @@
     <canvas id="candlestickChart" width="400" height="200"></canvas>
   </div>
 
-  <!-- Notícias -->
   <div class="news-container" id="news-container">
-    <!-- Notícias serão carregadas aqui -->
-  </div>
+    </div>
 
-  <!-- Rodapé -->
   <footer>
     Desenvolvido por Marlon Felipe
   </footer>
@@ -125,43 +119,99 @@
 <script>
 // Função para buscar preços ao vivo
 async function fetchCryptoPrices() {
-    const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
-    const data = await response.json();
-    
-    document.getElementById('prices-container').innerHTML = `
-        <div class="price-card"><h3>Bitcoin (BTC)</h3><p>Preço Atual: $${data.bitcoin.usd}</p></div>
-        <div class="price-card"><h3>Ethereum (ETH)</h3><p>Preço Atual: $${data.ethereum.usd}</p></div>
-        <div class="price-card"><h3>Solana (SOL)</h3><p>Preço Atual: $${data.solana.usd}</p></div>`;
+    try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
+        const data = await response.json();
+        
+        document.getElementById('prices-container').innerHTML = `
+            <div class="price-card"><h3>Bitcoin (BTC)</h3><p>Preço Atual: $${data.bitcoin.usd}</p></div>
+            <div class="price-card"><h3>Ethereum (ETH)</h3><p>Preço Atual: $${data.ethereum.usd}</p></div>
+            <div class="price-card"><h3>Solana (SOL)</h3><p>Preço Atual: $${data.solana.usd}</p></div>`;
+    } catch (error) {
+        console.error('Erro ao buscar preços:', error);
+    }
 }
 
 // Função para buscar dados históricos e renderizar gráfico de velas
 let chart;
 
 async function fetchCandleData(timeframe) {
-    const response = await fetch(`https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${timeframe}`);
-    const data = await response.json();
+    try {
+        const response = await fetch(`https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${timeframe}`);
+        const data = await response.json();
 
-    return data.prices.map(([timestamp, price]) => ({
-        x: new Date(timestamp),
-        y: price
-    }));
+        return data.prices.map(([timestamp, price]) => ({
+            x: new Date(timestamp),
+            y: price
+        }));
+    } catch (error) {
+        console.error('Erro ao buscar dados do gráfico:', error);
+        return [];
+    }
 }
 
 async function renderChart(timeframe = '1') {
     const prices = await fetchCandleData(timeframe);
-    
     const ctx = document.getElementById('candlestickChart').getContext('2d');
     
     if (chart) chart.destroy(); // Remove gráfico anterior
     
-   chart=new Chart(ctx,{type:"line",data:{labels:["BTC"],}});
+   const data = {
+            labels: prices.map(p => p.x),
+            datasets: [{
+                label: 'Bitcoin Price (USD)',
+                data: prices.map(p => ({ x: p.x, y: p.y })),
+                borderColor: 'rgb(75, 192, 192)',
+                tension: 0.1,
+                pointRadius: 0,
+            }]
+        };
+
+        chart = new Chart(ctx, {
+            type: 'line', // Change to 'candlestick' if you have OHLC data
+            data: data,
+            options: {
+                scales: {
+                    x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        }
+                    },
+                    y: {
+                        beginAtZero: false
+                    }
+                }
+            }
+        });
 }
 
 // Atualiza o gráfico ao mudar período
 function updateChart() {renderChart(document.getElementById("timeframe").value);}
 
 // Função para buscar notícias usando RSS Feeds
-async function fetchRSSFeeds() {try{const feeds=[];}catch{}}
+async function fetchRSSFeeds() {
+    try {
+        const response = await fetch('https://api.rss2json.com/v1/api.json?rss_url=https://cointelegraph.com/rss');
+        const data = await response.json();
+
+        if (data.status === 'ok') {
+            const newsContainer = document.getElementById('news-container');
+            newsContainer.innerHTML = data.items.map(item => `
+                <div class="news-item">
+                    <img src="${item.enclosure.link}" alt="${item.title}">
+                    <h3>${item.title}</h3>
+                    <p>${item.description}</p>
+                    <a href="${item.link}" target="_blank">Leia mais</a>
+                </div>
+            `).join('');
+        } else {
+            console.error('Erro ao buscar feeds RSS:', data.message);
+        }
+    } catch (error) {
+        console.error('Erro ao buscar feeds RSS:', error);
+    }
+}
 
 // Inicialização
 fetchCryptoPrices();
