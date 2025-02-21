@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CriptoNews - Últimas Notícias e Preços</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>CriptoNews</h1>
+    <p>Preços ao vivo e as últimas notícias sobre criptomoedas!</p>
+  </header>
+
+  <!-- Seção de Preços -->
+  <div class="prices-container" id="prices-container">
+    <!-- Preços serão carregados aqui -->
+  </div>
+
+  <!-- Gráfico de Preços -->
+  <div class="chart-container">
+    <h2>Gráfico de Preços (Últimas 24h)</h2>
+    <canvas id="priceChart" width="400" height="200"></canvas>
+  </div>
+
+  <!-- Conversor de Moedas -->
+  <div class="converter">
+    <h2>Conversor de Moedas</h2>
+    <input type="number" id="cryptoAmount" placeholder="Quantidade (ex.: 1)">
+    <select id="cryptoSelect">
+      <option value="bitcoin">Bitcoin (BTC)</option>
+      <option value="ethereum">Ethereum (ETH)</option>
+      <option value="solana">Solana (SOL)</option>
+    </select>
+    <button onclick="convertCrypto()">Converter</button>
+    <p id="conversionResult"></p>
+  </div>
+
+  <!-- Indicadores de Mercado -->
+  <div class="market-indicators" id="market-indicators">
+    <!-- Indicadores serão carregados aqui -->
+  </div>
+
+  <!-- Notícias -->
+  <div class="news-container" id="news-container">
+    <!-- Notícias serão carregadas aqui -->
+  </div>
+
+  <!-- Filtro de Notícias -->
+  <div class="news-filter">
+    <input type="text" id="filterInput" placeholder="Filtrar por palavra-chave">
+    <button onclick="filterNews()">Filtrar Notícias</button>
+  </div>
+
+  <!-- Rodapé -->
+  <footer>
+    <p>Desenvolvido por Marlon Felipe | Dados fornecidos pela CoinGecko e CoinDesk.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="scripts.js" defer></script>
+</body>
+</html>
