@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CriptoNews - Últimas Notícias e Preços</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -105,10 +105,9 @@
   <div class="chart-container">
     <h2 style="text-align:center;">Gráfico de Velas</h2>
     <select id="timeframe" onchange="updateChart()" style="margin-bottom:10px;">
-      <option value="1">1 Hora</option>
-      <option value="4">4 Horas</option>
-      <option value="24">1 Dia</option>
-      <option value="7">1 Semana</option>
+      <option value="1">Última Hora</option>
+      <option value="24">Último Dia</option>
+      <option value="7">Última Semana</option>
     </select>
     <canvas id="candlestickChart" width="400" height="200"></canvas>
   </div>
@@ -155,19 +154,14 @@ async function renderChart(timeframe = '1') {
     
     if (chart) chart.destroy(); // Remove gráfico anterior
     
-    chart = new Chart(ctx, {
-        type:'line',
-        data:{datasets:[{label:"BTC/USD",data:[...prices]}]}
-});
+   chart=new Chart(ctx,{type:"line",data:{labels:["BTC"],}});
 }
 
 // Atualiza o gráfico ao mudar período
 function updateChart() {renderChart(document.getElementById("timeframe").value);}
 
 // Função para buscar notícias usando RSS Feeds
-async function fetchRSSFeeds() {try{
-const feeds=["https://www.coindesk.com/rss","https://cointelegraph.com/rss"];
-const news=[];feeds.forEach(feed=>{});}}catch{}
+async function fetchRSSFeeds() {try{const feeds=[];}catch{}}
 
 // Inicialização
 fetchCryptoPrices();
