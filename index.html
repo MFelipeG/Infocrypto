@@ -182,6 +182,14 @@
 
           let description = article.description || 'Descrição não disponível.';
 
+          // Remove imagens duplicadas
+          let uniqueImages = new Set();
+          if (imageUrl && !uniqueImages.has(imageUrl)) {
+              uniqueImages.add(imageUrl);
+          } else {
+              imageUrl = 'https://via.placeholder.com/300x200';
+          }
+
           return `
             <div class="news-item">
               <img src="${imageUrl}" alt="Imagem da notícia">
