@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,112 +10,98 @@
       padding: 0;
       background-color: #121212;
       color: #ffffff;
-    }
+    }header {
+  background: linear-gradient(90deg, #50fa7b, #6272a4);
+  padding: 20px;
+  text-align: center;
+}
 
-    header {
-      background: linear-gradient(90deg, #50fa7b, #6272a4);
-      padding: 20px;
-      text-align: center;
-    }
+header h1 {
+  margin: 0;
+  font-size: 2.5em;
+  color: #121212;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 2.5em;
-      color: #121212;
-    }
+header p {
+  font-size: 1em;
+  color: #f8f8f8;
+}
 
-    header p {
-      font-size: 1em;
-      color: #f8f8f8;
-    }
+.prices-container,
+.news-container {
+  padding: 20px;
+}
 
-    .prices-container,
-    .news-container {
-      padding: 20px;
-    }
+.prices-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
 
-    .prices-container {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
+.price-card {
+  background-color: #1e1e2f;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+}
 
-    .price-card {
-      background-color: #1e1e2f;
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-    }
+.price-card h2 {
+  margin-bottom: 10px;
+  color: #50fa7b;
+}
 
-    .price-card h2 {
-      margin-bottom: 10px;
-      color: #50fa7b;
-    }
+.news-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
 
-    .price-card p {
-      color: #f8f8f8;
-    }
+.news-item {
+  background-color: #1e1e2f;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
 
-    .news-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
+.news-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
 
-    .news-item {
-      background-color: #1e1e2f;
-      border-radius: 10px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+.news-item h3 {
+  padding: 10px;
+}
 
-    .news-item img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-    }
+.news-item p {
+  padding: 10px;
+  flex-grow: 1;
+}
 
-    .news-item h3 {
-      padding: 10px;
-    }
+footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #282a36;
+  color: #6272a4;
+}
 
-    .news-item p {
-      padding: 10px;
-      flex-grow: 1;
-    }
+@media (max-width: 768px) {
+  .news-container {
+    grid-template-columns: 1fr;
+  }
+}
 
-    footer {
-      text-align: center;
-      padding: 10px;
-      background-color: #282a36;
-      color: #6272a4;
-    }
-
-    @media (max-width: 768px) {
-      .news-container {
-        grid-template-columns: 1fr;
-      }
-    }
   </style>
 </head>
 <body>
   <header>
     <h1>CriptoNews</h1>
     <p>Preços ao vivo e as últimas notícias sobre criptomoedas!</p>
-  </header>
-
-  <div class="prices-container" id="prices-container">
-    </div>
-
-  <div class="news-container" id="news-container">
-    </div>
-
-  <footer>
+  </header>  <div class="prices-container" id="prices-container"></div>
+  <div class="news-container" id="news-container"></div>  <footer>
     <p>Desenvolvido por: Marlon Felipe | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.</p>
-  </footer>
-
-  <script>
+  </footer>  <script>
     const pricesContainer = document.getElementById('prices-container');
     const newsContainer = document.getElementById('news-container');
 
@@ -138,7 +123,6 @@
             <h2>Solana (SOL)</h2>
             <p>Preço Atual: $${data.solana.usd}</p>
           </div>`;
-        
       } catch (error) {
         console.error('Erro ao buscar preços:', error);
         pricesContainer.innerHTML = '<p>Erro ao carregar preços. Tente novamente mais tarde.</p>';
@@ -170,26 +154,9 @@
         allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
 
         newsContainer.innerHTML = allNews.slice(0, 10).map(article => {
-          let imageUrl = '';
-
-          if (article.enclosure && article.enclosure.link) {
-              imageUrl = article.enclosure.link;
-          } else if (article.media && article.media.content && article.media.content.length > 0) {
-              imageUrl = article.media.content[0].url;
-          } else {
-              imageUrl = 'https://via.placeholder.com/300x200';
-          }
-
-          let description = article.description || 'Descrição não disponível.';
-
-          // Remove imagens duplicadas
-          let uniqueImages = new Set();
-          if (imageUrl && !uniqueImages.has(imageUrl)) {
-              uniqueImages.add(imageUrl);
-          } else {
-              imageUrl = 'https://via.placeholder.com/300x200';
-          }
-
+          let imageUrl = article.enclosure?.link || article.thumbnail || 'https://via.placeholder.com/300x200';
+          let description = article.description?.replace(/<img[^>]*>/g, '') || 'Descrição não disponível.';
+          
           return `
             <div class="news-item">
               <img src="${imageUrl}" alt="Imagem da notícia">
@@ -198,7 +165,6 @@
               <a href="${article.link}" target="_blank">Leia mais</a>
             </div>`;
         }).join('');
-        
       } catch (error) {
         console.error('Erro ao carregar os feeds RSS:', error);
         newsContainer.innerHTML = '<p>Erro ao carregar as notícias. Tente novamente mais tarde.</p>';
@@ -210,6 +176,5 @@
 
     setInterval(fetchCryptoPrices, 300000);
     setInterval(fetchRSSFeeds, 300000);
-  </script>
-</body>
+  </script></body>
 </html>
