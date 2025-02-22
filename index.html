@@ -3,9 +3,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CriptoNews - Últimas Notícias e Preços</title>
-  <meta property="og:title" content="CriptoNews - Últimas Notícias e Preços">
-  <meta property="og:description" content="Preços ao vivo e as últimas notícias sobre criptomoedas!">
-  <meta property="og:image" content="https://via.placeholder.com/300x200">
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -19,8 +16,13 @@
   text-align: center;
 }
 
-.prices-container,
-.news-container {
+header h1 {
+  margin: 0;
+  font-size: 2.5em;
+  color: #121212;
+}
+
+.prices-container, .news-container {
   padding: 20px;
 }
 
@@ -35,11 +37,7 @@
   padding: 15px;
   border-radius: 10px;
   text-align: center;
-  transition: transform 0.3s ease-in-out;
-}
-
-.price-card:hover {
-  transform: scale(1.05);
+  color: #50fa7b;
 }
 
 .news-container {
@@ -60,7 +58,6 @@
   width: 100%;
   height: auto;
   object-fit: cover;
-  loading: lazy;
 }
 
 footer {
@@ -80,29 +77,19 @@ footer {
   <div class="news-container" id="news-container"></div>  <footer>
     <p>Desenvolvido por: Marlon Felipe | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.</p>
   </footer>  <script>
-    const pricesContainer = document.getElementById('prices-container');
-    const newsContainer = document.getElementById('news-container');
-
     async function fetchCryptoPrices() {
       try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
         const data = await response.json();
-        localStorage.setItem('cryptoPrices', JSON.stringify(data));
-        updatePrices(data);
+
+        document.getElementById('prices-container').innerHTML = `
+          <div class="price-card"><h2>Bitcoin (BTC)</h2><p>Preço Atual: $${data.bitcoin.usd}</p></div>
+          <div class="price-card"><h2>Ethereum (ETH)</h2><p>Preço Atual: $${data.ethereum.usd}</p></div>
+          <div class="price-card"><h2>Solana (SOL)</h2><p>Preço Atual: $${data.solana.usd}</p></div>
+        `;
       } catch (error) {
         console.error('Erro ao buscar preços:', error);
-        const cachedData = localStorage.getItem('cryptoPrices');
-        if (cachedData) updatePrices(JSON.parse(cachedData));
       }
-    }
-
-    function updatePrices(data) {
-      pricesContainer.innerHTML = Object.entries(data).map(([coin, info]) => `
-        <div class="price-card">
-          <h2>${coin.toUpperCase()}</h2>
-          <p>Preço Atual: $${info.usd}</p>
-        </div>
-      `).join('');
     }
 
     async function fetchRSSFeeds() {
@@ -121,17 +108,20 @@ footer {
         }
 
         allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+        const uniqueNews = allNews.filter((item, index, self) => self.findIndex(t => t.link === item.link) === index);
 
-        newsContainer.innerHTML = allNews.slice(0, 10).map(article => `
-          <div class="news-item">
-            <img src="${article.enclosure?.link || 'https://via.placeholder.com/300x200'}" alt="Notícia">
-            <h3>${article.title}</h3>
-            <p>${article.description || 'Descrição não disponível.'}</p>
-            <a href="${article.link}" target="_blank">Leia mais</a>
-          </div>`
-        ).join('');
+        document.getElementById('news-container').innerHTML = uniqueNews.slice(0, 10).map(article => {
+          let imageUrl = article.enclosure?.link || 'https://via.placeholder.com/300x200';
+          return `
+            <div class="news-item">
+              <img src="${imageUrl}" alt="Imagem da notícia">
+              <h3>${article.title}</h3>
+              <p>${article.description || 'Descrição não disponível.'}</p>
+              <a href="${article.link}" target="_blank">Leia mais</a>
+            </div>`;
+        }).join('');
       } catch (error) {
-        console.error('Erro ao carregar os feeds RSS:', error);
+        console.error('Erro ao carregar as notícias:', error);
       }
     }
 
