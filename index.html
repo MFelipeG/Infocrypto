@@ -50,6 +50,11 @@
 
     .price-card h2 {
       margin-bottom: 10px;
+      color: #50fa7b; /* Cor para o título da criptomoeda */
+    }
+
+    .price-card p {
+      color: #f8f8f8; /* Cor para o preço da criptomoeda */
     }
 
     .news-container {
@@ -165,12 +170,13 @@
 
         newsContainer.innerHTML = allNews.slice(0, 10).map(article => {
           let imageUrl = '';
+
           if (article.enclosure && article.enclosure.link) {
-              imageUrl = article.enclosure.link; // Pega a primeira imagem
+              imageUrl = article.enclosure.link;
           } else if (article.media && article.media.content && article.media.content.length > 0) {
-              imageUrl = article.media.content[0].url; // Pega a primeira imagem de media:content
+              imageUrl = article.media.content[0].url;
           } else {
-              imageUrl = 'https://via.placeholder.com/300x200'; // Imagem placeholder
+              imageUrl = 'https://via.placeholder.com/300x200';
           }
 
           let description = article.description || 'Descrição não disponível.';
