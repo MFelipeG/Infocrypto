@@ -50,11 +50,11 @@
 
     .price-card h2 {
       margin-bottom: 10px;
-      color: #50fa7b; /* Cor para o título da criptomoeda */
+      color: #50fa7b;
     }
 
     .price-card p {
-      color: #f8f8f8; /* Cor para o preço da criptomoeda */
+      color: #f8f8f8;
     }
 
     .news-container {
@@ -158,7 +158,8 @@
         const allNews = [];
 
         for (const feed of RSS_FEEDS) {
-          const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feed}`);
+          const timestamp = new Date().getTime();
+          const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feed}&t=${timestamp}`);
           const data = await response.json();
 
           if (data.items && data.items.length > 0) {
