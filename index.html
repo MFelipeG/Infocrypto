@@ -1,8 +1,8 @@
-<!DOCTYPE html><html lang="pt-BR">
-<head>
+<!DOCTYPE html><html lang="pt-BR"><head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CriptoNews - Últimas Notícias e Preços</title>  <!-- Meta Tags para SEO -->  <meta name="description" content="CriptoNews - Últimas notícias e preços atualizados de Bitcoin, Ethereum, Solana e outras criptomoedas. Acompanhe as novidades do mercado cripto!">
+  <title>CriptoNews - Últimas Notícias e Preços</title>
+  <meta name="description" content="CriptoNews - Últimas notícias e preços atualizados de Bitcoin, Ethereum, Solana e outras criptomoedas. Acompanhe as novidades do mercado cripto!">
   <meta name="keywords" content="criptomoedas, bitcoin, ethereum, solana, preços cripto, notícias cripto, mercado financeiro, blockchain, investimentos">
   <meta name="author" content="Marlon Felipe">
   <meta name="robots" content="index, follow">
@@ -14,178 +14,167 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="CriptoNews - Últimas Notícias e Preços de Criptomoedas">
   <meta name="twitter:description" content="Acompanhe preços e notícias do mercado cripto em tempo real.">
-  <meta name="twitter:image" content="URL_DA_IMAGEM_DO_SEU_SITE">  <style>
+  <meta name="twitter:image" content="URL_DA_IMAGEM_DO_SEU_SITE">
+  <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-color: #121212;
       color: #ffffff;
-    }
+    }header {
+  background: linear-gradient(90deg, #50fa7b, #6272a4);
+  padding: 20px;
+  text-align: center;
+}
 
-    header {
-      background: linear-gradient(90deg, #50fa7b, #6272a4);
-      padding: 20px;
-      text-align: center;
-    }
+header h1 {
+  margin: 0;
+  font-size: 2.5em;
+  color: #121212;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 2.5em;
-      color: #121212;
-    }
+header p {
+  font-size: 1em;
+  color: #f8f8f8;
+}
 
-    header p {
-      font-size: 1em;
-      color: #f8f8f8;
-    }
+.search-container {
+  text-align: center;
+  margin: 20px;
+}
 
-    .prices-container,
-    .news-container {
-      padding: 20px;
-    }
+.search-container input {
+  padding: 10px;
+  width: 60%;
+  border-radius: 5px;
+  border: none;
+}
 
-    .prices-container {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-    }
+.search-container button {
+  padding: 10px;
+  background-color: #50fa7b;
+  border: none;
+  color: black;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-    .price-card {
-      background-color: #1e1e2f;
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-    }
+.prices-container,
+.news-container {
+  padding: 20px;
+}
 
-    .price-card h2 {
-      margin-bottom: 10px;
-      color: #50fa7b;
-    }
+.news-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
 
-    .news-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
+.news-item {
+  background-color: #1e1e2f;
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
 
-    .news-item {
-      background-color: #1e1e2f;
-      border-radius: 10px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
+.news-item img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
 
-    .news-item img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-    }
+.news-item h3 {
+  padding: 10px;
+}
 
-    .news-item h3 {
-      padding: 10px;
-    }
+.news-item p {
+  padding: 10px;
+  flex-grow: 1;
+}
 
-    .news-item p {
-      padding: 10px;
-      flex-grow: 1;
-    }
+footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #282a36;
+  color: #6272a4;
+}
 
-    footer {
-      text-align: center;
-      padding: 10px;
-      background-color: #282a36;
-      color: #6272a4;
-    }
-
-    @media (max-width: 768px) {
-      .news-container {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style></head>
+  </style>
+</head>
 <body>
   <header>
     <h1>CriptoNews</h1>
     <p>Preços ao vivo e as últimas notícias sobre criptomoedas!</p>
-  </header>  <div class="prices-container" id="prices-container"></div>
+  </header>  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Buscar notícias...">
+    <button onclick="searchNews()">Buscar</button>
+  </div>  <div class="prices-container" id="prices-container"></div>
   <div class="news-container" id="news-container"></div>  <footer>
     <p>Desenvolvido por: Marlon Felipe | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.</p>
   </footer>  <script>
-    const pricesContainer = document.getElementById('prices-container');
     const newsContainer = document.getElementById('news-container');
-
-    async function fetchCryptoPrices() {
-      try {
-        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
-        const data = await response.json();
-
-        pricesContainer.innerHTML = `
-          <div class="price-card">
-            <h2>Bitcoin (BTC)</h2>
-            <p>Preço Atual: $${data.bitcoin.usd}</p>
-          </div>
-          <div class="price-card">
-            <h2>Ethereum (ETH)</h2>
-            <p>Preço Atual: $${data.ethereum.usd}</p>
-          </div>
-          <div class="price-card">
-            <h2>Solana (SOL)</h2>
-            <p>Preço Atual: $${data.solana.usd}</p>
-          </div>`;
-      } catch (error) {
-        console.error('Erro ao buscar preços:', error);
-        pricesContainer.innerHTML = '<p>Erro ao carregar preços. Tente novamente mais tarde.</p>';
-      }
-    }
+    let allNews = [];
 
     async function fetchRSSFeeds() {
       try {
-        newsContainer.innerHTML = '<p>Carregando notícias...</p>';
-
         const RSS_FEEDS = [
           'https://www.coindesk.com/arc/outboundfeeds/rss/',
           'https://cointelegraph.com/rss',
           'https://livecoins.com.br/feed/'
         ];
 
-        const allNews = [];
-
+        allNews = [];
         for (const feed of RSS_FEEDS) {
-          const timestamp = new Date().getTime();
-          const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feed}&t=${timestamp}`);
+          const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feed}`);
           const data = await response.json();
-
-          if (data.items && data.items.length > 0) {
+          if (data.items) {
             allNews.push(...data.items);
           }
         }
 
-        allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+        allNews = allNews.filter(news => {
+          const newsDate = new Date(news.pubDate);
+          const currentDate = new Date();
+          const diffTime = Math.abs(currentDate - newsDate);
+          const diffDays = diffTime / (1000 * 60 * 60 * 24);
+          return diffDays <= 4;
+        });
 
-        newsContainer.innerHTML = allNews.slice(0, 10).map(article => {
-          let imageUrl = article.enclosure?.link || article.thumbnail || 'https://via.placeholder.com/300x200';
-          let description = article.description?.replace(/<img[^>]*>/g, '') || 'Descrição não disponível.';
-          
-          return `
-            <div class="news-item">
-              <img src="${imageUrl}" alt="Imagem da notícia">
-              <h3>${article.title}</h3>
-              <p>${description}</p>
-              <a href="${article.link}" target="_blank">Leia mais</a>
-            </div>`;
-        }).join('');
+        if (allNews.length > 20) {
+          allNews = allNews.slice(0, 20);
+        }
+
+        displayNews(allNews);
       } catch (error) {
         console.error('Erro ao carregar os feeds RSS:', error);
-        newsContainer.innerHTML = '<p>Erro ao carregar as notícias. Tente novamente mais tarde.</p>';
       }
     }
 
-    fetchCryptoPrices();
-    fetchRSSFeeds();
+    function displayNews(newsArray) {
+      newsContainer.innerHTML = newsArray.map(article => {
+        let imageUrl = article.enclosure?.link || article.thumbnail || 'https://via.placeholder.com/300x200';
+        return `
+          <div class="news-item">
+            <img src="${imageUrl}" alt="Imagem da notícia">
+            <h3>${article.title}</h3>
+            <p>${article.description.replace(/<img[^>]*>/g, '')}</p>
+            <a href="${article.link}" target="_blank">Leia mais</a>
+          </div>`;
+      }).join('');
+    }
 
-    setInterval(fetchCryptoPrices, 300000);
+    function searchNews() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filteredNews = allNews.filter(article =>
+        article.title.toLowerCase().includes(query) ||
+        article.description.toLowerCase().includes(query)
+      );
+      displayNews(filteredNews);
+    }
+
+    fetchRSSFeeds();
     setInterval(fetchRSSFeeds, 300000);
   </script></body>
 </html>
