@@ -7,7 +7,7 @@
   <meta name="author" content="Marlon Felipe">
   <meta name="robots" content="index, follow">
   <meta name="googlebot" content="index, follow">
-  <meta property="og:title" content="CriptoNews - Últimas Notícias e Preços de Criptomoedas">
+  <meta property="og:title" content="InfoCrypto - Últimas Notícias e Preços de Criptomoedas">
   <meta property="og:description" content="Fique atualizado com as últimas notícias e preços do mercado cripto. Acompanhe Bitcoin, Ethereum, Solana e mais!">
   <meta property="og:image" content="URL_DA_IMAGEM_DO_SEU_SITE">
   <meta property="og:url" content="URL_DO_SEU_SITE">
@@ -139,7 +139,7 @@ async function fetchRSSFeeds() {
 
     const now = new Date();
     allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
-    if (allNews.length > 20) allNews = allNews.slice(0, 20);
+    if (allNews.length > 30) allNews = allNews.slice(0, 30);
 
     displayNews(allNews);
   } catch (error) {
