@@ -59,18 +59,20 @@
     }
     header {
       background: linear-gradient(90deg, var(--highlight), var(--secondary));
-      padding: 20px;
+      padding: 20px 10px;
       text-align: center;
       position: relative;
+      min-height: 100px; /* Garante espaço suficiente */
     }
     header h1 {
       margin: 0;
-      font-size: 2.5em;
+      font-size: 2em; /* Reduzido pra mobile */
       color: var(--header-text);
     }
     header p {
-      font-size: 1em;
+      font-size: 0.9em;
       color: #f8f8f8;
+      margin-top: 5px;
     }
     .theme-toggle {
       position: absolute;
@@ -79,10 +81,11 @@
       background-color: var(--highlight);
       color: var(--header-text);
       border: none;
-      padding: 8px 12px;
+      padding: 6px 10px;
       border-radius: 5px;
       cursor: pointer;
-      font-size: 0.9em;
+      font-size: 0.8em;
+      z-index: 10;
     }
     .theme-toggle:hover {
       background-color: #45e06f;
@@ -94,6 +97,7 @@
       display: flex;
       justify-content: center;
       gap: 20px;
+      flex-wrap: wrap;
     }
     .price-card {
       background-color: var(--card-bg);
@@ -101,6 +105,7 @@
       border-radius: 10px;
       text-align: center;
       width: 150px;
+      flex: 1 1 150px;
     }
     .price-card h2 {
       margin-bottom: 10px;
@@ -196,7 +201,7 @@
       color: var(--secondary);
     }
     .support-section {
-      padding: 20px;
+      padding: 15px;
       background-color: var(--card-bg);
       margin: 0 20px 20px;
       border-radius: 10px;
@@ -204,24 +209,27 @@
       max-width: 400px;
       margin-left: auto;
       margin-right: auto;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     }
     .support-section h3 {
       color: var(--highlight);
       margin-bottom: 10px;
+      font-size: 1.2em;
     }
     .crypto-wallets {
       display: flex;
       justify-content: center;
-      gap: 15px;
+      gap: 10px;
     }
     .crypto-wallet {
-      cursor: pointer;
       width: 40px;
       height: 40px;
       border-radius: 50%;
       background-size: cover;
       background-position: center;
+      cursor: pointer;
       transition: transform 0.2s;
+      border: 2px solid var(--highlight);
     }
     .crypto-wallet:hover {
       transform: scale(1.1);
@@ -239,9 +247,11 @@
       color: var(--text-color);
       text-align: center;
       z-index: 1000;
+      max-width: 300px;
     }
     .wallet-address p {
       margin: 5px 0;
+      word-break: break-all;
     }
     .wallet-address button {
       background-color: var(--highlight);
@@ -311,9 +321,18 @@
       .news-container {
         grid-template-columns: 1fr;
       }
+      header {
+        padding: 10px;
+        min-height: 120px; /* Mais espaço pra texto e botão */
+      }
+      header h1 {
+        font-size: 1.5em; /* Ajuste pra mobile */
+      }
       .theme-toggle {
-        top: 70px; /* Move o botão pra baixo em telas pequenas */
+        top: 80px; /* Move pra baixo, abaixo do texto */
         right: 10px;
+        padding: 6px 10px;
+        font-size: 0.8em;
       }
       .price-card {
         width: 100%;
@@ -355,11 +374,11 @@
   <div class="support-section">
     <h3>Apoie Nosso Canal</h3>
     <div class="crypto-wallets">
-      <div class="crypto-wallet" style="background-image: url('https://via.placeholder.com/40?text=BTC')" onclick="showWallet('bitcoin')"></div>
-      <div class="crypto-wallet" style="background-image: url('https://via.placeholder.com/40?text=ETH')" onclick="showWallet('ethereum')"></div>
-      <div class="crypto-wallet" style="background-image: url('https://via.placeholder.com/40?text=SOL')" onclick="showWallet('solana')"></div>
-      <div class="crypto-wallet" style="background-image: url('https://via.placeholder.com/40?text=BNB')" onclick="showWallet('bnb')"></div>
-      <div class="crypto-wallet" style="background-image: url('https://via.placeholder.com/40?text=MATIC')" onclick="showWallet('polygon')"></div>
+      <div class="crypto-wallet" style="background-image: url('https://cryptoicons.org/api/icon/btc/40')" onclick="showWallet('bitcoin')"></div>
+      <div class="crypto-wallet" style="background-image: url('https://cryptoicons.org/api/icon/eth/40')" onclick="showWallet('ethereum')"></div>
+      <div class="crypto-wallet" style="background-image: url('https://cryptoicons.org/api/icon/sol/40')" onclick="showWallet('solana')"></div>
+      <div class="crypto-wallet" style="background-image: url('https://cryptoicons.org/api/icon/bnb/40')" onclick="showWallet('bnb')"></div>
+      <div class="crypto-wallet" style="background-image: url('https://cryptoicons.org/api/icon/matic/40')" onclick="showWallet('polygon')"></div>
     </div>
   </div>
 
@@ -407,7 +426,7 @@
       walletText.innerHTML = `
         <strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>
         ${walletAddresses[coin]}<br><br>
-        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada!</em>
+        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>
       `;
       walletAddress.style.display = 'block';
     }
