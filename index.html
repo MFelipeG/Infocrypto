@@ -76,7 +76,7 @@
     }
     .theme-toggle {
       position: absolute;
-      top: 80px;
+      bottom: 10px; /* Canto inferior direito */
       right: 10px;
       background-color: var(--highlight);
       color: var(--header-text);
@@ -121,6 +121,7 @@
       align-items: center;
       gap: 10px;
       padding: 20px;
+      max-width: 100%;
     }
     .chart-container select {
       background-color: var(--card-bg);
@@ -134,7 +135,7 @@
     #crypto-chart {
       width: 100% !important;
       max-width: 600px;
-      height: auto !important;
+      height: 200px !important; /* Altura fixa pra evitar comportamento elástico */
     }
     .search-container {
       display: flex;
@@ -225,8 +226,9 @@
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-size: cover;
+      background-size: contain; /* Ajuste pra garantir que a imagem inteira apareça */
       background-position: center;
+      background-repeat: no-repeat;
       cursor: pointer;
       transition: transform 0.2s;
       border: 2px solid var(--highlight);
@@ -323,16 +325,10 @@
       }
       header {
         padding: 10px;
-        min-height: 140px; /* Mais espaço pra texto e botão */
+        min-height: 140px;
       }
       header h1 {
         font-size: 1.5em;
-      }
-      .theme-toggle {
-        top: 100px; /* Ajustado pra ficar abaixo do texto em mobile */
-        right: 10px;
-        padding: 6px 10px;
-        font-size: 0.8em;
       }
       .price-card {
         width: 100%;
@@ -429,7 +425,7 @@
       walletText.innerHTML = `
         <strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>
         ${walletAddresses[coin]}<br><br>
-        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>
+        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! </em>
       `;
       walletAddress.style.display = 'block';
     }
@@ -456,7 +452,7 @@
 
     async function fetchChartData(coin) {
       try {
-        const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=30`); // Aumentado pra 30 dias
+        const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=30`);
         const data = await response.json();
         const ctx = document.getElementById('crypto-chart').getContext('2d');
         if (chartInstance) chartInstance.destroy();
@@ -469,13 +465,15 @@
               data: data.prices.map(p => p[1]),
               borderColor: '#50fa7b',
               fill: false,
-              pointRadius: 1, // Reduz pontos pra menos aglomeração
-              tension: 0.1 // Suaviza a linha
+              pointRadius: 1,
+              tension: 0.1
             }]
           },
           options: {
+            responsive: true,
+            maintainAspectRatio: true, // Restaurado pra evitar comportamento elástico
             scales: {
-              x: { ticks: { maxTicksLimit: 10 } }, // Limita ticks no eixo X
+              x: { ticks: { maxTicksLimit: 10 } },
               y: { beginAtZero: false }
             }
           }
@@ -564,7 +562,7 @@
     function searchNews() {
       const query = searchInput.value.toLowerCase();
       const filteredNews = allNews.filter(news =>
-        news.title.toLowerCase().includes(query) || news.description.toLowerCase().includes(query)
+        news.title.toLowerCase().includes(query) || description.toLowerCase().includes(query)
       );
       currentPage = 1;
       displayNews(filteredNews);
