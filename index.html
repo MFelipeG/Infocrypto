@@ -239,7 +239,14 @@
       newsList.forEach(article => {
         const div = document.createElement('div');
         div.className = 'news-item';
-        const imageUrl = article.enclosure?.link || article.thumbnail || 'https://via.placeholder.com/300x200';
+
+        // Tenta encontrar a imagem em enclosure, thumbnail ou description
+        let imageUrl = article.enclosure?.link || article.thumbnail;
+        if (!imageUrl && article.description) {
+          const imgMatch = article.description.match(/<img[^>]+src=["'](.*?)["']/i);
+          imageUrl = imgMatch ? imgMatch[1] : 'https://via.placeholder.com/300x200';
+        }
+
         const description = article.description?.replace(/<img[^>]*>/g, '') || 'Descrição não disponível.';
         div.innerHTML = `
           <img src="${imageUrl}" alt="Imagem da notícia" loading="lazy">
