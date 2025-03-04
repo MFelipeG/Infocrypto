@@ -104,6 +104,19 @@
       margin-bottom: 10px;
       color: var(--highlight);
     }
+    .chart-container {
+      text-align: center;
+      padding: 20px;
+    }
+    .chart-container select {
+      background-color: var(--card-bg);
+      color: var(--text-color);
+      border: none;
+      padding: 8px;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+    }
     .search-container {
       display: flex;
       justify-content: center;
@@ -237,7 +250,15 @@
   <div class="prices-container" id="prices-container">
     <p>Carregando preços...</p>
   </div>
-  <canvas id="btc-chart" width="400" height="200"></canvas>
+
+  <div class="chart-container">
+    <select id="chart-select">
+      <option value="bitcoin">Bitcoin (BTC)</option>
+      <option value="ethereum">Ethereum (ETH)</option>
+      <option value="solana">Solana (SOL)</option>
+    </select>
+    <canvas id="crypto-chart" width="400" height="200"></canvas>
+  </div>
 
   <div class="search-container">
     <label for="search-input" class="sr-only">Buscar notícias</label>
@@ -258,10 +279,12 @@
     const newsContainer = document.getElementById('news-container');
     const searchInput = document.getElementById('search-input');
     const themeToggle = document.getElementById('theme-toggle');
+    const chartSelect = document.getElementById('chart-select');
     let allNews = [];
     let lastFetchTime = null;
     let currentPage = 1;
-    const itemsPerPage = 15; // Aumentado de 10 para 15
+    const itemsPerPage = 15; // 15 notícias por página
+    let chartInstance = null; // Para armazenar o gráfico atual
 
     // Tema Claro/Escuro
     if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
@@ -286,17 +309,21 @@
       }
     }
 
-    async function fetchChartData() {
+    async function fetchChartData(coin) {
       try {
-        const response = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7');
+        const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=7`);
         const data = await response.json();
-        const ctx = document.getElementById('btc-chart').getContext('2d');
-        new Chart(ctx, {
+        const ctx = document.getElementById('crypto-chart').getContext('2d');
+
+        // Destruir gráfico anterior, se existir
+        if (chartInstance) chartInstance.destroy();
+
+        chartInstance = new Chart(ctx, {
           type: 'line',
           data: {
             labels: data.prices.map(p => new Date(p[0]).toLocaleDateString()),
             datasets: [{
-              label: 'Bitcoin (USD)',
+              label: `${coin.charAt(0).toUpperCase() + coin.slice(1)} (USD)`,
               data: data.prices.map(p => p[1]),
               borderColor: '#50fa7b',
               fill: false
@@ -370,9 +397,9 @@
       const pagination = document.createElement('div');
       pagination.className = 'pagination';
       pagination.innerHTML = `
-        <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} title="Página Anterior">&lt;</button>
+        <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} title="Página Anterior"><</button>
         <span>${currentPage}/${totalPages}</span>
-        <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} title="Próxima Página">&gt;</button>
+        <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} title="Próxima Página">></button>
       `;
       newsContainer.appendChild(pagination);
     }
@@ -391,14 +418,20 @@
       displayNews(filteredNews);
     }
 
+    // Inicialização
     fetchCryptoPrices();
-    fetchChartData();
+    fetchChartData('bitcoin'); // Inicia com Bitcoin
     fetchRSSFeeds();
 
+    // Atualização periódica
     setInterval(fetchCryptoPrices, 600000);
     setInterval(fetchRSSFeeds, 600000);
 
+    // Eventos
     searchInput.addEventListener('input', searchNews);
+    chartSelect.addEventListener('change', (e) => {
+      fetchChartData(e.target.value);
+    });
   </script>
 </body>
 </html>
