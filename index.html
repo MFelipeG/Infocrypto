@@ -74,14 +74,15 @@
     }
     .theme-toggle {
       position: absolute;
-      top: 20px;
-      right: 20px;
+      top: 10px;
+      right: 10px;
       background-color: var(--highlight);
       color: var(--header-text);
       border: none;
-      padding: 8px 16px;
+      padding: 8px 12px;
       border-radius: 5px;
       cursor: pointer;
+      font-size: 0.9em;
     }
     .theme-toggle:hover {
       background-color: #45e06f;
@@ -99,6 +100,7 @@
       padding: 15px;
       border-radius: 10px;
       text-align: center;
+      width: 150px;
     }
     .price-card h2 {
       margin-bottom: 10px;
@@ -193,6 +195,66 @@
       background-color: var(--footer-bg);
       color: var(--secondary);
     }
+    .support-section {
+      padding: 20px;
+      background-color: var(--card-bg);
+      margin: 0 20px 20px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .support-section h3 {
+      color: var(--highlight);
+      margin-bottom: 10px;
+    }
+    .crypto-wallets {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+    .crypto-wallet {
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.2s;
+    }
+    .crypto-wallet:hover {
+      transform: scale(1.1);
+    }
+    .wallet-address {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      color: var(--text-color);
+      text-align: center;
+      z-index: 1000;
+    }
+    .wallet-address p {
+      margin: 5px 0;
+    }
+    .wallet-address button {
+      background-color: var(--highlight);
+      color: var(--header-text);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .wallet-address button:hover {
+      background-color: #45e06f;
+    }
     .sr-only {
       position: absolute;
       width: 1px;
@@ -242,12 +304,20 @@
       color: var(--text-color);
     }
     @media (max-width: 768px) {
-      .news-container {
-        grid-template-columns: 1fr;
-      }
       .prices-container {
         flex-direction: column;
         align-items: center;
+      }
+      .news-container {
+        grid-template-columns: 1fr;
+      }
+      .theme-toggle {
+        top: 70px; /* Move o botão pra baixo em telas pequenas */
+        right: 10px;
+      }
+      .price-card {
+        width: 100%;
+        max-width: 200px;
       }
     }
   </style>
@@ -282,9 +352,25 @@
     <p>Carregando notícias...</p>
   </div>
 
+  <div class="support-section">
+    <h3>Apoie Nosso Canal</h3>
+    <div class="crypto-wallets">
+      <div class="crypto-wallet" style="background-image: url('https://via.placeholder.com/40?text=BTC')" onclick="showWallet('bitcoin')"></div>
+      <div class="crypto-wallet" style="background-image: url('https://via.placeholder.com/40?text=ETH')" onclick="showWallet('ethereum')"></div>
+      <div class="crypto-wallet" style="background-image: url('https://via.placeholder.com/40?text=SOL')" onclick="showWallet('solana')"></div>
+      <div class="crypto-wallet" style="background-image: url('https://via.placeholder.com/40?text=BNB')" onclick="showWallet('bnb')"></div>
+      <div class="crypto-wallet" style="background-image: url('https://via.placeholder.com/40?text=MATIC')" onclick="showWallet('polygon')"></div>
+    </div>
+  </div>
+
   <footer>
     <p>Desenvolvido por: Marlon Grochoska | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.</p>
   </footer>
+
+  <div id="wallet-address" class="wallet-address">
+    <p id="wallet-text"></p>
+    <button onclick="hideWallet()">Fechar</button>
+  </div>
 
   <script>
     const pricesContainer = document.getElementById('prices-container');
@@ -292,10 +378,13 @@
     const searchInput = document.getElementById('search-input');
     const themeToggle = document.getElementById('theme-toggle');
     const chartSelect = document.getElementById('chart-select');
+    const walletAddress = document.getElementById('wallet-address');
+    const walletText = document.getElementById('wallet-text');
     let allNews = [];
     let lastFetchTime = null;
     let currentPage = 1;
     const itemsPerPage = 15;
+    const maxPages = 3; // Limita a 3 páginas
     let chartInstance = null;
 
     // Tema Claro/Escuro
@@ -304,6 +393,28 @@
       document.body.classList.toggle('light');
       localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
     });
+
+    // Funções de Carteira
+    const walletAddresses = {
+      bitcoin: '1Lkpq3cwVi7wYzN3zC38padBk2Sz58Df1j',
+      ethereum: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05',
+      solana: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05',
+      bnb: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05',
+      polygon: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05'
+    };
+
+    function showWallet(coin) {
+      walletText.innerHTML = `
+        <strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>
+        ${walletAddresses[coin]}<br><br>
+        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada!</em>
+      `;
+      walletAddress.style.display = 'block';
+    }
+
+    function hideWallet() {
+      walletAddress.style.display = 'none';
+    }
 
     async function fetchCryptoPrices() {
       try {
@@ -367,8 +478,9 @@
           if (data.items) allNews.push(...data.items);
         }
 
+        // Limita a 45 notícias (15 por página x 3 páginas)
         allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
-        if (allNews.length > 40) allNews = allNews.slice(0, 40);
+        if (allNews.length > 45) allNews = allNews.slice(0, 45);
 
         lastFetchTime = now;
         displayNews(allNews);
@@ -403,7 +515,7 @@
     }
 
     function updatePaginationControls(totalItems) {
-      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages); // Limita a 3 páginas
       const pagination = document.createElement('div');
       pagination.className = 'pagination';
       pagination.innerHTML = `
@@ -415,8 +527,10 @@
     }
 
     function changePage(page) {
-      currentPage = page;
-      displayNews(allNews);
+      if (page >= 1 && page <= Math.min(Math.ceil(allNews.length / itemsPerPage), maxPages)) {
+        currentPage = page;
+        displayNews(allNews);
+      }
     }
 
     function searchNews() {
