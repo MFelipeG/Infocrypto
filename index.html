@@ -18,13 +18,10 @@
   <meta name="twitter:description" content="Acompanhe preços e notícias do mercado cripto em tempo real;">
   <meta name="twitter:image" content="https://seusite.com/imagens/infocrypto-logo.jpg">
 
-  <!-- Favicon -->
   <link rel="icon" href="/caminho/para/favicon.ico" type="image/x-icon">
-
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R42F4YDHYM"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -34,29 +31,61 @@
   </script>
 
   <style>
+    :root {
+      --bg-color: #121212;
+      --text-color: #ffffff;
+      --card-bg: #1e1e2f;
+      --header-text: #121212;
+      --highlight: #50fa7b;
+      --secondary: #6272a4;
+      --footer-bg: #282a36;
+    }
+    body.light {
+      --bg-color: #f0f0f0;
+      --text-color: #121212;
+      --card-bg: #ffffff;
+      --header-text: #ffffff;
+      --highlight: #45e06f;
+      --secondary: #8a9cc2;
+      --footer-bg: #e0e0e0;
+    }
     body {
       font-family: 'Roboto', Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #121212;
-      color: #ffffff;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.3s, color 0.3s;
     }
     header {
-      background: linear-gradient(90deg, #50fa7b, #6272a4);
+      background: linear-gradient(90deg, var(--highlight), var(--secondary));
       padding: 20px;
       text-align: center;
     }
     header h1 {
       margin: 0;
       font-size: 2.5em;
-      color: #121212;
+      color: var(--header-text);
     }
     header p {
       font-size: 1em;
       color: #f8f8f8;
     }
-    .prices-container,
-    .news-container {
+    .theme-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: var(--highlight);
+      color: var(--header-text);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .theme-toggle:hover {
+      background-color: #45e06f;
+    }
+    .prices-container, .news-container {
       padding: 20px;
     }
     .prices-container {
@@ -65,14 +94,14 @@
       gap: 20px;
     }
     .price-card {
-      background-color: #1e1e2f;
+      background-color: var(--card-bg);
       padding: 15px;
       border-radius: 10px;
       text-align: center;
     }
     .price-card h2 {
       margin-bottom: 10px;
-      color: #50fa7b;
+      color: var(--highlight);
     }
     .search-container {
       display: flex;
@@ -85,10 +114,12 @@
       border: none;
       border-radius: 5px;
       width: 200px;
+      background-color: var(--card-bg);
+      color: var(--text-color);
     }
     .search-container button {
-      background-color: #50fa7b;
-      color: #121212;
+      background-color: var(--highlight);
+      color: var(--header-text);
       border: none;
       padding: 8px 16px;
       border-radius: 5px;
@@ -103,7 +134,7 @@
       gap: 20px;
     }
     .news-item {
-      background-color: #1e1e2f;
+      background-color: var(--card-bg);
       border-radius: 10px;
       overflow: hidden;
       display: flex;
@@ -116,7 +147,7 @@
     }
     .news-item h3 {
       padding: 10px;
-      color: #50fa7b;
+      color: var(--highlight);
     }
     .news-item p {
       padding: 10px;
@@ -124,7 +155,7 @@
     }
     .news-item a {
       padding: 10px;
-      color: #6272a4;
+      color: var(--secondary);
       text-decoration: none;
     }
     .news-item a:hover {
@@ -133,8 +164,8 @@
     footer {
       text-align: center;
       padding: 10px;
-      background-color: #282a36;
-      color: #6272a4;
+      background-color: var(--footer-bg);
+      color: var(--secondary);
     }
     .sr-only {
       position: absolute;
@@ -145,6 +176,29 @@
       overflow: hidden;
       clip: rect(0, 0, 0, 0);
       border: 0;
+    }
+    .timestamp {
+      text-align: center;
+      font-size: 0.9em;
+      color: var(--secondary);
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
+    }
+    .pagination button {
+      background-color: var(--highlight);
+      color: var(--header-text);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .pagination button:disabled {
+      background-color: var(--secondary);
+      cursor: not-allowed;
     }
     @media (max-width: 768px) {
       .news-container {
@@ -161,11 +215,13 @@
   <header>
     <h1>InfoCrypto</h1>
     <p>Preços ao vivo e as últimas notícias sobre criptomoedas!</p>
+    <button class="theme-toggle" id="theme-toggle">Alternar Tema</button>
   </header>
 
   <div class="prices-container" id="prices-container">
     <p>Carregando preços...</p>
   </div>
+  <canvas id="btc-chart" width="400" height="200"></canvas>
 
   <div class="search-container">
     <label for="search-input" class="sr-only">Buscar notícias</label>
@@ -185,8 +241,18 @@
     const pricesContainer = document.getElementById('prices-container');
     const newsContainer = document.getElementById('news-container');
     const searchInput = document.getElementById('search-input');
+    const themeToggle = document.getElementById('theme-toggle');
     let allNews = [];
     let lastFetchTime = null;
+    let currentPage = 1;
+    const itemsPerPage = 10;
+
+    // Tema Claro/Escuro
+    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light');
+      localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    });
 
     async function fetchCryptoPrices() {
       try {
@@ -195,10 +261,35 @@
         pricesContainer.innerHTML = `
           <div class="price-card"><h2>Bitcoin (BTC)</h2><p>Preço Atual: $${data.bitcoin.usd}</p></div>
           <div class="price-card"><h2>Ethereum (ETH)</h2><p>Preço Atual: $${data.ethereum.usd}</p></div>
-          <div class="price-card"><h2>Solana (SOL)</h2><p>Preço Atual: $${data.solana.usd}</p></div>`;
+          <div class="price-card"><h2>Solana (SOL)</h2><p>Preço Atual: $${data.solana.usd}</p></div>
+          <p class="timestamp">Última atualização: ${new Date().toLocaleTimeString()}</p>
+        `;
       } catch (error) {
         pricesContainer.innerHTML = '<p>Erro ao carregar preços. Tente novamente mais tarde.</p>';
         console.error('Erro ao buscar preços:', error);
+      }
+    }
+
+    async function fetchChartData() {
+      try {
+        const response = await fetch('https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7');
+        const data = await response.json();
+        const ctx = document.getElementById('btc-chart').getContext('2d');
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: data.prices.map(p => new Date(p[0]).toLocaleDateString()),
+            datasets: [{
+              label: 'Bitcoin (USD)',
+              data: data.prices.map(p => p[1]),
+              borderColor: '#50fa7b',
+              fill: false
+            }]
+          },
+          options: { scales: { y: { beginAtZero: false } } }
+        });
+      } catch (error) {
+        console.error('Erro ao carregar gráfico:', error);
       }
     }
 
@@ -236,17 +327,16 @@
 
     function displayNews(newsList) {
       newsContainer.innerHTML = '';
-      newsList.forEach(article => {
+      const start = (currentPage - 1) * itemsPerPage;
+      const paginatedNews = newsList.slice(start, start + itemsPerPage);
+      paginatedNews.forEach(article => {
         const div = document.createElement('div');
         div.className = 'news-item';
-
-        // Tenta encontrar a imagem em enclosure, thumbnail ou description
         let imageUrl = article.enclosure?.link || article.thumbnail;
         if (!imageUrl && article.description) {
           const imgMatch = article.description.match(/<img[^>]+src=["'](.*?)["']/i);
           imageUrl = imgMatch ? imgMatch[1] : 'https://via.placeholder.com/300x200';
         }
-
         const description = article.description?.replace(/<img[^>]*>/g, '') || 'Descrição não disponível.';
         div.innerHTML = `
           <img src="${imageUrl}" alt="Imagem da notícia" loading="lazy">
@@ -256,6 +346,24 @@
         `;
         newsContainer.appendChild(div);
       });
+      updatePaginationControls(newsList.length);
+    }
+
+    function updatePaginationControls(totalItems) {
+      const totalPages = Math.ceil(totalItems / itemsPerPage);
+      const pagination = document.createElement('div');
+      pagination.className = 'pagination';
+      pagination.innerHTML = `
+        <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>Anterior</button>
+        <span>Página ${currentPage} de ${totalPages}</span>
+        <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>Próximo</button>
+      `;
+      newsContainer.appendChild(pagination);
+    }
+
+    function changePage(page) {
+      currentPage = page;
+      displayNews(allNews);
     }
 
     function searchNews() {
@@ -263,18 +371,17 @@
       const filteredNews = allNews.filter(news =>
         news.title.toLowerCase().includes(query) || news.description.toLowerCase().includes(query)
       );
+      currentPage = 1; // Reseta para a primeira página ao buscar
       displayNews(filteredNews);
     }
 
-    // Inicialização
     fetchCryptoPrices();
+    fetchChartData();
     fetchRSSFeeds();
 
-    // Atualização periódica (10 minutos)
     setInterval(fetchCryptoPrices, 600000);
     setInterval(fetchRSSFeeds, 600000);
 
-    // Busca em tempo real
     searchInput.addEventListener('input', searchNews);
   </script>
 </body>
