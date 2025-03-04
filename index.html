@@ -11,14 +11,20 @@
   <meta name="googlebot" content="index, follow">
   <meta property="og:title" content="InfoCrypto - Últimas Notícias e Preços de Criptomoedas">
   <meta property="og:description" content="Fique atualizado com as últimas notícias e preços do mercado cripto. Acompanhe Bitcoin, Ethereum, Solana e mais!">
-  <meta property="og:image" content="URL_DA_IMAGEM_DO_SEU_SITE">
-  <meta property="og:url" content="URL_DO_SEU_SITE">
+  <meta property="og:image" content="https://seusite.com/imagens/infocrypto-logo.jpg">
+  <meta property="og:url" content="https://seusite.com">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="InfoCrypto - Últimas Notícias e Preços de Criptomoedas">
   <meta name="twitter:description" content="Acompanhe preços e notícias do mercado cripto em tempo real;">
-  <meta name="twitter:image" content="URL_DA_IMAGEM_DO_SEU_SITE">
+  <meta name="twitter:image" content="https://seusite.com/imagens/infocrypto-logo.jpg">
 
-  <!-- Google tag (gtag.js) -->
+  <!-- Favicon -->
+  <link rel="icon" href="/caminho/para/favicon.ico" type="image/x-icon">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R42F4YDHYM"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -29,7 +35,7 @@
 
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Roboto', Arial, sans-serif;
       margin: 0;
       padding: 0;
       background-color: #121212;
@@ -68,6 +74,29 @@
       margin-bottom: 10px;
       color: #50fa7b;
     }
+    .search-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      padding: 20px;
+    }
+    .search-container input {
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      width: 200px;
+    }
+    .search-container button {
+      background-color: #50fa7b;
+      color: #121212;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .search-container button:hover {
+      background-color: #45e06f;
+    }
     .news-container {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -82,15 +111,24 @@
     }
     .news-item img {
       width: 100%;
-      height: auto;
+      height: 200px;
       object-fit: cover;
     }
     .news-item h3 {
       padding: 10px;
+      color: #50fa7b;
     }
     .news-item p {
       padding: 10px;
       flex-grow: 1;
+    }
+    .news-item a {
+      padding: 10px;
+      color: #6272a4;
+      text-decoration: none;
+    }
+    .news-item a:hover {
+      text-decoration: underline;
     }
     footer {
       text-align: center;
@@ -98,9 +136,23 @@
       background-color: #282a36;
       color: #6272a4;
     }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
     @media (max-width: 768px) {
       .news-container {
         grid-template-columns: 1fr;
+      }
+      .prices-container {
+        flex-direction: column;
+        align-items: center;
       }
     }
   </style>
@@ -110,10 +162,21 @@
     <h1>InfoCrypto</h1>
     <p>Preços ao vivo e as últimas notícias sobre criptomoedas!</p>
   </header>
-  <div class="prices-container" id="prices-container"></div>
-  <input type="text" id="search-input" placeholder="Buscar notícias...">
-  <button onclick="searchNews()">Buscar</button>
-  <div class="news-container" id="news-container"></div>
+
+  <div class="prices-container" id="prices-container">
+    <p>Carregando preços...</p>
+  </div>
+
+  <div class="search-container">
+    <label for="search-input" class="sr-only">Buscar notícias</label>
+    <input type="text" id="search-input" placeholder="Buscar notícias...">
+    <button onclick="searchNews()">Buscar</button>
+  </div>
+
+  <div class="news-container" id="news-container">
+    <p>Carregando notícias...</p>
+  </div>
+
   <footer>
     <p>Desenvolvido por: Marlon Grochoska | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.</p>
   </footer>
@@ -121,23 +184,31 @@
   <script>
     const pricesContainer = document.getElementById('prices-container');
     const newsContainer = document.getElementById('news-container');
+    const searchInput = document.getElementById('search-input');
     let allNews = [];
+    let lastFetchTime = null;
 
     async function fetchCryptoPrices() {
       try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
         const data = await response.json();
-
         pricesContainer.innerHTML = `
           <div class="price-card"><h2>Bitcoin (BTC)</h2><p>Preço Atual: $${data.bitcoin.usd}</p></div>
           <div class="price-card"><h2>Ethereum (ETH)</h2><p>Preço Atual: $${data.ethereum.usd}</p></div>
           <div class="price-card"><h2>Solana (SOL)</h2><p>Preço Atual: $${data.solana.usd}</p></div>`;
       } catch (error) {
+        pricesContainer.innerHTML = '<p>Erro ao carregar preços. Tente novamente mais tarde.</p>';
         console.error('Erro ao buscar preços:', error);
       }
     }
 
     async function fetchRSSFeeds() {
+      const now = new Date();
+      if (lastFetchTime && (now - lastFetchTime) < 600000) {
+        displayNews(allNews);
+        return;
+      }
+
       try {
         const RSS_FEEDS = [
           'https://www.coindesk.com/arc/outboundfeeds/rss/',
@@ -152,34 +223,52 @@
           if (data.items) allNews.push(...data.items);
         }
 
-        const now = new Date();
         allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
         if (allNews.length > 40) allNews = allNews.slice(0, 40);
 
+        lastFetchTime = now;
         displayNews(allNews);
       } catch (error) {
+        newsContainer.innerHTML = '<p>Erro ao carregar notícias. Tente novamente mais tarde.</p>';
         console.error('Erro ao carregar notícias:', error);
       }
     }
 
     function displayNews(newsList) {
-      newsContainer.innerHTML = newsList.map(article => {
-        let imageUrl = article.enclosure?.link || article.thumbnail || 'https://via.placeholder.com/300x200';
-        let description = article.description?.replace(/<img[^>]*>/g, '') || 'Descrição não disponível.';
-        return `<div class="news-item"><img src="${imageUrl}" alt="Imagem"><h3>${article.title}</h3><p>${description}</p><a href="${article.link}" target="_blank">Leia mais</a></div>`;
-      }).join('');
+      newsContainer.innerHTML = '';
+      newsList.forEach(article => {
+        const div = document.createElement('div');
+        div.className = 'news-item';
+        const imageUrl = article.enclosure?.link || article.thumbnail || 'https://via.placeholder.com/300x200';
+        const description = article.description?.replace(/<img[^>]*>/g, '') || 'Descrição não disponível.';
+        div.innerHTML = `
+          <img src="${imageUrl}" alt="Imagem da notícia" loading="lazy">
+          <h3>${article.title}</h3>
+          <p>${description}</p>
+          <a href="${article.link}" target="_blank">Leia mais</a>
+        `;
+        newsContainer.appendChild(div);
+      });
     }
 
     function searchNews() {
-      const query = document.getElementById('search-input').value.toLowerCase();
-      const filteredNews = allNews.filter(news => news.title.toLowerCase().includes(query) || news.description.toLowerCase().includes(query));
+      const query = searchInput.value.toLowerCase();
+      const filteredNews = allNews.filter(news =>
+        news.title.toLowerCase().includes(query) || news.description.toLowerCase().includes(query)
+      );
       displayNews(filteredNews);
     }
 
+    // Inicialização
     fetchCryptoPrices();
     fetchRSSFeeds();
-    setInterval(fetchCryptoPrices, 300000);
-    setInterval(fetchRSSFeeds, 300000);
+
+    // Atualização periódica (10 minutos)
+    setInterval(fetchCryptoPrices, 600000);
+    setInterval(fetchRSSFeeds, 600000);
+
+    // Busca em tempo real
+    searchInput.addEventListener('input', searchNews);
   </script>
 </body>
 </html>
