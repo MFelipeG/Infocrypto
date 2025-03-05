@@ -18,14 +18,13 @@ header h1 {
 
 .prices-container,
 .chart-container,
-.converter,
-.market-indicators,
-.news-container,
-.news-filter {
+.news-container {
   padding: 20px;
 }
 
-.price-card, .news-item, .indicator {
+.price-card,
+.news-item,
+.indicator {
   background-color: #1e1e2f;
   border-radius: 10px;
 }
@@ -34,3 +33,115 @@ button {
   background-color: #50fa7b;
 }
 
+/* Animações nos Ícones */
+.crypto-wallet {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  border: 2px solid var(--highlight);
+  opacity: 0; /* Começa invisível pra animação */
+  animation: fadeIn 1s ease-in forwards, pulse 2s infinite 1s; /* Fade-in + pulso */
+}
+
+.crypto-wallet:hover {
+  transform: scale(1.1) rotate(5deg); /* Escala e rotação no hover */
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Seção de Análises */
+.analyses-section {
+  padding: 20px;
+  background-color: var(--card-bg, #1e1e2f);
+  margin: 0 20px 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.analyses-section h2 {
+  color: var(--highlight, #50fa7b);
+  margin-bottom: 10px;
+  font-size: 1.5em;
+}
+
+.analysis-card {
+  background: linear-gradient(135deg, #1e1e2f, #282a36);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 10px 0;
+  text-align: left;
+}
+
+.analysis-card h3 {
+  color: #50fa7b;
+  margin-bottom: 5px;
+}
+
+.analysis-card p {
+  color: var(--secondary, #6272a4);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .analyses-section {
+    margin: 0 10px 10px;
+  }
+}
+
+/* Fundo 3D com Emblemas */
+body {
+  perspective: 1000px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+.background-3d {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.3;
+  animation: float 10s infinite ease-in-out;
+}
+
+.background-3d img {
+  position: absolute;
+  width: 100px;
+  transform: translateZ(50px) rotate(15deg);
+  animation: rotate 5s infinite linear;
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes rotate {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Posicione os emblemas (ajuste conforme necessário) */
+.background-3d img:nth-child(1) { top: 20%; left: 10%; } /* BTC */
+.background-3d img:nth-child(2) { top: 40%; left: 30%; } /* ETH */
+.background-3d img:nth-child(3) { top: 60%; left: 50%; } /* SOL */
+.background-3d img:nth-child(4) { top: 30%; left: 70%; } /* BNB */
+.background-3d img:nth-child(5) { top: 50%; left: 20%; } /* POL */
+.background-3d img:nth-child(6) { top: 70%; left: 40%; } /* Ripple */
