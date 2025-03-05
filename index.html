@@ -76,7 +76,7 @@
     }
     .theme-toggle {
       position: absolute;
-      bottom: 10px; /* Canto inferior direito */
+      bottom: 10px;
       right: 10px;
       background-color: var(--highlight);
       color: var(--header-text);
@@ -135,7 +135,7 @@
     #crypto-chart {
       width: 100% !important;
       max-width: 600px;
-      height: 200px !important; /* Altura fixa pra evitar comportamento elástico */
+      height: 200px !important;
     }
     .search-container {
       display: flex;
@@ -226,7 +226,7 @@
       width: 40px;
       height: 40px;
       border-radius: 50%;
-      background-size: contain; /* Ajuste pra garantir que a imagem inteira apareça */
+      background-size: contain;
       background-position: center;
       background-repeat: no-repeat;
       cursor: pointer;
@@ -373,11 +373,11 @@
   <div class="support-section">
     <h3>Apoie Nosso Canal</h3>
     <div class="crypto-wallets">
-      <div class="crypto-wallet" style="background-image: url('https://cryptoicons.org/api/icon/btc/40')" onclick="showWallet('bitcoin')"></div>
-      <div class="crypto-wallet" style="background-image: url('https://cryptoicons.org/api/icon/eth/40')" onclick="showWallet('ethereum')"></div>
-      <div class="crypto-wallet" style="background-image: url('https://cryptoicons.org/api/icon/sol/40')" onclick="showWallet('solana')"></div>
-      <div class="crypto-wallet" style="background-image: url('https://cryptoicons.org/api/icon/bnb/40')" onclick="showWallet('bnb')"></div>
-      <div class="crypto-wallet" style="background-image: url('https://cryptoicons.org/api/icon/matic/40')" onclick="showWallet('polygon')"></div>
+      <div class="crypto-wallet" style="background-image: url('imagens/btc.png')" onclick="showWallet('bitcoin')"></div>
+      <div class="crypto-wallet" style="background-image: url('imagens/eth.png')" onclick="showWallet('ethereum')"></div>
+      <div class="crypto-wallet" style="background-image: url('imagens/sol.png')" onclick="showWallet('solana')"></div>
+      <div class="crypto-wallet" style="background-image: url('imagens/bnb.png')" onclick="showWallet('bnb')"></div>
+      <div class="crypto-wallet" style="background-image: url('imagens/polygon.png')" onclick="showWallet('polygon')"></div>
     </div>
   </div>
 
@@ -425,7 +425,7 @@
       walletText.innerHTML = `
         <strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>
         ${walletAddresses[coin]}<br><br>
-        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! </em>
+        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>
       `;
       walletAddress.style.display = 'block';
     }
@@ -471,7 +471,7 @@
           },
           options: {
             responsive: true,
-            maintainAspectRatio: true, // Restaurado pra evitar comportamento elástico
+            maintainAspectRatio: true,
             scales: {
               x: { ticks: { maxTicksLimit: 10 } },
               y: { beginAtZero: false }
@@ -562,7 +562,7 @@
     function searchNews() {
       const query = searchInput.value.toLowerCase();
       const filteredNews = allNews.filter(news =>
-        news.title.toLowerCase().includes(query) || description.toLowerCase().includes(query)
+        news.title.toLowerCase().includes(query) || news.description.toLowerCase().includes(query)
       );
       currentPage = 1;
       displayNews(filteredNews);
