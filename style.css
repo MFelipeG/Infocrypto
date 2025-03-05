@@ -4,16 +4,49 @@ body {
   padding: 0;
   background-color: #121212;
   color: #ffffff;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.light {
+  background-color: #f0f0f0;
+  color: #121212;
 }
 
 header {
   background: linear-gradient(90deg, #50fa7b, #6272a4);
   padding: 20px;
   text-align: center;
+  position: relative;
+  min-height: 120px;
 }
 
 header h1 {
   margin: 0;
+  font-size: 2em;
+}
+
+header p {
+  font-size: 0.9em;
+  color: #f8f8f8;
+  margin-top: 5px;
+}
+
+.theme-toggle {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #50fa7b;
+  color: #121212;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 0.8em;
+  z-index: 10;
+}
+
+.theme-toggle:hover {
+  background-color: #45e06f;
 }
 
 .prices-container,
@@ -22,18 +55,158 @@ header h1 {
   padding: 20px;
 }
 
-.price-card,
-.news-item,
-.indicator {
+.prices-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.price-card {
+  background-color: #1e1e2f;
+  padding: 15px;
+  border-radius: 10px;
+  text-align: center;
+  width: 150px;
+  flex: 1 1 150px;
+}
+
+.price-card h2 {
+  margin-bottom: 10px;
+  color: #50fa7b;
+}
+
+.prices-container p,
+.news-container p {
+  color: #6272a4;
+  font-style: italic;
+}
+
+.chart-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  max-width: 100%;
+}
+
+.chart-container select {
+  background-color: #1e1e2f;
+  color: #ffffff;
+  border: none;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+}
+
+#crypto-chart {
+  width: 100% !important;
+  max-width: 600px;
+  height: 200px !important;
+}
+
+.search-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  padding: 20px;
+}
+
+.search-container input {
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  width: 200px;
+  background-color: #1e1e2f;
+  color: #ffffff;
+}
+
+.search-container button {
+  background-color: #50fa7b;
+  color: #121212;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.search-container button:hover {
+  background-color: #45e06f;
+}
+
+.news-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.news-item {
   background-color: #1e1e2f;
   border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-button {
-  background-color: #50fa7b;
+.news-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
 
-/* Animações nos Ícones */
+.news-item h3 {
+  padding: 10px;
+  color: #50fa7b;
+}
+
+.news-item p {
+  padding: 10px;
+  flex-grow: 1;
+}
+
+.news-item a {
+  padding: 10px;
+  color: #6272a4;
+  text-decoration: none;
+}
+
+.news-item a:hover {
+  text-decoration: underline;
+}
+
+footer {
+  text-align: center;
+  padding: 10px;
+  background-color: #282a36;
+  color: #6272a4;
+}
+
+.support-section {
+  padding: 15px;
+  background-color: #1e1e2f;
+  margin: 0 20px 20px;
+  border-radius: 10px;
+  text-align: center;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.support-section h3 {
+  color: #50fa7b;
+  margin-bottom: 10px;
+  font-size: 1.2em;
+}
+
+.crypto-wallets {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
 .crypto-wallet {
   width: 40px;
   height: 40px;
@@ -43,29 +216,108 @@ button {
   background-repeat: no-repeat;
   cursor: pointer;
   transition: transform 0.3s ease;
-  border: 2px solid var(--highlight);
-  opacity: 0; /* Começa invisível pra animação */
-  animation: fadeIn 1s ease-in forwards, pulse 2s infinite 1s; /* Fade-in + pulso */
+  border: 2px solid #50fa7b;
+  opacity: 0;
+  animation: fadeIn 1s ease-in forwards, pulse 2s infinite 1s;
 }
 
 .crypto-wallet:hover {
-  transform: scale(1.1) rotate(5deg); /* Escala e rotação no hover */
+  transform: scale(1.1) rotate(5deg);
 }
 
-@keyframes fadeIn {
-  to { opacity: 1; }
+.wallet-address {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #1e1e2f;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  text-align: center;
+  z-index: 1000;
+  max-width: 300px;
 }
 
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
+.wallet-address p {
+  margin: 5px 0;
+  word-break: break-all;
 }
 
-/* Seção de Análises */
+.wallet-address button {
+  background-color: #50fa7b;
+  color: #121212;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.wallet-address button:hover {
+  background-color: #45e06f;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.timestamp {
+  text-align: center;
+  font-size: 0.9em;
+  color: #6272a4;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+}
+
+.pagination button {
+  background-color: #50fa7b;
+  color: #121212;
+  border: none;
+  padding: 0;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.pagination button:disabled {
+  background-color: #6272a4;
+  cursor: not-allowed;
+}
+
+.pagination button:hover:not(:disabled) {
+  background-color: #45e06f;
+}
+
+.pagination span {
+  font-size: 1em;
+  color: #ffffff;
+}
+
 .analyses-section {
   padding: 20px;
-  background-color: var(--card-bg, #1e1e2f);
+  background-color: #1e1e2f;
   margin: 0 20px 20px;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -73,7 +325,7 @@ button {
 }
 
 .analyses-section h2 {
-  color: var(--highlight, #50fa7b);
+  color: #50fa7b;
   margin-bottom: 10px;
   font-size: 1.5em;
 }
@@ -92,56 +344,33 @@ button {
 }
 
 .analysis-card p {
-  color: var(--secondary, #6272a4);
+  color: #6272a4;
   font-style: italic;
 }
 
 @media (max-width: 768px) {
+  .prices-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  .news-container {
+    grid-template-columns: 1fr;
+  }
+  header {
+    padding: 10px;
+    min-height: 140px;
+  }
+  header h1 {
+    font-size: 1.5em;
+  }
+  .price-card {
+    width: 100%;
+    max-width: 200px;
+  }
+  .chart-container {
+    padding: 10px;
+  }
   .analyses-section {
     margin: 0 10px 10px;
   }
-}
-
-/* Fundo 3D com Emblemas */
-body {
-  perspective: 1000px;
-  overflow-x: hidden;
-  position: relative;
-}
-
-.background-3d {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  opacity: 0.3;
-  animation: float 10s infinite ease-in-out;
-}
-
-.background-3d img {
-  position: absolute;
-  width: 100px;
-  transform: translateZ(50px) rotate(15deg);
-  animation: rotate 5s infinite linear;
-}
-
-@keyframes float {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-  100% { transform: translateY(0); }
-}
-
-@keyframes rotate {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Posicione os emblemas (ajuste conforme necessário) */
-.background-3d img:nth-child(1) { top: 20%; left: 10%; } /* BTC */
-.background-3d img:nth-child(2) { top: 40%; left: 30%; } /* ETH */
-.background-3d img:nth-child(3) { top: 60%; left: 50%; } /* SOL */
-.background-3d img:nth-child(4) { top: 30%; left: 70%; } /* BNB */
-.background-3d img:nth-child(5) { top: 50%; left: 20%; } /* POL */
-.background-3d img:nth-child(6) { top: 70%; left: 40%; } /* Ripple */
+    }
