@@ -232,20 +232,16 @@
       cursor: pointer;
       transition: transform 0.2s;
       border: 2px solid var(--highlight);
-      opacity: 0;
-      animation: fadeIn 1s ease-in forwards, pulse 2s infinite 1s;
-      outline: none; /* Remove a sombra de foco */
-      box-shadow: none; /* Remove sombra padrão */
-    }
-    .crypto-wallet:focus {
-      outline: none; /* Garante que o foco não adicione sombra */
     }
     .crypto-wallet:hover {
       transform: scale(1.1);
     }
     .wallet-address {
       display: none;
-      position: absolute; /* Mudança pra absoluto pra posicionar relativo ao clique */
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       background-color: var(--card-bg);
       padding: 20px;
       border-radius: 10px;
@@ -254,15 +250,6 @@
       text-align: center;
       z-index: 1000;
       max-width: 300px;
-      transform: translate(-50%, -100%); /* Ajuste pra cima do clique */
-    }
-    @media (max-width: 768px) {
-      .wallet-address {
-        position: fixed; /* Mantém fixo em mobile */
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-      }
     }
     .wallet-address p {
       margin: 5px 0;
@@ -351,16 +338,6 @@
         padding: 10px;
       }
     }
-
-    /* Animações */
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
   </style>
 </head>
 <body>
@@ -425,7 +402,7 @@
     let lastFetchTime = null;
     let currentPage = 1;
     const itemsPerPage = 15;
-    const maxPages = 3; // Fixado em 3 páginas
+    const maxPages = 3;
     let chartInstance = null;
 
     // Tema Claro/Escuro
@@ -445,18 +422,12 @@
     };
 
     function showWallet(coin) {
-      const wallet = document.getElementById('wallet-address');
-      const walletText = document.getElementById('wallet-text');
       walletText.innerHTML = `
         <strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>
         ${walletAddresses[coin]}<br><br>
         <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>
       `;
-      const clickedElement = event.target; // Captura o elemento clicado
-      const rect = clickedElement.getBoundingClientRect();
-      wallet.style.top = `${rect.top}px`;
-      wallet.style.left = `${rect.left + rect.width / 2}px`;
-      wallet.style.display = 'block';
+      walletAddress.style.display = 'block';
     }
 
     function hideWallet() {
@@ -534,10 +505,6 @@
           if (data.items) allNews.push(...data.items);
         }
 
-        // Ordenar por data (mais recentes primeiro)
-        allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-
-        // Filtrar as últimas 4 dias e limitar a 45 notícias (3 páginas x 15)
         allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
         if (allNews.length > 45) allNews = allNews.slice(0, 45);
 
@@ -552,11 +519,10 @@
     function displayNews(newsList) {
       newsContainer.innerHTML = '';
       const start = (currentPage - 1) * itemsPerPage;
-      const end = start + itemsPerPage;
-      const paginatedNews = newsList.slice(start, end);
+      const paginatedNews = newsList.slice(start, start + itemsPerPage);
       paginatedNews.forEach(article => {
         const div = document.createElement('div');
-        div.className = 'news-item'; // Corrigido pra 'news-item'
+        div.className = 'news-item';
         let imageUrl = article.enclosure?.link || article.thumbnail;
         if (!imageUrl && article.description) {
           const imgMatch = article.description.match(/<img[^>]+src=["'](.*?)["']/i);
@@ -575,7 +541,7 @@
     }
 
     function updatePaginationControls(totalItems) {
-      const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages); // Limita a 3 páginas
+      const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages);
       const pagination = document.createElement('div');
       pagination.className = 'pagination';
       pagination.innerHTML = `
@@ -587,7 +553,7 @@
     }
 
     function changePage(page) {
-      if (page >= 1 && page <= maxPages) { // Garante até 3 páginas
+      if (page >= 1 && page <= Math.min(Math.ceil(allNews.length / itemsPerPage), maxPages)) {
         currentPage = page;
         displayNews(allNews);
       }
@@ -611,4 +577,8 @@
 
     searchInput.addEventListener('input', searchNews);
     chartSelect.addEventListener('change', (e) => {
-      fetch
+      fetchChartData(e.target.value);
+    });
+  </script>
+</body>
+</html>
