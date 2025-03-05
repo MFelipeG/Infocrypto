@@ -20,6 +20,7 @@
 
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R42F4YDHYM"></script>
@@ -29,316 +30,6 @@
     gtag('js', new Date());
     gtag('config', 'G-R42F4YDHYM');
   </script>
-
-  <style>
-    :root {
-      --bg-color: #121212;
-      --text-color: #ffffff;
-      --card-bg: #1e1e2f;
-      --header-text: #121212;
-      --highlight: #50fa7b;
-      --secondary: #6272a4;
-      --footer-bg: #282a36;
-    }
-    body.light {
-      --bg-color: #f0f0f0;
-      --text-color: #121212;
-      --card-bg: #ffffff;
-      --header-text: #ffffff;
-      --highlight: #45e06f;
-      --secondary: #8a9cc2;
-      --footer-bg: #e0e0e0;
-    }
-    body {
-      font-family: 'Roboto', Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      transition: background-color 0.3s, color 0.3s;
-    }
-    header {
-      background: linear-gradient(90deg, var(--highlight), var(--secondary));
-      padding: 20px 10px;
-      text-align: center;
-      position: relative;
-      min-height: 120px;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2em;
-      color: var(--header-text);
-    }
-    header p {
-      font-size: 0.9em;
-      color: #f8f8f8;
-      margin-top: 5px;
-    }
-    .theme-toggle {
-      position: absolute;
-      bottom: 10px;
-      right: 10px;
-      background-color: var(--highlight);
-      color: var(--header-text);
-      border: none;
-      padding: 6px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-      font-size: 0.8em;
-      z-index: 10;
-    }
-    .theme-toggle:hover {
-      background-color: #45e06f;
-    }
-    .prices-container, .news-container {
-      padding: 20px;
-    }
-    .prices-container {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
-    }
-    .price-card {
-      background-color: var(--card-bg);
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-      width: 150px;
-      flex: 1 1 150px;
-    }
-    .price-card h2 {
-      margin-bottom: 10px;
-      color: var(--highlight);
-    }
-    .prices-container p, .news-container p {
-      color: var(--secondary);
-      font-style: italic;
-    }
-    .chart-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      padding: 20px;
-      max-width: 100%;
-    }
-    .chart-container select {
-      background-color: var(--card-bg);
-      color: var(--text-color);
-      border: none;
-      padding: 8px;
-      border-radius: 5px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-    #crypto-chart {
-      width: 100% !important;
-      max-width: 600px;
-      height: 200px !important;
-    }
-    .search-container {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 20px;
-    }
-    .search-container input {
-      padding: 8px;
-      border: none;
-      border-radius: 5px;
-      width: 200px;
-      background-color: var(--card-bg);
-      color: var(--text-color);
-    }
-    .search-container button {
-      background-color: var(--highlight);
-      color: var(--header-text);
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .search-container button:hover {
-      background-color: #45e06f;
-    }
-    .news-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
-    }
-    .news-item {
-      background-color: var(--card-bg);
-      border-radius: 10px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-    .news-item img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-    .news-item h3 {
-      padding: 10px;
-      color: var(--highlight);
-    }
-    .news-item p {
-      padding: 10px;
-      flex-grow: 1;
-    }
-    .news-item a {
-      padding: 10px;
-      color: var(--secondary);
-      text-decoration: none;
-    }
-    .news-item a:hover {
-      text-decoration: underline;
-    }
-    footer {
-      text-align: center;
-      padding: 10px;
-      background-color: var(--footer-bg);
-      color: var(--secondary);
-    }
-    .support-section {
-      padding: 15px;
-      background-color: var(--card-bg);
-      margin: 0 20px 20px;
-      border-radius: 10px;
-      text-align: center;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    .support-section h3 {
-      color: var(--highlight);
-      margin-bottom: 10px;
-      font-size: 1.2em;
-    }
-    .crypto-wallets {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-    .crypto-wallet {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-size: contain;
-      background-position: center;
-      background-repeat: no-repeat;
-      cursor: pointer;
-      transition: transform 0.2s;
-      border: 2px solid var(--highlight);
-    }
-    .crypto-wallet:hover {
-      transform: scale(1.1);
-    }
-    .wallet-address {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: var(--card-bg);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      color: var(--text-color);
-      text-align: center;
-      z-index: 1000;
-      max-width: 300px;
-    }
-    .wallet-address p {
-      margin: 5px 0;
-      word-break: break-all;
-    }
-    .wallet-address button {
-      background-color: var(--highlight);
-      color: var(--header-text);
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    .wallet-address button:hover {
-      background-color: #45e06f;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      border: 0;
-    }
-    .timestamp {
-      text-align: center;
-      font-size: 0.9em;
-      color: var(--secondary);
-    }
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      padding: 20px;
-    }
-    .pagination button {
-      background-color: var(--highlight);
-      color: var(--header-text);
-      border: none;
-      padding: 0;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 1.2em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.3s;
-    }
-    .pagination button:disabled {
-      background-color: var(--secondary);
-      cursor: not-allowed;
-    }
-    .pagination button:hover:not(:disabled) {
-      background-color: #45e06f;
-    }
-    .pagination span {
-      font-size: 1em;
-      color: var(--text-color);
-    }
-    @media (max-width: 768px) {
-      .prices-container {
-        flex-direction: column;
-        align-items: center;
-      }
-      .news-container {
-        grid-template-columns: 1fr;
-      }
-      header {
-        padding: 10px;
-        min-height: 140px;
-      }
-      header h1 {
-        font-size: 1.5em;
-      }
-      .price-card {
-        width: 100%;
-        max-width: 200px;
-      }
-      .chart-container {
-        padding: 10px;
-      }
-    }
-  </style>
 </head>
 <body>
   <header>
@@ -368,6 +59,19 @@
 
   <div class="news-container" id="news-container">
     <p>Carregando notícias...</p>
+  </div>
+
+  <div class="analyses-section">
+    <h2>Análises de Mercado</h2>
+    <p>Confira nossas análises e previsões para o mercado de criptomoedas em 2025!</p>
+    <div class="analysis-card">
+      <h3>Bitcoin: Tendências para Março</h3>
+      <p>Analistas preveem um aumento de 10% no preço do BTC até o fim do mês.</p>
+    </div>
+    <div class="analysis-card">
+      <h3>Ethereum: Atualizações Pós-Merge</h3>
+      <p>Novas melhorias na rede podem impulsionar o ETH nos próximos meses.</p>
+    </div>
   </div>
 
   <div class="support-section">
