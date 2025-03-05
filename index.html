@@ -20,6 +20,7 @@
 
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-R42F4YDHYM"></script>
@@ -232,6 +233,8 @@
       cursor: pointer;
       transition: transform 0.2s;
       border: 2px solid var(--highlight);
+      opacity: 0;
+      animation: fadeIn 1s ease-in forwards, pulse 2s infinite 1s;
     }
     .crypto-wallet:hover {
       transform: scale(1.1);
@@ -338,6 +341,16 @@
         padding: 10px;
       }
     }
+
+    /* Animações */
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
 <body>
@@ -368,6 +381,19 @@
 
   <div class="news-container" id="news-container">
     <p>Carregando notícias...</p>
+  </div>
+
+  <div class="analyses-section">
+    <h2>Análises de Mercado</h2>
+    <p>Confira nossas análises e previsões para o mercado de criptomoedas em 2025!</p>
+    <div class="analysis-card">
+      <h3>Bitcoin: Tendências para Março</h3>
+      <p>Analistas preveem um aumento de 10% no preço do BTC até o fim do mês.</p>
+    </div>
+    <div class="analysis-card">
+      <h3>Ethereum: Atualizações Pós-Merge</h3>
+      <p>Novas melhorias na rede podem impulsionar o ETH nos próximos meses.</p>
+    </div>
   </div>
 
   <div class="support-section">
@@ -402,7 +428,7 @@
     let lastFetchTime = null;
     let currentPage = 1;
     const itemsPerPage = 15;
-    const maxPages = 3;
+    const maxPages = 3; // Fixado em 3 páginas
     let chartInstance = null;
 
     // Tema Claro/Escuro
@@ -425,7 +451,7 @@
       walletText.innerHTML = `
         <strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>
         ${walletAddresses[coin]}<br><br>
-        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! </em>
+        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>
       `;
       walletAddress.style.display = 'block';
     }
@@ -505,6 +531,10 @@
           if (data.items) allNews.push(...data.items);
         }
 
+        // Ordenar por data (mais recentes primeiro)
+        allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+        // Filtrar as últimas 4 dias e limitar a 45 notícias (3 páginas x 15)
         allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
         if (allNews.length > 45) allNews = allNews.slice(0, 45);
 
@@ -519,7 +549,8 @@
     function displayNews(newsList) {
       newsContainer.innerHTML = '';
       const start = (currentPage - 1) * itemsPerPage;
-      const paginatedNews = newsList.slice(start, start + itemsPerPage);
+      const end = start + itemsPerPage;
+      const paginatedNews = newsList.slice(start, end);
       paginatedNews.forEach(article => {
         const div = document.createElement('div');
         div.className = 'news-item';
@@ -541,7 +572,7 @@
     }
 
     function updatePaginationControls(totalItems) {
-      const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages);
+      const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages); // Limita a 3 páginas
       const pagination = document.createElement('div');
       pagination.className = 'pagination';
       pagination.innerHTML = `
@@ -553,7 +584,7 @@
     }
 
     function changePage(page) {
-      if (page >= 1 && page <= Math.min(Math.ceil(allNews.length / itemsPerPage), maxPages)) {
+      if (page >= 1 && page <= maxPages) { // Garante até 3 páginas
         currentPage = page;
         displayNews(allNews);
       }
