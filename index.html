@@ -4,38 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>InfoCrypto - Últimas Notícias e Preços</title>
-  <meta name="description" content="InfoCrypto - Últimas notícias e preços atualizados de Bitcoin, Ethereum, Solana, BNB e outras criptomoedas. Acompanhe as novidades do mercado cripto!">
-  <meta name="keywords" content="criptomoedas, bitcoin, ethereum, solana, bnb, preços cripto, notícias cripto, mercado financeiro, blockchain, investimentos">
+  <meta name="description" content="InfoCrypto - Últimas notícias e preços atualizados de Bitcoin, Ethereum, Solana e outras criptomoedas. Acompanhe as novidades do mercado cripto!">
+  <meta name="keywords" content="criptomoedas, bitcoin, ethereum, solana, preços cripto, notícias cripto, mercado financeiro, blockchain, investimentos">
   <meta name="author" content="Marlon Grochoska">
-  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="robots" content="index, follow">
   <meta name="googlebot" content="index, follow">
-  <meta name="google-site-verification" content="SEU_CÓDIGO_DE_VERIFICAÇÃO"> <!-- Substitua pelo código do Google Search Console -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="theme-color" content="#50fa7b">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="msapplication-TileImage" content="https://mfelipeg.github.io/Infocrypto/imagens/infocrypto-logo.jpg">
-  <meta name="msapplication-TileColor" content="#50fa7b">
-
   <meta property="og:title" content="InfoCrypto - Últimas Notícias e Preços de Criptomoedas">
-  <meta property="og:description" content="Fique atualizado com as últimas notícias e preços do mercado cripto. Acompanhe Bitcoin, Ethereum, Solana, BNB e mais!">
+  <meta property="og:description" content="Fique atualizado com as últimas notícias e preços do mercado cripto. Acompanhe Bitcoin, Ethereum, Solana e mais!">
   <meta property="og:image" content="https://mfelipeg.github.io/Infocrypto/imagens/infocrypto-logo.jpg">
   <meta property="og:url" content="https://mfelipeg.github.io/Infocrypto/">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="pt_BR">
-  <meta property="og:site_name" content="InfoCrypto">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="fb:app_id" content="SEU_APP_ID"> <!-- Substitua pelo ID do app do Facebook, se tiver -->
-
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="InfoCrypto - Últimas Notícias e Preços de Criptomoedas">
   <meta name="twitter:description" content="Acompanhe preços e notícias do mercado cripto em tempo real;">
   <meta name="twitter:image" content="https://mfelipeg.github.io/Infocrypto/imagens/infocrypto-logo.jpg">
-  <meta name="twitter:image:alt" content="Logo InfoCrypto">
-  <meta name="twitter:site" content="@MarlonGrochoska"> <!-- Substitua por sua conta real -->
-  <meta name="twitter:creator" content="@MarlonGrochoska"> <!-- Substitua por sua conta real -->
-
-  <link rel="canonical" href="https://mfelipeg.github.io/Infocrypto/">
 
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -47,21 +28,6 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-R42F4YDHYM');
-  </script>
-
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "InfoCrypto",
-      "url": "https://mfelipeg.github.io/Infocrypto/",
-      "description": "InfoCrypto - Últimas notícias e preços atualizados de Bitcoin, Ethereum, Solana, BNB e outras criptomoedas.",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Marlon Grochoska",
-        "url": "https://mfelipeg.github.io/Infocrypto/"
-      }
-    }
   </script>
 
   <style>
@@ -390,7 +356,6 @@
       <option value="bitcoin">Bitcoin (BTC)</option>
       <option value="ethereum">Ethereum (ETH)</option>
       <option value="solana">Solana (SOL)</option>
-      <option value="bnb">BNB (BNB)</option>
     </select>
     <canvas id="crypto-chart" width="400" height="200"></canvas>
   </div>
@@ -417,7 +382,7 @@
   </div>
 
   <footer>
-    <p>Desenvolvido por: Marlon Grochoska | Dados fornecidos por Binance, CoinDesk, CoinTelegraph e Livecoins.</p>
+    <p>Desenvolvido por: Marlon Grochoska | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.</p>
   </footer>
 
   <div id="wallet-address" class="wallet-address">
@@ -469,49 +434,35 @@
       walletAddress.style.display = 'none';
     }
 
-    // Função para buscar preços da Binance
     async function fetchCryptoPrices() {
       try {
-        console.log('Buscando preços da Binance...');
-        const symbols = ['BTCUSDT', 'ETHUSDT', 'SOLUSDT', 'BNBUSDT'];
-        const prices = {};
-        for (const symbol of symbols) {
-          const response = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}`);
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status} for ${symbol}`);
-          const data = await response.json();
-          prices[symbol] = data.price;
-        }
-        console.log('Preços recebidos:', prices);
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
+        const data = await response.json();
         pricesContainer.innerHTML = `
-          <div class="price-card"><h2>Bitcoin (BTC)</h2><p>Preço Atual: $${prices.BTCUSDT}</p></div>
-          <div class="price-card"><h2>Ethereum (ETH)</h2><p>Preço Atual: $${prices.ETHUSDT}</p></div>
-          <div class="price-card"><h2>Solana (SOL)</h2><p>Preço Atual: $${prices.SOLUSDT}</p></div>
-          <div class="price-card"><h2>BNB (BNB)</h2><p>Preço Atual: $${prices.BNBUSDT}</p></div>
+          <div class="price-card"><h2>Bitcoin (BTC)</h2><p>Preço Atual: $${data.bitcoin.usd}</p></div>
+          <div class="price-card"><h2>Ethereum (ETH)</h2><p>Preço Atual: $${data.ethereum.usd}</p></div>
+          <div class="price-card"><h2>Solana (SOL)</h2><p>Preço Atual: $${data.solana.usd}</p></div>
           <p class="timestamp">Última atualização: ${new Date().toLocaleTimeString()}</p>
         `;
       } catch (error) {
-        console.error('Erro ao buscar preços:', error);
         pricesContainer.innerHTML = '<p>Erro ao carregar preços. Tente novamente mais tarde.</p>';
+        console.error('Erro ao buscar preços:', error);
       }
     }
 
-    // Função para buscar gráfico da Binance
     async function fetchChartData(coin) {
       try {
-        console.log(`Buscando gráfico para ${coin}...`);
-        const response = await fetch(`https://api.binance.com/api/v3/klines?symbol=${coin.toUpperCase()}USDT&interval=1h&limit=100`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=30`);
         const data = await response.json();
-        console.log('Dados do gráfico:', data);
         const ctx = document.getElementById('crypto-chart').getContext('2d');
         if (chartInstance) chartInstance.destroy();
         chartInstance = new Chart(ctx, {
           type: 'line',
           data: {
-            labels: data.map(d => new Date(d[0]).toLocaleDateString()),
+            labels: data.prices.map(p => new Date(p[0]).toLocaleDateString()),
             datasets: [{
-              label: `${coin.toUpperCase()} (USD)`,
-              data: data.map(d => d[4]), // Preço de fechamento
+              label: `${coin.charAt(0).toUpperCase() + coin.slice(1)} (USD)`,
+              data: data.prices.map(p => p[1]),
               borderColor: '#50fa7b',
               fill: false,
               pointRadius: 1,
@@ -528,21 +479,19 @@
           }
         });
       } catch (error) {
-        console.error('Erro ao carregar gráfico:', error);
         document.querySelector('.chart-container').innerHTML += '<p style="color: var(--secondary);">Erro ao carregar gráfico. Tente novamente mais tarde.</p>';
+        console.error('Erro ao carregar gráfico:', error);
       }
     }
 
-    // Função para buscar notícias (mantida como estava)
     async function fetchRSSFeeds() {
-      try {
-        console.log('Buscando notícias...');
-        const now = new Date();
-        if (lastFetchTime && (now - lastFetchTime) < 600000) {
-          displayNews(allNews);
-          return;
-        }
+      const now = new Date();
+      if (lastFetchTime && (now - lastFetchTime) < 600000) {
+        displayNews(allNews);
+        return;
+      }
 
+      try {
         const RSS_FEEDS = [
           'https://www.coindesk.com/arc/outboundfeeds/rss/',
           'https://cointelegraph.com/rss',
@@ -551,33 +500,26 @@
 
         allNews = [];
         for (const feed of RSS_FEEDS) {
-          const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed)}`);
-          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feed}`);
           const data = await response.json();
           if (data.items) allNews.push(...data.items);
         }
 
-        // Ordenar por data (mais recentes primeiro)
-        allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
-
-        // Filtrar as últimas 4 dias e limitar a 45 notícias (3 páginas x 15)
         allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
         if (allNews.length > 45) allNews = allNews.slice(0, 45);
 
-        console.log('Notícias recebidas:', allNews.length);
         lastFetchTime = now;
         displayNews(allNews);
       } catch (error) {
-        console.error('Erro ao carregar notícias:', error);
         newsContainer.innerHTML = '<p>Erro ao carregar notícias. Tente novamente mais tarde.</p>';
+        console.error('Erro ao carregar notícias:', error);
       }
     }
 
     function displayNews(newsList) {
       newsContainer.innerHTML = '';
       const start = (currentPage - 1) * itemsPerPage;
-      const end = start + itemsPerPage;
-      const paginatedNews = newsList.slice(start, end);
+      const paginatedNews = newsList.slice(start, start + itemsPerPage);
       paginatedNews.forEach(article => {
         const div = document.createElement('div');
         div.className = 'news-item';
@@ -591,4 +533,52 @@
           <img src="${imageUrl}" alt="Imagem da notícia" loading="lazy">
           <h3>${article.title}</h3>
           <p>${description}</p>
-          <
+          <a href="${article.link}" target="_blank">Leia mais</a>
+        `;
+        newsContainer.appendChild(div);
+      });
+      updatePaginationControls(newsList.length);
+    }
+
+    function updatePaginationControls(totalItems) {
+      const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages);
+      const pagination = document.createElement('div');
+      pagination.className = 'pagination';
+      pagination.innerHTML = `
+        <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} title="Página Anterior"><</button>
+        <span>${currentPage}/${totalPages}</span>
+        <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} title="Próxima Página">></button>
+      `;
+      newsContainer.appendChild(pagination);
+    }
+
+    function changePage(page) {
+      if (page >= 1 && page <= Math.min(Math.ceil(allNews.length / itemsPerPage), maxPages)) {
+        currentPage = page;
+        displayNews(allNews);
+      }
+    }
+
+    function searchNews() {
+      const query = searchInput.value.toLowerCase();
+      const filteredNews = allNews.filter(news =>
+        news.title.toLowerCase().includes(query) || news.description.toLowerCase().includes(query)
+      );
+      currentPage = 1;
+      displayNews(filteredNews);
+    }
+
+    fetchCryptoPrices();
+    fetchChartData('bitcoin');
+    fetchRSSFeeds();
+
+    setInterval(fetchCryptoPrices, 600000);
+    setInterval(fetchRSSFeeds, 600000);
+
+    searchInput.addEventListener('input', searchNews);
+    chartSelect.addEventListener('change', (e) => {
+      fetchChartData(e.target.value);
+    });
+  </script>
+</body>
+</html>
