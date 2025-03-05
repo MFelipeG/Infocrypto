@@ -383,19 +383,6 @@
     <p>Carregando notícias...</p>
   </div>
 
-  <div class="analyses-section">
-    <h2>Análises de Mercado</h2>
-    <p>Confira nossas análises e previsões para o mercado de criptomoedas em 2025!</p>
-    <div class="analysis-card">
-      <h3>Bitcoin: Tendências para Março</h3>
-      <p>Analistas preveem um aumento de 10% no preço do BTC até o fim do mês.</p>
-    </div>
-    <div class="analysis-card">
-      <h3>Ethereum: Atualizações Pós-Merge</h3>
-      <p>Novas melhorias na rede podem impulsionar o ETH nos próximos meses.</p>
-    </div>
-  </div>
-
   <div class="support-section">
     <h3>Apoie Nosso Canal</h3>
     <div class="crypto-wallets">
@@ -553,7 +540,7 @@
       const paginatedNews = newsList.slice(start, end);
       paginatedNews.forEach(article => {
         const div = document.createElement('div');
-        div.className = 'news-item';
+        div.className = 'news-container';
         let imageUrl = article.enclosure?.link || article.thumbnail;
         if (!imageUrl && article.description) {
           const imgMatch = article.description.match(/<img[^>]+src=["'](.*?)["']/i);
