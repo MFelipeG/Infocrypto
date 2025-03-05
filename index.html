@@ -7,16 +7,35 @@
   <meta name="description" content="InfoCrypto - Últimas notícias e preços atualizados de Bitcoin, Ethereum, Solana e outras criptomoedas. Acompanhe as novidades do mercado cripto!">
   <meta name="keywords" content="criptomoedas, bitcoin, ethereum, solana, preços cripto, notícias cripto, mercado financeiro, blockchain, investimentos">
   <meta name="author" content="Marlon Grochoska">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="googlebot" content="index, follow">
+  <meta name="google-site-verification" content="SEU_CÓDIGO_DE_VERIFICAÇÃO"> <!-- Substitua pelo código do Google Search Console -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="theme-color" content="#50fa7b"> <!-- Cor da barra de status em mobile -->
+  <meta name="apple-mobile-web-app-capable" content="yes"> <!-- Habilita como web app em iOS -->
+  <meta name="msapplication-TileImage" content="https://mfelipeg.github.io/Infocrypto/imagens/infocrypto-logo.jpg"> <!-- Ícone para Windows -->
+  <meta name="msapplication-TileColor" content="#50fa7b"> <!-- Cor do tile no Windows -->
+
   <meta property="og:title" content="InfoCrypto - Últimas Notícias e Preços de Criptomoedas">
   <meta property="og:description" content="Fique atualizado com as últimas notícias e preços do mercado cripto. Acompanhe Bitcoin, Ethereum, Solana e mais!">
   <meta property="og:image" content="https://mfelipeg.github.io/Infocrypto/imagens/infocrypto-logo.jpg">
   <meta property="og:url" content="https://mfelipeg.github.io/Infocrypto/">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="InfoCrypto">
+  <meta property="og:image:width" content="1200"> <!-- Largura da imagem em pixels -->
+  <meta property="og:image:height" content="630"> <!-- Altura da imagem em pixels -->
+  <meta property="fb:app_id" content="SEU_APP_ID"> <!-- Substitua pelo ID do app do Facebook, se tiver -->
+
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="InfoCrypto - Últimas Notícias e Preços de Criptomoedas">
   <meta name="twitter:description" content="Acompanhe preços e notícias do mercado cripto em tempo real;">
   <meta name="twitter:image" content="https://mfelipeg.github.io/Infocrypto/imagens/infocrypto-logo.jpg">
+  <meta name="twitter:image:alt" content="Logo InfoCrypto">
+  <meta name="twitter:site" content="@MGrochoska"> <!-- Substitua por sua conta real -->
+  <meta name="twitter:creator" content="@MGrochoska"> <!-- Substitua por sua conta real -->
+
+  <link rel="canonical" href="https://mfelipeg.github.io/Infocrypto/">
 
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -28,6 +47,22 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-R42F4YDHYM');
+  </script>
+
+  <!-- Dados Estruturados (Schema.org) -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "InfoCrypto",
+      "url": "https://mfelipeg.github.io/Infocrypto/",
+      "description": "InfoCrypto - Últimas notícias e preços atualizados de Bitcoin, Ethereum, Solana e outras criptomoedas.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Marlon Grochoska",
+        "url": "https://mfelipeg.github.io/Infocrypto/"
+      }
+    }
   </script>
 
   <style>
@@ -402,7 +437,7 @@
     let lastFetchTime = null;
     let currentPage = 1;
     const itemsPerPage = 15;
-    const maxPages = 3;
+    const maxPages = 3; // Fixado em 3 páginas
     let chartInstance = null;
 
     // Tema Claro/Escuro
@@ -425,7 +460,7 @@
       walletText.innerHTML = `
         <strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>
         ${walletAddresses[coin]}<br><br>
-        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>
+        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! </em>
       `;
       walletAddress.style.display = 'block';
     }
@@ -505,6 +540,10 @@
           if (data.items) allNews.push(...data.items);
         }
 
+        // Ordenar por data (mais recentes primeiro)
+        allNews.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+
+        // Filtrar as últimas 4 dias e limitar a 45 notícias (3 páginas x 15)
         allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
         if (allNews.length > 45) allNews = allNews.slice(0, 45);
 
@@ -519,7 +558,8 @@
     function displayNews(newsList) {
       newsContainer.innerHTML = '';
       const start = (currentPage - 1) * itemsPerPage;
-      const paginatedNews = newsList.slice(start, start + itemsPerPage);
+      const end = start + itemsPerPage;
+      const paginatedNews = newsList.slice(start, end);
       paginatedNews.forEach(article => {
         const div = document.createElement('div');
         div.className = 'news-item';
@@ -541,7 +581,7 @@
     }
 
     function updatePaginationControls(totalItems) {
-      const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages);
+      const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages); // Limita a 3 páginas
       const pagination = document.createElement('div');
       pagination.className = 'pagination';
       pagination.innerHTML = `
@@ -549,36 +589,4 @@
         <span>${currentPage}/${totalPages}</span>
         <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} title="Próxima Página">></button>
       `;
-      newsContainer.appendChild(pagination);
-    }
-
-    function changePage(page) {
-      if (page >= 1 && page <= Math.min(Math.ceil(allNews.length / itemsPerPage), maxPages)) {
-        currentPage = page;
-        displayNews(allNews);
-      }
-    }
-
-    function searchNews() {
-      const query = searchInput.value.toLowerCase();
-      const filteredNews = allNews.filter(news =>
-        news.title.toLowerCase().includes(query) || news.description.toLowerCase().includes(query)
-      );
-      currentPage = 1;
-      displayNews(filteredNews);
-    }
-
-    fetchCryptoPrices();
-    fetchChartData('bitcoin');
-    fetchRSSFeeds();
-
-    setInterval(fetchCryptoPrices, 600000);
-    setInterval(fetchRSSFeeds, 600000);
-
-    searchInput.addEventListener('input', searchNews);
-    chartSelect.addEventListener('change', (e) => {
-      fetchChartData(e.target.value);
-    });
-  </script>
-</body>
-</html>
+ 
