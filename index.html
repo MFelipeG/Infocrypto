@@ -240,7 +240,255 @@
     .crypto-wallet:hover {
       transform: scale(1.1);
     }
-        async function fetchRSSFeeds() {
+    .wallet-address {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: var(--card-bg);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      color: var(--text-color);
+      text-align: center;
+      z-index: 1000;
+      max-width: 300px;
+    }
+    .wallet-address p {
+      margin: 5px 0;
+      word-break: break-all;
+    }
+    .wallet-address button {
+      background-color: var(--highlight);
+      color: var(--header-text);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .wallet-address button:hover {
+      background-color: #45e06f;
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    .timestamp {
+      text-align: center;
+      font-size: 0.9em;
+      color: var(--secondary);
+    }
+    .pagination {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      padding: 20px;
+    }
+    .pagination button {
+      background-color: var(--highlight);
+      color: var(--header-text);
+      border: none;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.3s;
+    }
+    .pagination button:disabled {
+      background-color: var(--secondary);
+      cursor: not-allowed;
+    }
+    .pagination button:hover:not(:disabled) {
+      background-color: #45e06f;
+    }
+    .pagination span {
+      font-size: 1em;
+      color: var(--text-color);
+    }
+    @media (max-width: 768px) {
+      .prices-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      .news-container {
+        grid-template-columns: 1fr;
+      }
+      header {
+        padding: 10px;
+        min-height: 140px;
+      }
+      header h1 {
+        font-size: 1.5em;
+      }
+      .price-card {
+        width: 100%;
+        max-width: 200px;
+      }
+      .chart-container {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>InfoCrypto</h1>
+    <p>Preços ao vivo e as últimas notícias sobre criptomoedas!</p>
+    <button class="theme-toggle" id="theme-toggle">Alternar Tema</button>
+  </header>
+
+  <div class="prices-container" id="prices-container">
+    <p>Carregando preços...</p>
+  </div>
+
+  <div class="chart-container">
+    <select id="chart-select">
+      <option value="bitcoin">Bitcoin (BTC)</option>
+      <option value="ethereum">Ethereum (ETH)</option>
+      <option value="solana">Solana (SOL)</option>
+    </select>
+    <canvas id="crypto-chart" width="400" height="200"></canvas>
+  </div>
+
+  <div class="search-container">
+    <label for="search-input" class="sr-only">Buscar notícias</label>
+    <input type="text" id="search-input" placeholder="Buscar notícias...">
+    <button onclick="searchNews()">Buscar</button>
+  </div>
+
+  <div class="news-container" id="news-container">
+    <p>Carregando notícias...</p>
+  </div>
+
+  <div class="support-section">
+    <h3>Apoie Nosso Canal</h3>
+    <div class="crypto-wallets">
+      <div class="crypto-wallet" style="background-image: url('imagens/btc.png')" onclick="showWallet('bitcoin')"></div>
+      <div class="crypto-wallet" style="background-image: url('imagens/eth.png')" onclick="showWallet('ethereum')"></div>
+      <div class="crypto-wallet" style="background-image: url('imagens/sol.png')" onclick="showWallet('solana')"></div>
+      <div class="crypto-wallet" style="background-image: url('imagens/bnb.png')" onclick="showWallet('bnb')"></div>
+      <div class="crypto-wallet" style="background-image: url('imagens/pol.png')" onclick="showWallet('polygon')"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>Desenvolvido por: Marlon Grochoska | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.</p>
+  </footer>
+
+  <div id="wallet-address" class="wallet-address">
+    <p id="wallet-text"></p>
+    <button onclick="hideWallet()">Fechar</button>
+  </div>
+
+  <script>
+    const pricesContainer = document.getElementById('prices-container');
+    const newsContainer = document.getElementById('news-container');
+    const searchInput = document.getElementById('search-input');
+    const themeToggle = document.getElementById('theme-toggle');
+    const chartSelect = document.getElementById('chart-select');
+    const walletAddress = document.getElementById('wallet-address');
+    const walletText = document.getElementById('wallet-text');
+    let allNews = [];
+    let lastFetchTime = null;
+    let currentPage = 1;
+    const itemsPerPage = 15;
+    const maxPages = 3;
+    let chartInstance = null;
+
+    // Tema Claro/Escuro
+    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('light');
+      localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    });
+
+    // Funções de Carteira
+    const walletAddresses = {
+      bitcoin: '1Lkpq3cwVi7wYzN3zC38padBk2Sz58Df1j',
+      ethereum: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05',
+      solana: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05',
+      bnb: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05',
+      polygon: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05'
+    };
+
+    function showWallet(coin) {
+      walletText.innerHTML = `
+        <strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>
+        ${walletAddresses[coin]}<br><br>
+        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>
+      `;
+      walletAddress.style.display = 'block';
+    }
+
+    function hideWallet() {
+      walletAddress.style.display = 'none';
+    }
+
+    async function fetchCryptoPrices() {
+      try {
+        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
+        const data = await response.json();
+        pricesContainer.innerHTML = `
+          <div class="price-card"><h2>Bitcoin (BTC)</h2><p>Preço Atual: $${data.bitcoin.usd}</p></div>
+          <div class="price-card"><h2>Ethereum (ETH)</h2><p>Preço Atual: $${data.ethereum.usd}</p></div>
+          <div class="price-card"><h2>Solana (SOL)</h2><p>Preço Atual: $${data.solana.usd}</p></div>
+          <p class="timestamp">Última atualização: ${new Date().toLocaleTimeString()}</p>
+        `;
+      } catch (error) {
+        pricesContainer.innerHTML = '<p>Erro ao carregar preços. Tente novamente mais tarde.</p>';
+        console.error('Erro ao buscar preços:', error);
+      }
+    }
+
+    async function fetchChartData(coin) {
+      try {
+        const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=30`);
+        const data = await response.json();
+        const ctx = document.getElementById('crypto-chart').getContext('2d');
+        if (chartInstance) chartInstance.destroy();
+        chartInstance = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: data.prices.map(p => new Date(p[0]).toLocaleDateString()),
+            datasets: [{
+              label: `${coin.charAt(0).toUpperCase() + coin.slice(1)} (USD)`,
+              data: data.prices.map(p => p[1]),
+              borderColor: '#50fa7b',
+              fill: false,
+              pointRadius: 1,
+              tension: 0.1
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: {
+              x: { ticks: { maxTicksLimit: 10 } },
+              y: { beginAtZero: false }
+            }
+          }
+        });
+      } catch (error) {
+        document.querySelector('.chart-container').innerHTML += '<p style="color: var(--secondary);">Erro ao carregar gráfico. Tente novamente mais tarde.</p>';
+        console.error('Erro ao carregar gráfico:', error);
+      }
+    }
+
+    async function fetchRSSFeeds() {
       const now = new Date();
       if (lastFetchTime && (now - lastFetchTime) < 600000) {
         displayNews(allNews);
