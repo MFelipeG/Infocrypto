@@ -369,25 +369,56 @@
       background-color: #ff6b6b;
       color: var(--header-text);
     }
-    .share-buttons {
-      display: flex;
-      gap: 10px;
-      padding: 10px;
-      flex-wrap: wrap;
+
+    /* Estilos para o botão de compartilhamento */
+    .share-container {
+      position: relative;
+      display: inline-block;
     }
-    .share-buttons a {
+    .share-button {
       background-color: var(--card-bg);
       color: var(--text-color);
+      border: none;
       padding: 8px 12px;
       border-radius: 5px;
-      text-decoration: none;
+      cursor: pointer;
       display: flex;
       align-items: center;
       gap: 5px;
     }
-    .share-buttons a:hover {
+    .share-button:hover {
       background-color: var(--highlight);
       color: var(--header-text);
+    }
+    .share-options {
+      display: none;
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--card-bg);
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      padding: 10px;
+      z-index: 100;
+      flex-direction: column;
+      gap: 5px;
+    }
+    .share-options a {
+      color: var(--text-color);
+      text-decoration: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .share-options a:hover {
+      background-color: var(--highlight);
+      color: var(--header-text);
+    }
+    .share-container:hover .share-options {
+      display: flex;
     }
   </style>
 </head>
@@ -589,13 +620,16 @@
             <button class="like-btn" onclick="toggleLike(this, '${article.link}')">👍 <span>0</span></button>
             <button class="dislike-btn" onclick="toggleDislike(this, '${article.link}')">👎 <span>0</span></button>
           </div>
-          <div class="share-buttons">
-            <a href="#" onclick="shareOnFacebook('${article.link}', '${article.title}')">Facebook</a>
-            <a href="#" onclick="shareOnInstagram('${article.link}', '${article.title}')">Instagram</a>
-            <a href="#" onclick="shareOnTwitter('${article.link}', '${article.title}')">X (Twitter)</a>
-            <a href="#" onclick="shareOnWhatsApp('${article.link}', '${article.title}')">WhatsApp</a>
-            <a href="#" onclick="shareByEmail('${article.link}', '${article.title}')">E-mail</a>
-            <a href="#" onclick="copyLink('${article.link}')">Copiar Link</a>
+          <div class="share-container">
+            <button class="share-button">📤 Compartilhar</button>
+            <div class="share-options">
+              <a href="#" onclick="shareOnFacebook('${article.link}', '${article.title}')">Facebook</a>
+              <a href="#" onclick="shareOnInstagram('${article.link}', '${article.title}')">Instagram</a>
+              <a href="#" onclick="shareOnTwitter('${article.link}', '${article.title}')">X (Twitter)</a>
+              <a href="#" onclick="shareOnWhatsApp('${article.link}', '${article.title}')">WhatsApp</a>
+              <a href="#" onclick="shareByEmail('${article.link}', '${article.title}')">E-mail</a>
+              <a href="#" onclick="copyLink('${article.link}')">Copiar Link</a>
+            </div>
           </div>
           <a href="${article.link}" target="_blank">Leia mais</a>
         `;
