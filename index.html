@@ -704,7 +704,7 @@
     }
 
     function shareOnWhatsApp(url, title) {
-      window.open(`https://wa.me/?text=${encodeURIComponent(title + ' - ' + url)}`, '_blank');
+      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(title + ' - ' + url)}`, '_blank');
     }
 
     function shareByEmail(url, title) {
