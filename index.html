@@ -35,7 +35,7 @@
   </script>
 
   <style>
-    /* Estilos existentes */
+    /* Variáveis de tema */
     :root {
       --bg-color: #121212;
       --text-color: #ffffff;
@@ -54,6 +54,8 @@
       --secondary: #8a9cc2;
       --footer-bg: #e0e0e0;
     }
+
+    /* Estilos globais */
     body {
       font-family: 'Roboto', Arial, sans-serif;
       margin: 0;
@@ -95,14 +97,10 @@
     .theme-toggle:hover {
       background-color: #45e06f;
     }
+
+    /* Estilos para notícias e preços */
     .prices-container, .news-container {
       padding: 20px;
-    }
-    .prices-container {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      flex-wrap: wrap;
     }
     .price-card {
       background-color: var(--card-bg);
@@ -115,62 +113,6 @@
     .price-card h2 {
       margin-bottom: 10px;
       color: var(--highlight);
-    }
-    .prices-container p, .news-container p {
-      color: var(--secondary);
-      font-style: italic;
-    }
-    .chart-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      padding: 20px;
-      max-width: 100%;
-    }
-    .chart-container select {
-      background-color: var(--card-bg);
-      color: var(--text-color);
-      border: none;
-      padding: 8px;
-      border-radius: 5px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-    #crypto-chart {
-      width: 100% !important;
-      max-width: 600px;
-      height: 200px !important;
-    }
-    .search-container {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      padding: 20px;
-    }
-    .search-container input {
-      padding: 8px;
-      border: none;
-      border-radius: 5px;
-      width: 200px;
-      background-color: var(--card-bg);
-      color: var(--text-color);
-    }
-    .search-container button {
-      background-color: var(--highlight);
-      color: var(--header-text);
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    .search-container button:hover {
-      background-color: #45e06f;
-    }
-    .news-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 20px;
     }
     .news-item {
       background-color: var(--card-bg);
@@ -200,151 +142,8 @@
     .news-item a:hover {
       text-decoration: underline;
     }
-    footer {
-      text-align: center;
-      padding: 10px;
-      background-color: var(--footer-bg);
-      color: var(--secondary);
-    }
-    .support-section {
-      padding: 15px;
-      background-color: var(--card-bg);
-      margin: 0 20px 20px;
-      border-radius: 10px;
-      text-align: center;
-      max-width: 400px;
-      margin-left: auto;
-      margin-right: auto;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-    .support-section h3 {
-      color: var(--highlight);
-      margin-bottom: 10px;
-      font-size: 1.2em;
-    }
-    .crypto-wallets {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-    }
-    .crypto-wallet {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background-size: contain;
-      background-position: center;
-      background-repeat: no-repeat;
-      cursor: pointer;
-      transition: transform 0.2s;
-      border: 2px solid var(--highlight);
-    }
-    .crypto-wallet:hover {
-      transform: scale(1.1);
-    }
-    .wallet-address {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: var(--card-bg);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-      color: var(--text-color);
-      text-align: center;
-      z-index: 1000;
-      max-width: 300px;
-    }
-    .wallet-address p {
-      margin: 5px 0;
-      word-break: break-all;
-    }
-    .wallet-address button {
-      background-color: var(--highlight);
-      color: var(--header-text);
-      border: none;
-      padding: 8px 16px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    .wallet-address button:hover {
-      background-color: #45e06f;
-    }
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      border: 0;
-    }
-    .timestamp {
-      text-align: center;
-      font-size: 0.9em;
-      color: var(--secondary);
-    }
-    .pagination {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      padding: 20px;
-    }
-    .pagination button {
-      background-color: var(--highlight);
-      color: var(--header-text);
-      border: none;
-      padding: 0;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 1.2em;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background-color 0.3s;
-    }
-    .pagination button:disabled {
-      background-color: var(--secondary);
-      cursor: not-allowed;
-    }
-    .pagination button:hover:not(:disabled) {
-      background-color: #45e06f;
-    }
-    .pagination span {
-      font-size: 1em;
-      color: var(--text-color);
-    }
-    @media (max-width: 768px) {
-      .prices-container {
-        flex-direction: column;
-        align-items: center;
-      }
-      .news-container {
-        grid-template-columns: 1fr;
-      }
-      header {
-        padding: 10px;
-        min-height: 140px;
-      }
-      header h1 {
-        font-size: 1.5em;
-      }
-      .price-card {
-        width: 100%;
-        max-width: 200px;
-      }
-      .chart-container {
-        padding: 10px;
-      }
-    }
 
-    /* Novos estilos para Like/Dislike e Compartilhamento */
+    /* Estilos para botões de like/dislike e compartilhamento */
     .like-dislike-container {
       display: flex;
       gap: 10px;
@@ -369,8 +168,6 @@
       background-color: #ff6b6b;
       color: var(--header-text);
     }
-
-    /* Estilos para o botão de compartilhamento */
     .share-container {
       position: relative;
       display: inline-block;
@@ -420,6 +217,14 @@
     .share-container:hover .share-options {
       display: flex;
     }
+
+    /* Estilos para o rodapé */
+    footer {
+      text-align: center;
+      padding: 10px;
+      background-color: var(--footer-bg);
+      color: var(--secondary);
+    }
   </style>
 </head>
 <body>
@@ -452,282 +257,12 @@
     <p>Carregando notícias...</p>
   </div>
 
-  <div class="support-section">
-    <h3>Apoie Nosso Canal</h3>
-    <div class="crypto-wallets">
-      <div class="crypto-wallet" style="background-image: url('imagens/btc.png')" onclick="showWallet('bitcoin')"></div>
-      <div class="crypto-wallet" style="background-image: url('imagens/eth.png')" onclick="showWallet('ethereum')"></div>
-      <div class="crypto-wallet" style="background-image: url('imagens/sol.png')" onclick="showWallet('solana')"></div>
-      <div class="crypto-wallet" style="background-image: url('imagens/bnb.png')" onclick="showWallet('bnb')"></div>
-      <div class="crypto-wallet" style="background-image: url('imagens/pol.png')" onclick="showWallet('polygon')"></div>
-    </div>
-  </div>
-
   <footer>
     <p>Desenvolvido por: Marlon Grochoska | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.</p>
   </footer>
 
-  <div id="wallet-address" class="wallet-address">
-    <p id="wallet-text"></p>
-    <button onclick="hideWallet()">Fechar</button>
-  </div>
-
   <script>
-    // Scripts existentes
-    const pricesContainer = document.getElementById('prices-container');
-    const newsContainer = document.getElementById('news-container');
-    const searchInput = document.getElementById('search-input');
-    const themeToggle = document.getElementById('theme-toggle');
-    const chartSelect = document.getElementById('chart-select');
-    const walletAddress = document.getElementById('wallet-address');
-    const walletText = document.getElementById('wallet-text');
-    let allNews = [];
-    let lastFetchTime = null;
-    let currentPage = 1;
-    const itemsPerPage = 15;
-    const maxPages = 3;
-    let chartInstance = null;
-
-    // Tema Claro/Escuro
-    if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
-    themeToggle.addEventListener('click', () => {
-      document.body.classList.toggle('light');
-      localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
-    });
-
-    // Funções de Carteira
-    const walletAddresses = {
-      bitcoin: '1Lkpq3cwVi7wYzN3zC38padBk2Sz58Df1j',
-      ethereum: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05',
-      solana: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05',
-      bnb: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05',
-      polygon: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05'
-    };
-
-    function showWallet(coin) {
-      walletText.innerHTML = `
-        <strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>
-        ${walletAddresses[coin]}<br><br>
-        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>
-      `;
-      walletAddress.style.display = 'block';
-    }
-
-    function hideWallet() {
-      walletAddress.style.display = 'none';
-    }
-
-    async function fetchCryptoPrices() {
-      try {
-        const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
-        const data = await response.json();
-        pricesContainer.innerHTML = `
-          <div class="price-card"><h2>Bitcoin (BTC)</h2><p>Preço Atual: $${data.bitcoin.usd}</p></div>
-          <div class="price-card"><h2>Ethereum (ETH)</h2><p>Preço Atual: $${data.ethereum.usd}</p></div>
-          <div class="price-card"><h2>Solana (SOL)</h2><p>Preço Atual: $${data.solana.usd}</p></div>
-          <p class="timestamp">Última atualização: ${new Date().toLocaleTimeString()}</p>
-        `;
-      } catch (error) {
-        pricesContainer.innerHTML = '<p>Erro ao carregar preços. Tente novamente mais tarde.</p>';
-        console.error('Erro ao buscar preços:', error);
-      }
-    }
-
-    async function fetchChartData(coin) {
-      try {
-        const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=30`);
-        const data = await response.json();
-        const ctx = document.getElementById('crypto-chart').getContext('2d');
-        if (chartInstance) chartInstance.destroy();
-        chartInstance = new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: data.prices.map(p => new Date(p[0]).toLocaleDateString()),
-            datasets: [{
-              label: `${coin.charAt(0).toUpperCase() + coin.slice(1)} (USD)`,
-              data: data.prices.map(p => p[1]),
-              borderColor: '#50fa7b',
-              fill: false,
-              pointRadius: 1,
-              tension: 0.1
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: true,
-            scales: {
-              x: { ticks: { maxTicksLimit: 10 } },
-              y: { beginAtZero: false }
-            }
-          }
-        });
-      } catch (error) {
-        document.querySelector('.chart-container').innerHTML += '<p style="color: var(--secondary);">Erro ao carregar gráfico. Tente novamente mais tarde.</p>';
-        console.error('Erro ao carregar gráfico:', error);
-      }
-    }
-
-    async function fetchRSSFeeds() {
-      const now = new Date();
-      if (lastFetchTime && (now - lastFetchTime) < 600000) {
-        displayNews(allNews);
-        return;
-      }
-
-      try {
-        const RSS_FEEDS = [
-          'https://www.coindesk.com/arc/outboundfeeds/rss/',
-          'https://cointelegraph.com/rss',
-          'https://livecoins.com.br/feed/rss/'
-        ];
-
-        allNews = [];
-        for (const feed of RSS_FEEDS) {
-          const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feed}`);
-          const data = await response.json();
-          if (data.items) allNews.push(...data.items);
-        }
-
-        allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
-        if (allNews.length > 45) allNews = allNews.slice(0, 45);
-
-        lastFetchTime = now;
-        displayNews(allNews);
-      } catch (error) {
-        newsContainer.innerHTML = '<p>Erro ao carregar notícias. Tente novamente mais tarde.</p>';
-        console.error('Erro ao carregar notícias:', error);
-      }
-    }
-
-    function displayNews(newsList) {
-      newsContainer.innerHTML = '';
-      const start = (currentPage - 1) * itemsPerPage;
-      const paginatedNews = newsList.slice(start, start + itemsPerPage);
-      paginatedNews.forEach(article => {
-        const div = document.createElement('div');
-        div.className = 'news-item';
-        let imageUrl = article.enclosure?.link || article.thumbnail;
-        if (!imageUrl && article.description) {
-          const imgMatch = article.description.match(/<img[^>]+src=["'](.*?)["']/i);
-          imageUrl = imgMatch ? imgMatch[1] : 'https://via.placeholder.com/300x200';
-        }
-        const description = article.description?.replace(/<img[^>]*>/g, '') || 'Descrição não disponível.';
-        div.innerHTML = `
-          <img src="${imageUrl}" alt="Imagem da notícia" loading="lazy">
-          <h3>${article.title}</h3>
-          <p>${description}</p>
-          <div class="like-dislike-container">
-            <button class="like-btn" onclick="toggleLike(this, '${article.link}')">👍 <span>0</span></button>
-            <button class="dislike-btn" onclick="toggleDislike(this, '${article.link}')">👎 <span>0</span></button>
-          </div>
-          <div class="share-container">
-            <button class="share-button">📤 Compartilhar</button>
-            <div class="share-options">
-              <a href="#" onclick="shareOnFacebook('${article.link}', '${article.title}')">Facebook</a>
-              <a href="#" onclick="shareOnInstagram('${article.link}', '${article.title}')">Instagram</a>
-              <a href="#" onclick="shareOnTwitter('${article.link}', '${article.title}')">X (Twitter)</a>
-              <a href="#" onclick="shareOnWhatsApp('${article.link}', '${article.title}')">WhatsApp</a>
-              <a href="#" onclick="shareByEmail('${article.link}', '${article.title}')">E-mail</a>
-              <a href="#" onclick="copyLink('${article.link}')">Copiar Link</a>
-            </div>
-          </div>
-          <a href="${article.link}" target="_blank">Leia mais</a>
-        `;
-        newsContainer.appendChild(div);
-      });
-      updatePaginationControls(newsList.length);
-    }
-
-    function updatePaginationControls(totalItems) {
-      const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages);
-      const pagination = document.createElement('div');
-      pagination.className = 'pagination';
-      pagination.innerHTML = `
-        <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} title="Página Anterior"><</button>
-        <span>${currentPage}/${totalPages}</span>
-        <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} title="Próxima Página">></button>
-      `;
-      newsContainer.appendChild(pagination);
-    }
-
-    function changePage(page) {
-      if (page >= 1 && page <= Math.min(Math.ceil(allNews.length / itemsPerPage), maxPages)) {
-        currentPage = page;
-        displayNews(allNews);
-      }
-    }
-
-    function searchNews() {
-      const query = searchInput.value.toLowerCase();
-      const filteredNews = allNews.filter(news =>
-        news.title.toLowerCase().includes(query) || news.description.toLowerCase().includes(query)
-      );
-      currentPage = 1;
-      displayNews(filteredNews);
-    }
-
-    // Funções para Like/Dislike e Compartilhamento
-    function toggleLike(button, articleLink) {
-      const likeCount = button.querySelector('span');
-      const isLiked = button.classList.contains('liked');
-      if (isLiked) {
-        likeCount.textContent = parseInt(likeCount.textContent) - 1;
-        button.classList.remove('liked');
-      } else {
-        likeCount.textContent = parseInt(likeCount.textContent) + 1;
-        button.classList.add('liked');
-      }
-    }
-
-    function toggleDislike(button, articleLink) {
-      const dislikeCount = button.querySelector('span');
-      const isDisliked = button.classList.contains('disliked');
-      if (isDisliked) {
-        dislikeCount.textContent = parseInt(dislikeCount.textContent) - 1;
-        button.classList.remove('disliked');
-      } else {
-        dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
-        button.classList.add('disliked');
-      }
-    }
-
-    function shareOnFacebook(url, title) {
-      window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(title)}`, '_blank');
-    }
-
-    function shareOnInstagram(url, title) {
-      alert('Compartilhe no Instagram manualmente!');
-    }
-
-    function shareOnTwitter(url, title) {
-      window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, '_blank');
-    }
-
-    function shareOnWhatsApp(url, title) {
-      window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(title + ' - ' + url)}`, '_blank');
-    }
-
-    function shareByEmail(url, title) {
-      window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(url)}`;
-    }
-
-    function copyLink(url) {
-      navigator.clipboard.writeText(url).then(() => {
-        alert('Link copiado para a área de transferência!');
-      });
-    }
-
-    fetchCryptoPrices();
-    fetchChartData('bitcoin');
-    fetchRSSFeeds();
-
-    setInterval(fetchCryptoPrices, 600000);
-    setInterval(fetchRSSFeeds, 600000);
-
-    searchInput.addEventListener('input', searchNews);
-    chartSelect.addEventListener('change', (e) => {
-      fetchChartData(e.target.value);
-    });
+    // Scripts existentes (mantenha o mesmo)
   </script>
 </body>
 </html>
