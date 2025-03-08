@@ -35,7 +35,7 @@
   </script>
 
   <style>
-    /* Variáveis de tema */
+    /* Estilos globais */
     :root {
       --bg-color: #121212;
       --text-color: #ffffff;
@@ -54,8 +54,6 @@
       --secondary: #8a9cc2;
       --footer-bg: #e0e0e0;
     }
-
-    /* Estilos globais */
     body {
       font-family: 'Roboto', Arial, sans-serif;
       margin: 0;
@@ -97,8 +95,6 @@
     .theme-toggle:hover {
       background-color: #45e06f;
     }
-
-    /* Estilos para notícias e preços */
     .prices-container, .news-container {
       padding: 20px;
     }
@@ -142,83 +138,6 @@
     .news-item a:hover {
       text-decoration: underline;
     }
-
-    /* Estilos para botões de like/dislike e compartilhamento */
-    .like-dislike-container {
-      display: flex;
-      gap: 10px;
-      padding: 10px;
-    }
-    .like-btn, .dislike-btn {
-      background-color: var(--card-bg);
-      border: none;
-      padding: 8px 12px;
-      cursor: pointer;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      color: var(--text-color);
-    }
-    .like-btn.liked {
-      background-color: var(--highlight);
-      color: var(--header-text);
-    }
-    .dislike-btn.disliked {
-      background-color: #ff6b6b;
-      color: var(--header-text);
-    }
-    .share-container {
-      position: relative;
-      display: inline-block;
-    }
-    .share-button {
-      background-color: var(--card-bg);
-      color: var(--text-color);
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .share-button:hover {
-      background-color: var(--highlight);
-      color: var(--header-text);
-    }
-    .share-options {
-      display: none;
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: var(--card-bg);
-      border-radius: 5px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      padding: 10px;
-      z-index: 100;
-      flex-direction: column;
-      gap: 5px;
-    }
-    .share-options a {
-      color: var(--text-color);
-      text-decoration: none;
-      padding: 5px 10px;
-      border-radius: 5px;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-    }
-    .share-options a:hover {
-      background-color: var(--highlight);
-      color: var(--header-text);
-    }
-    .share-container:hover .share-options {
-      display: flex;
-    }
-
-    /* Estilos para o rodapé */
     footer {
       text-align: center;
       padding: 10px;
