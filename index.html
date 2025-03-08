@@ -36,13 +36,15 @@
 <body>
     <!-- Área de Login -->
     <div id="login-area" class="login-container">
-        <h2>Login</h2>
-        <button id="google-login" class="login-btn google-btn">Login com Google</button>
-        <div class="email-login">
-            <input type="email" id="email" placeholder="E-mail">
-            <input type="password" id="password" placeholder="Senha">
-            <button id="email-login-btn" class="login-btn">Login com E-mail</button>
-            <button id="email-signup-btn" class="login-btn">Cadastrar com E-mail</button>
+        <h2 class="login-title">Faça Login</h2>
+        <div class="login-options">
+            <button id="google-login" class="login-btn google-btn">Login com Google</button>
+            <div class="email-login">
+                <input type="email" id="email" placeholder="Digite seu e-mail" class="login-input">
+                <input type="password" id="password" placeholder="Digite sua senha" class="login-input">
+                <button id="email-login-btn" class="login-btn email-btn">Login com E-mail</button>
+                <button id="email-signup-btn" class="login-btn signup-btn">Cadastrar com E-mail</button>
+            </div>
         </div>
         <p id="login-status"></p>
     </div>
