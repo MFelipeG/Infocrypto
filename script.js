@@ -1,3 +1,81 @@
+// Configuração do Firebase (usando o seu firebaseConfig)
+const firebaseConfig = {
+  apiKey: "AIzaSyC-1lZOaGZLOZ-RWL1IX9FnY4LJXUPyXW0",
+  authDomain: "infocrypto-2025.firebaseapp.com",
+  projectId: "infocrypto-2025",
+  storageBucket: "infocrypto-2025.firebasestorage.app",
+  messagingSenderId: "817973626061",
+  appId: "1:817973626061:web:1aeaf14ea9b908592e9584",
+  measurementId: "G-5HKM77NY9B"
+};
+
+// Inicializa o Firebase
+const app = firebase.initializeApp(firebaseConfig);
+// Não usaremos getAnalytics por enquanto, focando na autenticação
+const auth = firebase.auth();
+
+// Mostrar/esconder a área de login
+document.getElementById('show-login').addEventListener('click', () => {
+    document.getElementById('login-area').style.display = 'block';
+});
+
+// Login com Google
+document.getElementById('google-login').addEventListener('click', () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+        .then((result) => {
+            const user = result.user;
+            document.getElementById('login-status').textContent = `Bem-vindo, ${user.displayName}!`;
+            document.getElementById('login-area').style.display = 'none';
+            document.getElementById('show-login').textContent = `Olá, ${user.displayName}`;
+        })
+        .catch((error) => {
+            document.getElementById('login-status').textContent = `Erro: ${error.message}`;
+        });
+});
+
+// Login com E-mail
+document.getElementById('email-login-btn').addEventListener('click', () => {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            document.getElementById('login-status').textContent = `Bem-vindo, ${user.email}!`;
+            document.getElementById('login-area').style.display = 'none';
+            document.getElementById('show-login').textContent = `Olá, ${user.email}`;
+        })
+        .catch((error) => {
+            document.getElementById('login-status').textContent = `Erro: ${error.message}`;
+        });
+});
+
+// Cadastro com E-mail
+document.getElementById('email-signup-btn').addEventListener('click', () => {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    auth.createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            document.getElementById('login-status').textContent = `Cadastrado como ${user.email}!`;
+            document.getElementById('login-area').style.display = 'none';
+            document.getElementById('show-login').textContent = `Olá, ${user.email}`;
+        })
+        .catch((error) => {
+            document.getElementById('login-status').textContent = `Erro: ${error.message}`;
+        });
+});
+
+// Verificar se o usuário já está logado ao carregar a página
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        document.getElementById('show-login').textContent = `Olá, ${user.displayName || user.email}`;
+    } else {
+        document.getElementById('show-login').textContent = 'Login';
+    }
+});
+
+// Restante do código original (preços, notícias, etc.)
 const pricesContainer = document.getElementById('prices-container'),
       newsContainer = document.getElementById('news-container'),
       searchInput = document.getElementById('search-input'),
@@ -193,7 +271,7 @@ function toggleDislike(button, articleLink) {
         dislikeCount.textContent = parseInt(dislikeCount.textContent) - 1;
         button.classList.remove('disliked');
     } else {
-        dislikeCount.textContent = parseInt(likeCount.textContent) + 1;
+        dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
         button.classList.add('disliked');
     }
 }
