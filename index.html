@@ -28,13 +28,30 @@
         gtag('js', new Date());
         gtag('config', 'G-R42F4YDHYM');
     </script>
+    <!-- Scripts do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Área de Login -->
+    <div id="login-area" class="login-container">
+        <h2>Login</h2>
+        <button id="google-login" class="login-btn google-btn">Login com Google</button>
+        <div class="email-login">
+            <input type="email" id="email" placeholder="E-mail">
+            <input type="password" id="password" placeholder="Senha">
+            <button id="email-login-btn" class="login-btn">Login com E-mail</button>
+            <button id="email-signup-btn" class="login-btn">Cadastrar com E-mail</button>
+        </div>
+        <p id="login-status"></p>
+    </div>
+
     <header>
         <h1>InfoCrypto</h1>
         <p>Preços ao vivo e as últimas notícias sobre criptomoedas!</p>
         <button class="theme-toggle" id="theme-toggle">Alternar Tema</button>
+        <button id="show-login">Login</button>
     </header>
     <div class="prices-container" id="prices-container">
         <p>Carregando preços...</p>
