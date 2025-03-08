@@ -19,17 +19,17 @@
     <meta name="twitter:image" content="https://mfelipeg.github.io/Infocrypto/imagens/infocrypto-logo.jpg">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- AdSense Script -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8442042587705069" crossorigin="anonymous"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-R42F4YDHYM"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
+        function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-R42F4YDHYM');
     </script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
@@ -75,17 +75,14 @@
     </div>
     <script>
         const pricesContainer = document.getElementById('prices-container'),
-            newsContainer = document.getElementById('news-container'),
-            searchInput = document.getElementById('search-input'),
-            themeToggle = document.getElementById('theme-toggle'),
-            chartSelect = document.getElementById('chart-select'),
-            walletAddress = document.getElementById('wallet-address'),
-            walletText = document.getElementById('wallet-text');
-        let allNews = [],
-            lastFetchTime = null,
-            currentPage = 1;
-        const itemsPerPage = 15,
-            maxPages = 3;
+              newsContainer = document.getElementById('news-container'),
+              searchInput = document.getElementById('search-input'),
+              themeToggle = document.getElementById('theme-toggle'),
+              chartSelect = document.getElementById('chart-select'),
+              walletAddress = document.getElementById('wallet-address'),
+              walletText = document.getElementById('wallet-text');
+        let allNews = [], lastFetchTime = null, currentPage = 1;
+        const itemsPerPage = 15, maxPages = 3;
         let chartInstance = null;
 
         if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
@@ -117,18 +114,9 @@
                 const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
                 const data = await response.json();
                 pricesContainer.innerHTML = `
-                    <div class="price-card">
-                        <h2>Bitcoin (BTC)</h2>
-                        <p>Preço Atual: $${data.bitcoin.usd}</p>
-                    </div>
-                    <div class="price-card">
-                        <h2>Ethereum (ETH)</h2>
-                        <p>Preço Atual: $${data.ethereum.usd}</p>
-                    </div>
-                    <div class="price-card">
-                        <h2>Solana (SOL)</h2>
-                        <p>Preço Atual: $${data.solana.usd}</p>
-                    </div>
+                    <div class="price-card"><h2>Bitcoin (BTC)</h2><p>Preço Atual: $${data.bitcoin.usd}</p></div>
+                    <div class="price-card"><h2>Ethereum (ETH)</h2><p>Preço Atual: $${data.ethereum.usd}</p></div>
+                    <div class="price-card"><h2>Solana (SOL)</h2><p>Preço Atual: $${data.solana.usd}</p></div>
                     <p class="timestamp">Última atualização: ${new Date().toLocaleTimeString()}</p>`;
             } catch (error) {
                 pricesContainer.innerHTML = '<p>Erro ao carregar preços. Tente novamente mais tarde.</p>';
@@ -256,7 +244,10 @@
 
         function searchNews() {
             const query = searchInput.value.toLowerCase();
-            const filteredNews = allNews.filter(news => news.title.toLowerCase().includes(query) || news.description.toLowerCase().includes(query));
+            const filteredNews = allNews.filter(news => 
+                news.title.toLowerCase().includes(query) || 
+                news.description.toLowerCase().includes(query)
+            );
             currentPage = 1;
             displayNews(filteredNews);
         }
@@ -284,7 +275,7 @@
         }
 
         function shareOnFacebook(url, title) {
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(title)}`, '_blank');
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}"e=${encodeURIComponent(title)}`, '_blank');
         }
 
         function shareOnInstagram(url, title) {
