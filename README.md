@@ -1,6 +1,4 @@
- InfoCrypto
-
-![InfoCrypto](https://infocripto.netlify.app/logo.png)  
+InfoCrypto  
 
 📢 **InfoCrypto** é um portal de notícias e preços de criptomoedas em tempo real. Nosso objetivo é fornecer informações atualizadas sobre o mercado cripto, incluindo preços, tendências, análises e novidades do setor.
 
