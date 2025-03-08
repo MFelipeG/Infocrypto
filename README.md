@@ -1,4 +1,4 @@
-# InfoCrypto
+ InfoCrypto
 
 ![InfoCrypto](https://infocripto.netlify.app/logo.png)  
 
