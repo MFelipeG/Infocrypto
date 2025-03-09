@@ -36,28 +36,30 @@ function hideWallet() {
 async function fetchCryptoPrices() {
     try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
+        if (!response.ok) throw new Error(`Erro na API: ${response.status}`);
         const data = await response.json();
         pricesContainer.innerHTML = `
-            <div class="price-card"><h2>Bitcoin (BTC)</h2><p>Preço Atual: $${data.bitcoin.usd}</p></div>
-            <div class="price-card"><h2>Ethereum (ETH)</h2><p>Preço Atual: $${data.ethereum.usd}</p></div>
-            <div class="price-card"><h2>Solana (SOL)</h2><p>Preço Atual: $${data.solana.usd}</p></div>
-            <p class="timestamp">Última atualização: ${new Date().toLocaleTimeString()}</p>`;
+            <div class="price-card"><h2>Bitcoin (BTC)</h2><p>Preço Atual: $${data.bitcoin.usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
+            <div class="price-card"><h2>Ethereum (ETH)</h2><p>Preço Atual: $${data.ethereum.usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
+            <div class="price-card"><h2>Solana (SOL)</h2><p>Preço Atual: $${data.solana.usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
+            <p class="timestamp">Última atualização: ${new Date().toLocaleTimeString('pt-BR')}</p>`;
     } catch (error) {
-        pricesContainer.innerHTML = '<p>Erro ao carregar preços. Tente novamente mais tarde.</p>';
-        console.error('Erro ao buscar preços:', error);
+        pricesContainer.innerHTML = '<p>Erro ao carregar preços. Verifique sua conexão ou tente novamente mais tarde.</p>';
+        console.error('Erro ao buscar preços:', error.message);
     }
 }
 
 async function fetchChartData(coin) {
     try {
         const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=30`);
+        if (!response.ok) throw new Error(`Erro na API: ${response.status}`);
         const data = await response.json();
         const ctx = document.getElementById('crypto-chart').getContext('2d');
         if (chartInstance) chartInstance.destroy();
         chartInstance = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: data.prices.map(p => new Date(p[0]).toLocaleDateString()),
+                labels: data.prices.map(p => new Date(p[0]).toLocaleDateString('pt-BR')),
                 datasets: [{
                     label: `${coin.charAt(0).toUpperCase() + coin.slice(1)} (USD)`,
                     data: data.prices.map(p => p[1]),
@@ -72,13 +74,13 @@ async function fetchChartData(coin) {
                 maintainAspectRatio: true,
                 scales: {
                     x: { ticks: { maxTicksLimit: 10 } },
-                    y: { beginAtZero: false }
+                    y: { beginAtZero: false, title: { display: true, text: 'Preço (USD)' } }
                 }
             }
         });
     } catch (error) {
-        document.querySelector('.chart-container').innerHTML += '<p style="color: var(--secondary);">Erro ao carregar gráfico. Tente novamente mais tarde.</p>';
-        console.error('Erro ao carregar gráfico:', error);
+        document.querySelector('.chart-container').innerHTML += '<p style="color: var(--secondary);">Erro ao carregar gráfico. Verifique sua conexão ou tente novamente.</p>';
+        console.error('Erro ao carregar gráfico:', error.message);
     }
 }
 
@@ -92,21 +94,26 @@ async function fetchRSSFeeds() {
         const RSS_FEEDS = [
             'https://www.coindesk.com/arc/outboundfeeds/rss/',
             'https://cointelegraph.com/rss',
-            'https://livecoins.com.br/feed/rss/'
+            'https://livecoins.com.br/feed/'
         ];
         allNews = [];
         for (const feed of RSS_FEEDS) {
-            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${feed}`);
+            const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed)}`);
+            if (!response.ok) {
+                console.warn(`Falha ao carregar feed ${feed}: ${response.status}`);
+                continue;
+            }
             const data = await response.json();
             if (data.items) allNews.push(...data.items);
         }
+        if (allNews.length === 0) throw new Error('Nenhum feed de notícias disponível.');
         allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
         if (allNews.length > 45) allNews = allNews.slice(0, 45);
         lastFetchTime = now;
         displayNews(allNews);
     } catch (error) {
-        newsContainer.innerHTML = '<p>Erro ao carregar notícias. Tente novamente mais tarde.</p>';
-        console.error('Erro ao carregar notícias:', error);
+        newsContainer.innerHTML = '<p>Erro ao carregar notícias. Os feeds podem estar indisponíveis. Tente novamente mais tarde.</p>';
+        console.error('Erro ao carregar notícias:', error.message);
     }
 }
 
@@ -224,9 +231,6 @@ function copyLink(url) {
     });
 }
 
-fetchCryptoPrices();
-fetchChartData('bitcoin');
-fetchRSSFeeds();
 setInterval(fetchCryptoPrices, 600000);
 setInterval(fetchRSSFeeds, 600000);
 searchInput.addEventListener('input', searchNews);
@@ -270,4 +274,9 @@ function addLoginButton() {
     loginContainer.appendChild(loginButton);
 }
 
-document.addEventListener('DOMContentLoaded', addLoginButton);
+document.addEventListener('DOMContentLoaded', () => {
+    fetchCryptoPrices();
+    fetchChartData('bitcoin');
+    fetchRSSFeeds();
+    addLoginButton();
+});
