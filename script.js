@@ -25,7 +25,11 @@ const walletAddresses = {
 };
 
 function showWallet(coin) {
-    walletText.innerHTML = `<strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>${walletAddresses[coin]}<br><br><em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>`;
+    walletText.innerHTML = `
+        <strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>
+        ${walletAddresses[coin]}<br><br>
+        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>
+    `;
     walletAddress.style.display = 'block';
 }
 
@@ -199,7 +203,7 @@ function toggleDislike(button, articleLink) {
 }
 
 function shareOnFacebook(url, title) {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}"e=${encodeURIComponent(title)}`, '_blank');
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(title)}`, '_blank');
 }
 
 function shareOnInstagram(url, title) {
