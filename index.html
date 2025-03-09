@@ -19,18 +19,10 @@
     <meta name="twitter:image" content="https://mfelipeg.github.io/Infocrypto/imagens/infocrypto-logo.jpg">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8442042587705069" crossorigin="anonymous"></script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R42F4YDHYM"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'G-R42F4YDHYM');
-    </script>
-    <!-- Scripts do Firebase -->
-    <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script defer src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <!-- Removido Chart.js, AdSense e Google Analytics temporariamente pra isolar o problema -->
+    <!-- Scripts do Firebase (versão mais recente) -->
+    <script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+    <script defer src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -58,39 +50,9 @@
     <div class="prices-container" id="prices-container">
         <p>Carregando preços...</p>
     </div>
-    <div class="chart-container">
-        <select id="chart-select">
-            <option value="bitcoin">Bitcoin (BTC)</option>
-            <option value="ethereum">Ethereum (ETH)</option>
-            <option value="solana">Solana (SOL)</option>
-        </select>
-        <canvas id="crypto-chart" width="400" height="200"></canvas>
-    </div>
-    <div class="search-container">
-        <label for="search-input" class="sr-only">Buscar notícias</label>
-        <input type="text" id="search-input" placeholder="Buscar notícias...">
-        <button onclick="searchNews()">Buscar</button>
-    </div>
-    <div class="news-container" id="news-container">
-        <p>Carregando notícias...</p>
-    </div>
-    <div class="support-section">
-        <h3>Apoie Nosso Canal</h3>
-        <div class="crypto-wallets">
-            <div class="crypto-wallet" style="background-image: url('imagens/btc.png')" onclick="showWallet('bitcoin')"></div>
-            <div class="crypto-wallet" style="background-image: url('imagens/eth.png')" onclick="showWallet('ethereum')"></div>
-            <div class="crypto-wallet" style="background-image: url('imagens/sol.png')" onclick="showWallet('solana')"></div>
-            <div class="crypto-wallet" style="background-image: url('imagens/bnb.png')" onclick="showWallet('bnb')"></div>
-            <div class="crypto-wallet" style="background-image: url('imagens/pol.png')" onclick="showWallet('polygon')"></div>
-        </div>
-    </div>
     <footer>
-        <p>Desenvolvido por: Marlon Grochoska | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.</p>
+        <p>Desenvolvido por: Marlon Grochoska.</p>
     </footer>
-    <div id="wallet-address" class="wallet-address">
-        <p id="wallet-text"></p>
-        <button onclick="hideWallet()">Fechar</button>
-    </div>
     <script src="script.js"></script>
 </body>
 </html>
