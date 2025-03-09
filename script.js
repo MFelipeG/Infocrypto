@@ -1,3 +1,5 @@
+console.log('Script carregado com sucesso'); // Verifica se o script está sendo executado
+
 const pricesContainer = document.getElementById('prices-container'),
       newsContainer = document.getElementById('news-container'),
       searchInput = document.getElementById('search-input'),
@@ -34,10 +36,12 @@ function hideWallet() {
 }
 
 async function fetchCryptoPrices() {
+    console.log('Tentando carregar preços...');
     try {
         const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd');
         if (!response.ok) throw new Error(`Erro na API: ${response.status}`);
         const data = await response.json();
+        console.log('Preços recebidos:', data);
         pricesContainer.innerHTML = `
             <div class="price-card"><h2>Bitcoin (BTC)</h2><p>Preço Atual: $${data.bitcoin.usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
             <div class="price-card"><h2>Ethereum (ETH)</h2><p>Preço Atual: $${data.ethereum.usd.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p></div>
@@ -50,10 +54,12 @@ async function fetchCryptoPrices() {
 }
 
 async function fetchChartData(coin) {
+    console.log(`Tentando carregar gráfico para ${coin}...`);
     try {
         const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=30`);
         if (!response.ok) throw new Error(`Erro na API: ${response.status}`);
         const data = await response.json();
+        console.log(`Dados do gráfico de ${coin} recebidos:`, data);
         const ctx = document.getElementById('crypto-chart').getContext('2d');
         if (chartInstance) chartInstance.destroy();
         chartInstance = new Chart(ctx, {
@@ -85,6 +91,7 @@ async function fetchChartData(coin) {
 }
 
 async function fetchRSSFeeds() {
+    console.log('Tentando carregar notícias...');
     const now = new Date();
     if (lastFetchTime && (now - lastFetchTime) < 600000) {
         displayNews(allNews);
@@ -104,6 +111,7 @@ async function fetchRSSFeeds() {
                 continue;
             }
             const data = await response.json();
+            console.log(`Notícias de ${feed} recebidas:`, data.items);
             if (data.items) allNews.push(...data.items);
         }
         if (allNews.length === 0) throw new Error('Nenhum feed de notícias disponível.');
@@ -206,7 +214,7 @@ function toggleDislike(button, articleLink) {
 }
 
 function shareOnFacebook(url, title) {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}"e=${encodeURIComponent(title)}`, '_blank');
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&t=${encodeURIComponent(title)}`, '_blank');
 }
 
 function shareOnInstagram(url, title) {
@@ -238,7 +246,7 @@ chartSelect.addEventListener('change', (e) => {
     fetchChartData(e.target.value);
 });
 
-// Firebase Integration
+// Firebase Integration (unificado aqui)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
@@ -256,6 +264,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 function addLoginButton() {
+    console.log('Adicionando botão de login...');
     const loginContainer = document.getElementById('login-container');
     const loginButton = document.createElement('button');
     loginButton.textContent = 'Login com Google';
@@ -275,6 +284,7 @@ function addLoginButton() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('Página carregada, iniciando funções...');
     fetchCryptoPrices();
     fetchChartData('bitcoin');
     fetchRSSFeeds();
