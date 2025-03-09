@@ -3,66 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>InfoCrypto</title>
-    <link rel="stylesheet" href="/Infocrypto/style.css"> <!-- Caminho ajustado para GitHub Pages -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- Biblioteca Chart.js -->
+    <title>InfoCrypto - Últimas Notícias e Preços</title>
+    <meta name="description" content="InfoCrypto - Últimas notícias e preços atualizados de Bitcoin, Ethereum, Solana e outras criptomoedas. Acompanhe as novidades do mercado cripto!">
+    <meta name="keywords" content="criptomoedas, bitcoin, ethereum, solana, preços cripto, notícias cripto, mercado financeiro, blockchain, investimentos">
+    <meta name="author" content="Marlon Grochoska">
+    <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta property="og:title" content="InfoCrypto - Últimas Notícias e Preços de Criptomoedas">
+    <meta property="og:description" content="Fique atualizado com as últimas notícias e preços do mercado cripto. Acompanhe Bitcoin, Ethereum, Solana e mais!">
+    <meta property="og:image" content="https://mfelipeg.github.io/Infocrypto/imagens/infocrypto-logo.jpg">
+    <meta property="og:url" content="https://mfelipeg.github.io/Infocrypto/">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="InfoCrypto - Últimas Notícias e Preços de Criptomoedas">
+    <meta name="twitter:description" content="Acompanhe preços e notícias do mercado cripto em tempo real;">
+    <meta name="twitter:image" content="https://mfelipeg.github.io/Infocrypto/imagens/infocrypto-logo.jpg">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8442042587705069" crossorigin="anonymous"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R42F4YDHYM"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-R42F4YDHYM');
+    </script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <h1>InfoCrypto</h1>
-        <p>Seu portal de notícias e preços de criptomoedas</p>
-        <button class="theme-toggle">Alternar Tema</button>
+        <p>Preços ao vivo e as últimas notícias sobre criptomoedas!</p>
+        <button class="theme-toggle" id="theme-toggle">Alternar Tema</button>
+        <div id="login-container"></div> <!-- Container para o botão de login -->
     </header>
-
-    <section class="prices-container">
-        <div class="price-card">
-            <h2>BTC</h2>
-            <p>Carregando...</p>
-        </div>
-        <div class="price-card">
-            <h2>ETH</h2>
-            <p>Carregando...</p>
-        </div>
-    </section>
-
-    <section class="chart-container">
-        <select id="crypto-select">
-            <option value="bitcoin">Bitcoin</option>
-            <option value="ethereum">Ethereum</option>
+    <div class="prices-container" id="prices-container">
+        <p>Carregando preços...</p>
+    </div>
+    <div class="chart-container">
+        <select id="chart-select">
+            <option value="bitcoin">Bitcoin (BTC)</option>
+            <option value="ethereum">Ethereum (ETH)</option>
+            <option value="solana">Solana (SOL)</option>
         </select>
-        <canvas id="crypto-chart"></canvas>
-    </section>
-
-    <section class="search-container">
-        <input type="text" placeholder="Pesquisar notícias...">
-        <button>Pesquisar</button>
-    </section>
-
-    <section class="news-container">
-        <div class="news-item">
-            <img src="https://via.placeholder.com/300x200" alt="Notícia">
-            <h3>Título da Notícia</h3>
-            <p>Resumo da notícia aqui...</p>
-            <a href="#">Leia mais</a>
-        </div>
-    </section>
-
-    <section class="support-section">
-        <h3>Apoie o Projeto</h3>
+        <canvas id="crypto-chart" width="400" height="200"></canvas>
+    </div>
+    <div class="search-container">
+        <label for="search-input" class="sr-only">Buscar notícias</label>
+        <input type="text" id="search-input" placeholder="Buscar notícias...">
+        <button onclick="searchNews()">Buscar</button>
+    </div>
+    <div class="news-container" id="news-container">
+        <p>Carregando notícias...</p>
+    </div>
+    <div class="support-section">
+        <h3>Apoie Nosso Canal</h3>
         <div class="crypto-wallets">
-            <div class="crypto-wallet btc" style="background-image: url('https://via.placeholder.com/50');" data-address="1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"></div>
-            <div class="crypto-wallet eth" style="background-image: url('https://via.placeholder.com/50');" data-address="0x1234567890abcdef1234567890abcdef12345678"></div>
+            <div class="crypto-wallet" style="background-image: url('imagens/btc.png')" onclick="showWallet('bitcoin')"></div>
+            <div class="crypto-wallet" style="background-image: url('imagens/eth.png')" onclick="showWallet('ethereum')"></div>
+            <div class="crypto-wallet" style="background-image: url('imagens/sol.png')" onclick="showWallet('solana')"></div>
+            <div class="crypto-wallet" style="background-image: url('imagens/bnb.png')" onclick="showWallet('bnb')"></div>
+            <div class="crypto-wallet" style="background-image: url('imagens/pol.png')" onclick="showWallet('polygon')"></div>
         </div>
-        <div class="wallet-address">
-            <p id="wallet-address-text"></p>
-            <button onclick="this.parentElement.style.display='none'">Fechar</button>
-        </div>
-    </section>
-
+    </div>
     <footer>
-        <p>&copy; 2025 InfoCrypto</p>
+        <p>Desenvolvido por: Marlon Grochoska | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.</p>
     </footer>
+    <div id="wallet-address" class="wallet-address">
+        <p id="wallet-text"></p>
+        <button onclick="hideWallet()">Fechar</button>
+    </div>
+    <!-- Firebase e botão de login -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-    <script src="/Infocrypto/script.js"></script> <!-- Caminho ajustado -->
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC-1lZOaGZLOZ-RWL1IX9FnY4LJXUPyXW0",
+            authDomain: "infocrypto-2025.firebaseapp.com",
+            projectId: "infocrypto-2025",
+            storageBucket: "infocrypto-2025.appspot.com",
+            messagingSenderId: "817973626061",
+            appId: "1:817973626061:web:1aeaf14ea9b908592e9584",
+            measurementId: "G-5HKM77NY9B"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Função para adicionar o botão de login
+        function addLoginButton() {
+            const loginContainer = document.getElementById('login-container');
+            const loginButton = document.createElement('button');
+            loginButton.textContent = 'Login com Google';
+            loginButton.classList.add('login-button');
+            loginButton.onclick = () => {
+                const provider = new GoogleAuthProvider();
+                signInWithPopup(auth, provider)
+                    .then((result) => {
+                        const user = result.user;
+                        alert(`Bem-vindo, ${user.displayName}!`);
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao fazer login:', error);
+                    });
+            };
+            loginContainer.appendChild(loginButton);
+        }
+
+        // Adiciona o botão de login ao carregar a página
+        document.addEventListener('DOMContentLoaded', addLoginButton);
+    </script>
+    <script src="script.js"></script>
 </body>
 </html>
