@@ -193,13 +193,13 @@ function toggleDislike(button, articleLink) {
         dislikeCount.textContent = parseInt(dislikeCount.textContent) - 1;
         button.classList.remove('disliked');
     } else {
-        dislikeCount.textContent = parseInt(likeCount.textContent) + 1;
+        dislikeCount.textContent = parseInt(dislikeCount.textContent) + 1;
         button.classList.add('disliked');
     }
 }
 
 function shareOnFacebook(url, title) {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&t=${encodeURIComponent(title)}`, '_blank');
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}"e=${encodeURIComponent(title)}`, '_blank');
 }
 
 function shareOnInstagram(url, title) {
