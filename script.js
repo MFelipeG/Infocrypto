@@ -246,7 +246,7 @@ chartSelect.addEventListener('change', (e) => {
     fetchChartData(e.target.value);
 });
 
-// Firebase Integration (unificado aqui)
+// Firebase Integration
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
