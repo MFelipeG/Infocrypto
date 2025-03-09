@@ -233,3 +233,41 @@ searchInput.addEventListener('input', searchNews);
 chartSelect.addEventListener('change', (e) => {
     fetchChartData(e.target.value);
 });
+
+// Firebase Integration
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyC-1lZOaGZLOZ-RWL1IX9FnY4LJXUPyXW0",
+    authDomain: "infocrypto-2025.firebaseapp.com",
+    projectId: "infocrypto-2025",
+    storageBucket: "infocrypto-2025.appspot.com",
+    messagingSenderId: "817973626061",
+    appId: "1:817973626061:web:1aeaf14ea9b908592e9584",
+    measurementId: "G-5HKM77NY9B"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+function addLoginButton() {
+    const loginContainer = document.getElementById('login-container');
+    const loginButton = document.createElement('button');
+    loginButton.textContent = 'Login com Google';
+    loginButton.classList.add('login-button');
+    loginButton.onclick = () => {
+        const provider = new GoogleAuthProvider();
+        signInWithPopup(auth, provider)
+            .then((result) => {
+                const user = result.user;
+                alert(`Bem-vindo, ${user.displayName}!`);
+            })
+            .catch((error) => {
+                console.error('Erro ao fazer login:', error);
+            });
+    };
+    loginContainer.appendChild(loginButton);
+}
+
+document.addEventListener('DOMContentLoaded', addLoginButton);
