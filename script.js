@@ -1,9 +1,13 @@
-// Aguarda o carregamento completo e adiciona um atraso pra garantir o Firebase
+// Aguarda o carregamento completo da página
 window.onload = function() {
     setTimeout(() => {
+        // Log pra verificar se o script.js está executando
+        console.log('script.js carregado.');
+
         // Verifica se o Firebase está disponível
         if (typeof firebase === 'undefined') {
-            document.getElementById('login-status').textContent = 'Erro: Firebase não carregou. Verifique sua conexão, adicione mfelipeg.github.io no Firebase Console, ou desative adblockers.';
+            document.getElementById('login-status').textContent = 'Erro: Firebase não carregou. Desative adblockers, verifique sua conexão ou adicione mfelipeg.github.io no Firebase Console.';
+            console.error('Firebase não carregou.');
             return;
         }
 
@@ -25,6 +29,7 @@ window.onload = function() {
         // Mostrar/esconder a área de login
         document.getElementById('show-login').addEventListener('click', () => {
             document.getElementById('login-area').style.display = 'block';
+            console.log('Botão de login clicado.');
         });
 
         // Login com Google
@@ -36,9 +41,11 @@ window.onload = function() {
                     document.getElementById('login-status').textContent = `Bem-vindo, ${user.displayName}!`;
                     document.getElementById('login-area').style.display = 'none';
                     document.getElementById('show-login').textContent = `Olá, ${user.displayName}`;
+                    console.log('Login com Google bem-sucedido:', user.displayName);
                 })
                 .catch((error) => {
                     document.getElementById('login-status').textContent = `Erro: ${error.message}`;
+                    console.error('Erro no login com Google:', error);
                 });
         });
 
@@ -52,9 +59,11 @@ window.onload = function() {
                     document.getElementById('login-status').textContent = `Bem-vindo, ${user.email}!`;
                     document.getElementById('login-area').style.display = 'none';
                     document.getElementById('show-login').textContent = `Olá, ${user.email}`;
+                    console.log('Login com e-mail bem-sucedido:', user.email);
                 })
                 .catch((error) => {
                     document.getElementById('login-status').textContent = `Erro: ${error.message}`;
+                    console.error('Erro no login com e-mail:', error);
                 });
         });
 
@@ -68,39 +77,54 @@ window.onload = function() {
                     document.getElementById('login-status').textContent = `Cadastrado como ${user.email}!`;
                     document.getElementById('login-area').style.display = 'none';
                     document.getElementById('show-login').textContent = `Olá, ${user.email}`;
+                    console.log('Cadastro com e-mail bem-sucedido:', user.email);
                 })
                 .catch((error) => {
                     document.getElementById('login-status').textContent = `Erro: ${error.message}`;
+                    console.error('Erro no cadastro com e-mail:', error);
                 });
         });
 
-        // Verificar se o usuário já está logado
+        // Verificar estado de autenticação
         auth.onAuthStateChanged((user) => {
             if (user) {
                 document.getElementById('show-login').textContent = `Olá, ${user.displayName || user.email}`;
+                console.log('Usuário logado:', user.displayName || user.email);
             } else {
                 document.getElementById('show-login').textContent = 'Login';
+                console.log('Nenhum usuário logado.');
             }
         });
 
-        // Teste de preços com proxy CORS
-        async function fetchCryptoPrices() {
+        // Teste simples com uma API que suporta CORS
+        async function fetchTestData() {
             try {
-                const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
-                const apiUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,solana&vs_currencies=usd';
-                const response = await fetch(proxyUrl + apiUrl);
+                const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
                 const data = await response.json();
                 document.getElementById('prices-container').innerHTML = `
-                    <div class="price-card"><h2>Bitcoin (BTC)</h2><p>Preço Atual: $${data.bitcoin.usd}</p></div>
-                    <div class="price-card"><h2>Ethereum (ETH)</h2><p>Preço Atual: $${data.ethereum.usd}</p></div>
-                    <div class="price-card"><h2>Solana (SOL)</h2><p>Preço Atual: $${data.solana.usd}</p></div>
-                    <p class="timestamp">Última atualização: ${new Date().toLocaleTimeString()}</p>`;
+                    <div class="price-card">
+                        <h2>Teste API</h2>
+                        <p>Título: ${data.title}</p>
+                        <p>Body: ${data.body}</p>
+                    </div>`;
+                console.log('Dados de teste carregados:', data);
             } catch (error) {
-                document.getElementById('prices-container').innerHTML = '<p>Erro ao carregar preços. Ative o proxy em https://cors-anywhere.herokuapp.com/corsdemo.</p>';
-                console.error('Erro ao buscar preços:', error);
+                document.getElementById('prices-container').innerHTML = '<p>Erro ao carregar dados de teste.</p>';
+                console.error('Erro ao carregar dados de teste:', error);
             }
         }
 
-        fetchCryptoPrices();
-    }, 1000); // Aguarda 1 segundo
+        fetchTestData();
+    }, 2000); // Aguarda 2 segundos pra garantir que os scripts carreguem
 };
+
+// Função de alternar tema (mantida)
+document.getElementById('theme-toggle').addEventListener('click', () => {
+    document.body.classList.toggle('light');
+    localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
+    console.log('Tema alternado:', document.body.classList.contains('light') ? 'light' : 'dark');
+});
+
+if (localStorage.getItem('theme') === 'light') {
+    document.body.classList.add('light');
+}
