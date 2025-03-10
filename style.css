@@ -147,7 +147,7 @@ header p {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-    max-height: 1200px; /* Aumentado de 800px para 1200px */
+    max-height: 2000px; /* Aumentado de 800px para 2000px */
     overflow-y: auto;
     background-color: var(--card-bg);
     border-radius: 5px;
@@ -421,7 +421,7 @@ footer a:hover {
     }
     .news-container {
         grid-template-columns: 1fr;
-        max-height: 1000px; /* Aumentado de 600px para 1000px */
+        max-height: 1400px; /* Aumentado de 600px para 1400px */
     }
     .news-item {
         max-height: 400px;
