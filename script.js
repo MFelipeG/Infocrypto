@@ -6,7 +6,7 @@ const pricesContainer = document.getElementById('prices-container'),
       walletAddress = document.getElementById('wallet-address'),
       walletText = document.getElementById('wallet-text');
 let allNews = [], lastFetchTime = null, currentPage = 1;
-const itemsPerPage = 15, maxPages = 3;
+const itemsPerPage = 30, maxPages = 3; // Aumentado de 15 para 30 notícias por página
 let chartInstance = null;
 
 if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
@@ -105,7 +105,7 @@ async function fetchRSSFeeds() {
             if (data.items) allNews.push(...data.items);
         }
         allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
-        if (allNews.length > 45) allNews = allNews.slice(0, 45);
+        if (allNews.length > 90) allNews = allNews.slice(0, 90); // Aumentado para carregar mais notícias
         lastFetchTime = now;
         displayNews(allNews);
     } catch (error) {
@@ -126,7 +126,6 @@ function displayNews(newsList) {
             const imgMatch = article.description.match(/<img[^>]+src=["'](.*?)["']/i);
             imageUrl = imgMatch ? imgMatch[1] : 'https://via.placeholder.com/300x200';
         }
-        // Limitar a descrição a 250 caracteres com fallback
         const description = (article.description?.replace(/<img[^>]*>/g, '') || 'Descrição não disponível.').substring(0, 250) + (article.description?.length > 250 ? '...' : '');
         div.innerHTML = `
             <img src="${imageUrl}" alt="Imagem da notícia" loading="lazy">
@@ -204,7 +203,7 @@ function toggleDislike(button, articleLink) {
 }
 
 function shareOnFacebook(url, title) {
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(title)}`, '_blank');
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}"e=${encodeURIComponent(title)}`, '_blank');
 }
 
 function shareOnInstagram(url, title) {
