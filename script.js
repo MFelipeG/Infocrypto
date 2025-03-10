@@ -73,7 +73,7 @@ async function fetchChartData(coin) {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: true,
+                maintainAspectRatio: false,
                 scales: {
                     x: { ticks: { maxTicksLimit: 10 } },
                     y: { beginAtZero: false }
@@ -126,7 +126,8 @@ function displayNews(newsList) {
             const imgMatch = article.description.match(/<img[^>]+src=["'](.*?)["']/i);
             imageUrl = imgMatch ? imgMatch[1] : 'https://via.placeholder.com/300x200';
         }
-        const description = article.description?.replace(/<img[^>]*>/g, '') || 'Descrição não disponível.';
+        // Limitar a descrição a 250 caracteres com fallback
+        const description = (article.description?.replace(/<img[^>]*>/g, '') || 'Descrição não disponível.').substring(0, 250) + (article.description?.length > 250 ? '...' : '');
         div.innerHTML = `
             <img src="${imageUrl}" alt="Imagem da notícia" loading="lazy">
             <h3>${article.title}</h3>
