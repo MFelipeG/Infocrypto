@@ -16,14 +16,20 @@ body.light {
     --secondary: #8a9cc2;
     --footer-bg: #e0e0f0;
 }
-body {
-    font-family: 'Roboto', Arial, sans-serif;
+html, body {
     margin: 0;
     padding: 0;
+    height: 100%; /* Garante que o html/body ocupem toda a altura da tela */
+}
+body {
+    font-family: 'Roboto', Arial, sans-serif;
     background-color: var(--bg-color);
     color: var(--text-color);
     transition: background-color .3s, color .3s;
     line-height: 1.6;
+    min-height: 100vh; /* Garante altura mínima da viewport */
+    display: flex; /* Usa flexbox para organizar o layout */
+    flex-direction: column; /* Organiza os filhos em coluna */
 }
 header {
     background: linear-gradient(90deg, var(--highlight), var(--secondary));
@@ -147,8 +153,8 @@ header p {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-    max-height: 2000px; /* Aumentado de 800px para 2000px */
-    overflow-y: auto;
+    flex: 1; /* Faz o news-container ocupar o espaço disponível */
+    overflow-y: auto; /* Mantém a rolagem interna */
     background-color: var(--card-bg);
     border-radius: 5px;
     margin: 0 20px 20px;
@@ -421,7 +427,6 @@ footer a:hover {
     }
     .news-container {
         grid-template-columns: 1fr;
-        max-height: 1400px; /* Aumentado de 600px para 1400px */
     }
     .news-item {
         max-height: 400px;
@@ -450,4 +455,4 @@ footer a:hover {
     .support-section {
         max-width: 300px;
     }
-}
+        }
