@@ -55,9 +55,6 @@
     <div class="news-container" id="news-container">
         <p>Carregando notícias...</p>
     </div>
-    <div class="pagination" id="pagination">
-        <!-- Paginação será gerada dinamicamente pelo JavaScript -->
-    </div>
     <div class="support-section">
         <h3>Apoie Nosso Canal</h3>
         <div class="crypto-wallets">
@@ -67,16 +64,14 @@
             <div class="crypto-wallet" style="background-image: url('imagens/bnb.png')" onclick="showWallet('bnb')"></div>
             <div class="crypto-wallet" style="background-image: url('imagens/pol.png')" onclick="showWallet('polygon')"></div>
         </div>
-        <div id="wallet-address" class="wallet-address">
-            <p id="wallet-text"></p>
-            <button onclick="hideWallet()">Fechar</button>
-        </div>
     </div>
     <footer>
-        <p>Desenvolvido por: Marlon Grochoska | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.
-            
-          | Contato: <a href="mailto:geralinfocrypto@gmail.com">geralinfocrypto@gmail.com</a></p>
+        <p>Desenvolvido por: Marlon Grochoska | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.</p>
     </footer>
+    <div id="wallet-address" class="wallet-address">
+        <p id="wallet-text"></p>
+        <button onclick="hideWallet()">Fechar</button>
+    </div>
     <script src="script.js"></script>
 </body>
 </html>
