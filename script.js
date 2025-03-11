@@ -4,10 +4,9 @@ const pricesContainer = document.getElementById('prices-container'),
       themeToggle = document.getElementById('theme-toggle'),
       chartSelect = document.getElementById('chart-select'),
       walletAddress = document.getElementById('wallet-address'),
-      walletText = document.getElementById('wallet-text'),
-      paginationContainer = document.getElementById('pagination');
+      walletText = document.getElementById('wallet-text');
 let allNews = [], lastFetchTime = null, currentPage = 1;
-const itemsPerPage = 15, maxPages = 3; // 15 notícias por página, 3 páginas
+const itemsPerPage = 15, maxPages = 3;
 let chartInstance = null;
 
 if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
@@ -26,11 +25,7 @@ const walletAddresses = {
 };
 
 function showWallet(coin) {
-    walletText.innerHTML = `
-        <strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>
-        ${walletAddresses[coin]}<br><br>
-        <em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>
-    `;
+    walletText.innerHTML = `<strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>${walletAddresses[coin]}<br><br><em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>`;
     walletAddress.style.display = 'block';
 }
 
@@ -74,7 +69,7 @@ async function fetchChartData(coin) {
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
                 scales: {
                     x: { ticks: { maxTicksLimit: 10 } },
                     y: { beginAtZero: false }
@@ -106,7 +101,7 @@ async function fetchRSSFeeds() {
             if (data.items) allNews.push(...data.items);
         }
         allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
-        if (allNews.length > 90) allNews = allNews.slice(0, 90); // Limita a 90 notícias
+        if (allNews.length > 45) allNews = allNews.slice(0, 45);
         lastFetchTime = now;
         displayNews(allNews);
     } catch (error) {
@@ -127,7 +122,7 @@ function displayNews(newsList) {
             const imgMatch = article.description.match(/<img[^>]+src=["'](.*?)["']/i);
             imageUrl = imgMatch ? imgMatch[1] : 'https://via.placeholder.com/300x200';
         }
-        const description = (article.description?.replace(/<img[^>]*>/g, '') || 'Descrição não disponível.').substring(0, 250) + (article.description?.length > 250 ? '...' : '');
+        const description = article.description?.replace(/<img[^>]*>/g, '') || 'Descrição não disponível.';
         div.innerHTML = `
             <img src="${imageUrl}" alt="Imagem da notícia" loading="lazy">
             <h3>${article.title}</h3>
@@ -155,14 +150,13 @@ function displayNews(newsList) {
 
 function updatePaginationControls(totalItems) {
     const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages);
-    paginationContainer.innerHTML = '';
-    for (let i = 1; i <= totalPages; i++) {
-        const button = document.createElement('button');
-        button.textContent = i;
-        button.onclick = () => changePage(i);
-        button.disabled = i === currentPage;
-        paginationContainer.appendChild(button);
-    }
+    const pagination = document.createElement('div');
+    pagination.className = 'pagination';
+    pagination.innerHTML = `
+        <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} title="Página Anterior"><</button>
+        <span>${currentPage}/${totalPages}</span>
+        <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} title="Próxima Página">></button>`;
+    newsContainer.appendChild(pagination);
 }
 
 function changePage(page) {
