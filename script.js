@@ -4,9 +4,10 @@ const pricesContainer = document.getElementById('prices-container'),
       themeToggle = document.getElementById('theme-toggle'),
       chartSelect = document.getElementById('chart-select'),
       walletAddress = document.getElementById('wallet-address'),
-      walletText = document.getElementById('wallet-text');
+      walletText = document.getElementById('wallet-text'),
+      paginationContainer = document.getElementById('pagination');
 let allNews = [], lastFetchTime = null, currentPage = 1;
-const itemsPerPage = 30, maxPages = 3; // Aumentado de 15 para 30 notícias por página
+const itemsPerPage = 15, maxPages = 3; // 15 notícias por página, 3 páginas
 let chartInstance = null;
 
 if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
@@ -105,7 +106,7 @@ async function fetchRSSFeeds() {
             if (data.items) allNews.push(...data.items);
         }
         allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
-        if (allNews.length > 90) allNews = allNews.slice(0, 90); // Aumentado para carregar mais notícias
+        if (allNews.length > 90) allNews = allNews.slice(0, 90); // Limita a 90 notícias
         lastFetchTime = now;
         displayNews(allNews);
     } catch (error) {
@@ -154,13 +155,14 @@ function displayNews(newsList) {
 
 function updatePaginationControls(totalItems) {
     const totalPages = Math.min(Math.ceil(totalItems / itemsPerPage), maxPages);
-    const pagination = document.createElement('div');
-    pagination.className = 'pagination';
-    pagination.innerHTML = `
-        <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} title="Página Anterior"><</button>
-        <span>${currentPage}/${totalPages}</span>
-        <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} title="Próxima Página">></button>`;
-    newsContainer.appendChild(pagination);
+    paginationContainer.innerHTML = '';
+    for (let i = 1; i <= totalPages; i++) {
+        const button = document.createElement('button');
+        button.textContent = i;
+        button.onclick = () => changePage(i);
+        button.disabled = i === currentPage;
+        paginationContainer.appendChild(button);
+    }
 }
 
 function changePage(page) {
