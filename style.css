@@ -149,19 +149,23 @@ header p {
     background-color: #45e06f;
 }
 
-/* Ajuste principal: impede esticamento vertical dos itens do grid */
+/* Grid de notícias: cada item terá altura conforme seu próprio conteúdo */
 .news-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-    align-items: start; /* Cada card terá altura apenas do próprio conteúdo */
+    align-items: start; /* Impede esticamento vertical */
 }
 
 .news-item {
     background-color: var(--card-bg);
     border-radius: 10px;
     overflow: hidden;
-    /* Removido 'display: flex; flex-direction: column;' para evitar esticamento */
+
+    /* Mantém flex para organizar conteúdo verticalmente */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Evita “esticar” o conteúdo internamente */
 }
 
 .news-item img {
@@ -177,13 +181,14 @@ header p {
 
 .news-item p {
     padding: 10px;
-    /* Importante: garantir que não exista flex-grow aqui */
+    /* Se havia flex-grow, certifique-se de que está removido */
 }
 
 .news-item a {
     padding: 10px;
     color: var(--secondary);
     text-decoration: none;
+    /* Certifique-se de NÃO usar margin-top: auto; aqui, para não forçar esticamento */
 }
 
 .news-item a:hover {
