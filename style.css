@@ -149,12 +149,14 @@ header p {
     background-color: #45e06f;
 }
 
-/* Grid de notícias: cada item terá altura conforme seu próprio conteúdo */
+/* Alteração principal no container de notícias:
+   - grid-auto-rows: min-content força cada linha a ter apenas a altura mínima necessária */
 .news-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-    align-items: start; /* Impede esticamento vertical */
+    align-items: start;
+    grid-auto-rows: min-content;
 }
 
 .news-item {
@@ -162,10 +164,10 @@ header p {
     border-radius: 10px;
     overflow: hidden;
 
-    /* Mantém flex para organizar conteúdo verticalmente */
+    /* Mantém o flex para organizar o conteúdo internamente */
     display: flex;
     flex-direction: column;
-    align-items: flex-start; /* Evita “esticar” o conteúdo internamente */
+    align-items: flex-start;
 }
 
 .news-item img {
@@ -181,14 +183,14 @@ header p {
 
 .news-item p {
     padding: 10px;
-    /* Se havia flex-grow, certifique-se de que está removido */
+    /* Removido qualquer flex-grow para que o parágrafo não force esticamento */
 }
 
 .news-item a {
     padding: 10px;
     color: var(--secondary);
     text-decoration: none;
-    /* Certifique-se de NÃO usar margin-top: auto; aqui, para não forçar esticamento */
+    /* Evite usar margin-top: auto para não empurrar o link para ocupar espaço extra */
 }
 
 .news-item a:hover {
