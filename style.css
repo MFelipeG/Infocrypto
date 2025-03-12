@@ -152,7 +152,7 @@ header p {
 }
 .news-item p {
     padding: 10px;
-    flex-grow: 1;
+    /* flex-grow removido para evitar alongamento excessivo */
 }
 .news-item a {
     padding: 10px;
@@ -378,4 +378,4 @@ footer {
 }
 .share-container:hover .share-options {
     display: flex;
-}
+        }
