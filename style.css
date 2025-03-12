@@ -149,25 +149,20 @@ header p {
     background-color: #45e06f;
 }
 
-/* Alteração principal no container de notícias:
-   - grid-auto-rows: min-content força cada linha a ter apenas a altura mínima necessária */
+/* GRID de notícias: cada item tem a própria altura */
 .news-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px;
-    align-items: start;
-    grid-auto-rows: min-content;
+    align-items: start; /* Evita “esticar” todos os itens à altura do maior */
 }
 
+/* Cada notícia como bloco comum, sem flex */
 .news-item {
     background-color: var(--card-bg);
     border-radius: 10px;
     overflow: hidden;
-
-    /* Mantém o flex para organizar o conteúdo internamente */
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+    display: block; 
 }
 
 .news-item img {
@@ -183,14 +178,12 @@ header p {
 
 .news-item p {
     padding: 10px;
-    /* Removido qualquer flex-grow para que o parágrafo não force esticamento */
 }
 
 .news-item a {
     padding: 10px;
     color: var(--secondary);
     text-decoration: none;
-    /* Evite usar margin-top: auto para não empurrar o link para ocupar espaço extra */
 }
 
 .news-item a:hover {
@@ -339,25 +332,20 @@ footer {
         flex-direction: column;
         align-items: center;
     }
-
     .news-container {
         grid-template-columns: 1fr;
     }
-
     header {
         padding: 10px;
         min-height: 140px;
     }
-
     header h1 {
         font-size: 1.5em;
     }
-
     .price-card {
         width: 100%;
         max-width: 200px;
     }
-
     .chart-container {
         padding: 10px;
     }
