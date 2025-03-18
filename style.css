@@ -140,6 +140,8 @@ header p {
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    max-height: 400px; /* Adicionado para limitar a altura */
+    overflow: auto; /* Permite rolagem se o conteúdo exceder */
 }
 .news-item img {
     width: 100%;
