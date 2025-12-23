@@ -68,19 +68,20 @@ header p {
 }
 .price-card {
     background-color: var(--card-bg);
-    padding: 15px;
+    padding: 12px;
     border-radius: 10px;
     text-align: center;
-    width: 150px;
-    flex: 1 1 150px;
+    min-width: 140px;
+    max-width: 200px;
+    flex: 1 1 140px;
 }
 .price-card h2 {
     margin-bottom: 10px;
+        font-size: 1.1em;
     color: var(--highlight);
 }
 .prices-container p, .news-container p {
-    color: var(--secondary);
-    font-style: italic;
+    margin-bottom: 8px;    font-style: italic;
 }
 .chart-container {
     display: flex;
@@ -414,10 +415,8 @@ footer {
 }
 
 .price-card .price {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin: 10px 0;
-}
+    font-size: 1.3em;    font-weight: bold;
+    margin: 8px 0;}
 
 .price-card .change {
     font-size: 0.9em;
