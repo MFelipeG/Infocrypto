@@ -347,3 +347,15 @@ footer a:hover {
     padding: 20px;
     font-weight: bold;
 }
+
+
+/* Notícias - Limitar tamanho das imagens */
+.news-item img,
+img[alt="Imagem da notícia"] {
+    max-width: 100%;
+    max-height: 300px;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+}
