@@ -104,11 +104,11 @@ header p {
 .price-card {
     flex-shrink: 0;
     min-width: 250px;
+        max-height: 130px;
     background: rgba(30, 47, 79, 0.4);
     border: 1px solid rgba(80, 250, 123, 0.2);
     border-radius: 8px;
-    padding: 15px 20px;
-    transition: all 0.3s ease;
+    padding: 8px 15px;    transition: all 0.3s ease;
     position: relative;
 }
 
@@ -119,8 +119,7 @@ header p {
 }
 
 .crypto-name {
-    font-size: 1.2em;
-    font-weight: bold;
+    font-size: 1em;    font-weight: bold;
     color: var(--highlight);
     margin-bottom: 10px;
     display: flex;
@@ -135,11 +134,9 @@ header p {
 }
 
 .price {
-    font-size: 1.5em;
-    font-weight: bold;
+    font-size: 1.2em;    font-weight: bold;
     color: var(--text-color);
-    margin: 10px 0;
-}
+    margin: 5px 0;}
 
 .price-change {
     font-size: 0.95em;
@@ -310,8 +307,7 @@ footer a:hover {
     }
 
     #crypto-chart {
-        height: 300px;
-    }
+    height: 250px;    }
 
     .chart-header {
         flex-direction: column;
