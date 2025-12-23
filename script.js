@@ -85,8 +85,7 @@ async function fetchCryptoPrices() {
         let html = '';
         const displayList = favorites.length > 0 
             ? CRYPTO_LIST.filter(c => isFavorite(c.id))
-            : CRYPTO_LIST.slice(0, 3);
-        
+            : CRYPTO_LIST.slice(0, 8);        
         displayList.forEach(crypto => {
             const priceInfo = data[crypto.id];
             if (priceInfo) {
