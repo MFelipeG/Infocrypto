@@ -110,8 +110,7 @@ async function fetchCryptoPrices() {
         });
         
         html += `<p class="timestamp">Última atualização: ${new Date().toLocaleTimeString('pt-BR')}</p>`;
-        pricesContainer.innerHTML = html;
-        
+        pricesContainer.innerHTML = `<div class="prices-track">${html}${html}</div>`;        
     } catch (error) {
         pricesContainer.innerHTML = '<p class="error">⚠️ Erro ao carregar preços. Tente novamente mais tarde.</p>';
         console.error('Erro ao buscar preços:', error);
