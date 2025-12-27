@@ -277,6 +277,7 @@ function displayNews(newsList) {
                 <button class="like-btn" onclick="toggleLike(this, '${article.link}')">👍 <span>0</span></button>
                 <button class="dislike-btn" onclick="toggleDislike(this, '${article.link}')">👎 <span>0</span></button>
             </div>
+                          <div class="share-dropdown">
               <button class="share-btn">📤 Compartilhar</button>                <div class="share-options">
                     <a href="#" onclick="shareOnFacebook('${article.link}', '${article.title}')">Facebook</a>
                     <a href="#" onclick="shareOnInstagram('${article.link}', '${article.title}')">Instagram</a>
@@ -285,6 +286,7 @@ function displayNews(newsList) {
                     <a href="#" onclick="shareByEmail('${article.link}', '${article.title}')">E-mail</a>
                     <a href="#" onclick="copyLink('${article.link}')">Copiar Link</a>
                 </div>
+                            </div>
             </div>
             <a href="${article.link}" target="_blank">Leia mais</a>`;
         newsContainer.appendChild(div);
