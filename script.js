@@ -277,15 +277,15 @@ function displayNews(newsList) {
                 <button class="like-btn" onclick="toggleLike(this, '${article.link}')">👍 <span>0</span></button>
                 <button class="dislike-btn" onclick="toggleDislike(this, '${article.link}')">👎 <span>0</span></button>
             </div>
-                          <div class="share-options">
-              <button class="share-btn"> onclick="toggleShareOptions(this)"📤 Compartilhar</button>                <div class="share-options">
-                    <a href="#" onclick="shareOnFacebook('${article.link}', '${article.title}')">Facebook</a>
-                    <a href="#" onclick="shareOnInstagram('${article.link}', '${article.title}')">Instagram</a>
-                    <a href="#" onclick="shareOnTwitter('${article.link}', '${article.title}')">X (Twitter)</a>
-                    <a href="#" onclick="shareOnWhatsApp('${article.link}', '${article.title}')">WhatsApp</a>
-                    <a href="#" onclick="shareByEmail('${article.link}', '${article.title}')">E-mail</a>
-                    <a href="#" onclick="copyLink('${article.link}')">Copiar Link</a>
-                </div>
+                    <button class="share-btn" onclick="toggleShareOptions(this)">📤 Compartilhar</button>
+                    <div class="share-options">
+                        <a href="#" onclick="shareOnFacebook('${article.link}', '${article.title}')">👍 Facebook</a>
+                        <a href="#" onclick="shareOnInstagram('${article.link}', '${article.title}')">📸 Instagram</a>
+                        <a href="#" onclick="shareOnTwitter('${article.link}', '${article.title}')">❌ X (Twitter)</a>
+                        <a href="#" onclick="shareOnWhatsApp('${article.link}', '${article.title}')">📱 WhatsApp</a>
+                        <a href="#" onclick="shareByEmail('${article.link}', '${article.title}')">✉️ E-mail</a>
+                        <a href="#" onclick="copyLink('${article.link}')">📋 Copiar Link</a>
+                    </div>                </div>
                             </div>
             </div>
             <a href="${article.link}" target="_blank">Leia mais</a>`;
