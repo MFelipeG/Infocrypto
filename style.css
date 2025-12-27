@@ -207,8 +207,7 @@ header p {
 }
 
 #crypto-chart {
-    height: 400px;
-    margin-top: 15px;
+    height: 300px;    margin-top: 15px;
 }
 
 /* Estatísticas */
@@ -414,3 +413,142 @@ footer a:hover {
 }
 
 .news-item img,
+
+
+/* Botão compartilhar com dropdown */
+.share-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.share-btn {
+    padding: 8px 15px;
+    background: var(--highlight);
+    color: var(--header-text);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s;
+}
+
+.share-btn:hover {
+    background: var(--secondary);
+}
+
+.share-options {
+    display: none;
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--secondary);
+    border-radius: 5px;
+    padding: 10px;
+    min-width: 200px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    z-index: 1000;
+    margin-bottom: 5px;
+}
+
+.share-dropdown:hover .share-options,
+.share-options.show {
+    display: block;
+}
+
+.share-options a {
+    display: block;
+    padding: 8px 12px;
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 3px;
+    transition: background 0.3s;
+}
+
+.share-options a:hover {
+    background: rgba(80, 250, 123, 0.2);
+}
+
+/* Seção Apoie o Canal */
+.support-section {
+    background: var(--card-bg);
+    padding: 30px 20px;
+    border-radius: 10px;
+    margin: 40px auto;
+    max-width: 800px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.support-section h3 {
+    color: var(--highlight);
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.crypto-wallets {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+}
+
+.crypto-wallet {
+    width: 80px;
+    height: 80px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border: 2px solid transparent;
+}
+
+.crypto-wallet:hover {
+    transform: scale(1.1);
+    border-color: var(--highlight);
+    box-shadow: 0 4px 12px rgba(80, 250, 123, 0.3);
+}
+
+.wallet-address {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    z-index: 2000;
+    max-width: 90%;
+    text-align: center;
+}
+
+.wallet-address.show {
+    display: block;
+}
+
+.wallet-address p {
+    color: var(--text-color);
+    margin: 20px 0;
+    word-break: break-all;
+    font-size: 0.9em;
+}
+
+.wallet-address button {
+    padding: 10px 20px;
+    background: var(--highlight);
+    color: var(--header-text);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.wallet-address button:hover {
+    background: var(--secondary);
+}
