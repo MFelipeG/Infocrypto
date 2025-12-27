@@ -277,8 +277,8 @@ function displayNews(newsList) {
                 <button class="like-btn" onclick="toggleLike(this, '${article.link}')">👍 <span>0</span></button>
                 <button class="dislike-btn" onclick="toggleDislike(this, '${article.link}')">👎 <span>0</span></button>
             </div>
-                          <div class="share-dropdown">
-              <button class="share-btn">📤 Compartilhar</button>                <div class="share-options">
+                          <div class="share-options">
+              <button class="share-btn"> onclick="toggleShareOptions(this)"📤 Compartilhar</button>                <div class="share-options">
                     <a href="#" onclick="shareOnFacebook('${article.link}', '${article.title}')">Facebook</a>
                     <a href="#" onclick="shareOnInstagram('${article.link}', '${article.title}')">Instagram</a>
                     <a href="#" onclick="shareOnTwitter('${article.link}', '${article.title}')">X (Twitter)</a>
@@ -423,4 +423,10 @@ function copyAddress(address) {
     }).catch(() => {
         alert('Erro ao copiar. Por favor, copie manualmente: ' + address);
     });
+}
+
+// Função para mostrar/esconder opções de compartilhar
+function toggleShareOptions(button) {
+    const shareOptions = button.nextElementSibling;
+    shareOptions.classList.toggle('show');
 }
