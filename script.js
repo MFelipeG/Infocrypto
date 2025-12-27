@@ -2,9 +2,9 @@
 const CONFIG = {
     UPDATE_INTERVAL: 600000,
     NEWS_CACHE_TIME: 600000,
-    MAX_NEWS: 60,  // aumentei a quantidade de notícias
+    MAX_NEWS: 60, // Aumentado para mais notícias
     ITEMS_PER_PAGE: 15,
-    MAX_PAGES: 4
+    MAX_PAGES: 3
 };
 
 const CRYPTO_LIST = [
@@ -19,26 +19,27 @@ const CRYPTO_LIST = [
 ];
 
 const pricesContainer = document.getElementById('prices-container'),
-    newsContainer = document.getElementById('news-container'),
-    searchInput = document.getElementById('search-input'),
-    themeToggle = document.getElementById('theme-toggle'),
-    chartSelect = document.getElementById('chart-select'),
-    chartPeriodSelect = document.getElementById('chart-period'),
-    walletAddress = document.getElementById('wallet-address'),
-    walletText = document.getElementById('wallet-text');
+      newsContainer = document.getElementById('news-container'),
+      searchInput = document.getElementById('search-input'),
+      themeToggle = document.getElementById('theme-toggle'),
+      chartSelect = document.getElementById('chart-select'),
+      chartPeriodSelect = document.getElementById('chart-period'),
+      walletAddress = document.getElementById('wallet-address'),
+      walletText = document.getElementById('wallet-text');
 
 let allNews = [], lastFetchTime = null, currentPage = 1;
 let chartInstance = null;
 let currentChartPeriod = 30;
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
+// Tema
 if (localStorage.getItem('theme') === 'light') document.body.classList.add('light');
-
 themeToggle.addEventListener('click', () => {
     document.body.classList.toggle('light');
     localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
 });
 
+// Carteiras
 const WALLET_ADDRESSES = {
     bitcoin: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
     ethereum: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
@@ -47,11 +48,38 @@ const WALLET_ADDRESSES = {
     polygon: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
 };
 
-// ================= FUNÇÕES CRIPTO =================
+function showWallet(crypto) {
+    const address = WALLET_ADDRESSES[crypto];
+    walletText.innerHTML = `
+        <h3>Endereço ${crypto.toUpperCase()}</h3>
+        <p>${address}</p>
+        <button onclick="copyAddress('${address}')">📋 Copiar Endereço</button>
+    `;
+    walletAddress.classList.add('show');
+    walletAddress.style.display = 'block';
+}
+
+function hideWallet() {
+    walletAddress.classList.remove('show');
+    walletAddress.style.display = 'none';
+}
+
+function copyAddress(address) {
+    navigator.clipboard.writeText(address).then(() => {
+        alert('💰 Endereço copiado! Obrigado pelo apoio!');
+    }).catch(() => {
+        alert('Erro ao copiar. Por favor, copie manualmente: ' + address);
+    });
+}
+
+// Favoritos
 function toggleFavorite(coinId) {
     const index = favorites.indexOf(coinId);
-    if (index > -1) favorites.splice(index, 1);
-    else favorites.push(coinId);
+    if (index > -1) {
+        favorites.splice(index, 1);
+    } else {
+        favorites.push(coinId);
+    }
     localStorage.setItem('favorites', JSON.stringify(favorites));
     fetchCryptoPrices();
 }
@@ -60,12 +88,14 @@ function isFavorite(coinId) {
     return favorites.includes(coinId);
 }
 
+// Preços
 async function fetchCryptoPrices() {
     try {
         const cryptoIds = CRYPTO_LIST.map(c => c.id).join(',');
         const response = await fetch(
             `https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd&include_24hr_change=true&include_market_cap=true`
         );
+        if (!response.ok) throw new Error('Erro ao buscar preços');
         const data = await response.json();
 
         let html = '';
@@ -100,15 +130,15 @@ async function fetchCryptoPrices() {
     }
 }
 
-// ================= FUNÇÕES GRÁFICO =================
+// Gráfico
 async function fetchChartData(coin, days = 30) {
     try {
         const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=${days}`);
+        if (!response.ok) throw new Error('Erro ao buscar dados do gráfico');
         const data = await response.json();
-        
+
         let step = days === 365 ? 7 : days === 90 ? 3 : 1;
         const filtered = data.prices.filter((_, index) => index % step === 0);
-        
         const processedData = {
             labels: filtered.map(p => {
                 const date = new Date(p[0]);
@@ -122,17 +152,18 @@ async function fetchChartData(coin, days = 30) {
         renderChart(coin, processedData, days);
     } catch (error) {
         console.error('Erro ao carregar gráfico:', error);
+        document.querySelector('.chart-container').innerHTML += '<p style="color: var(--secondary);">⚠️ Erro ao carregar gráfico.</p>';
     }
 }
 
 function renderChart(coin, processedData, days) {
     const ctx = document.getElementById('crypto-chart').getContext('2d');
     if (chartInstance) chartInstance.destroy();
-    
+
     const prices = processedData.data;
     const isPositive = prices[prices.length - 1] >= prices[0];
     const lineColor = isPositive ? '#50fa7b' : '#ff6b6b';
-    
+
     const gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
     gradientFill.addColorStop(0, isPositive ? 'rgba(80, 250, 123, 0.3)' : 'rgba(255, 107, 107, 0.3)');
     gradientFill.addColorStop(1, 'rgba(80, 250, 123, 0)');
@@ -161,24 +192,52 @@ function renderChart(coin, processedData, days) {
             maintainAspectRatio: true,
             interaction: { intersect: false, mode: 'index' },
             plugins: {
-                legend: { display: true, position: 'top' },
+                legend: {
+                    display: true,
+                    position: 'top',
+                    labels: { color: getComputedStyle(document.body).getPropertyValue('--text-color'), font: { size: 12 } }
+                },
                 tooltip: {
+                    enabled: true,
+                    backgroundColor: 'rgba(0,0,0,0.8)',
+                    titleColor: '#fff',
+                    bodyColor: '#fff',
+                    borderColor: lineColor,
+                    borderWidth: 1,
+                    displayColors: false,
                     callbacks: {
                         label: function(context) {
-                            return `$${context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                            return `Preço: $${context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
                         }
                     }
                 }
             },
             scales: {
-                x: { grid: { display: false } },
-                y: { beginAtZero: false }
+                x: {
+                    grid: { display: false },
+                    ticks: {
+                        color: getComputedStyle(document.body).getPropertyValue('--text-color'),
+                        maxTicksLimit: days === 7 ? 7 : days === 30 ? 10 : 12,
+                        font: { size: 10 }
+                    }
+                },
+                y: {
+                    beginAtZero: false,
+                    grid: { color: 'rgba(255,255,255,0.1)', borderDash: [5,5] },
+                    ticks: {
+                        color: getComputedStyle(document.body).getPropertyValue('--text-color'),
+                        callback: function(value) {
+                            return '$' + value.toLocaleString('pt-BR', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+                        },
+                        font: { size: 10 }
+                    }
+                }
             }
         }
     });
 }
 
-// ================= FUNÇÕES NOTÍCIAS =================
+// Notícias
 async function fetchRSSFeeds() {
     const now = new Date();
     if (lastFetchTime && (now - lastFetchTime) < CONFIG.NEWS_CACHE_TIME) {
@@ -196,7 +255,7 @@ async function fetchRSSFeeds() {
             const data = await response.json();
             if (data.items) allNews.push(...data.items);
         }
-        allNews.sort((a,b)=>new Date(b.pubDate)-new Date(a.pubDate));
+        allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000*60*60*24) <= 4);
         if (allNews.length > CONFIG.MAX_NEWS) allNews = allNews.slice(0, CONFIG.MAX_NEWS);
         lastFetchTime = now;
         displayNews(allNews);
@@ -206,6 +265,7 @@ async function fetchRSSFeeds() {
     }
 }
 
+// Exibir notícias
 function displayNews(newsList) {
     newsContainer.innerHTML = '';
     const start = (currentPage - 1) * CONFIG.ITEMS_PER_PAGE;
@@ -223,8 +283,102 @@ function displayNews(newsList) {
             <img src="${imageUrl}" alt="Imagem da notícia" loading="lazy">
             <h3>${article.title}</h3>
             <p>${description}</p>
-            <a href="${article.link}" target="_blank" class="read-more-btn">Leia mais</a>
+            <div class="like-dislike-container">
+                <button class="like-btn" onclick="toggleLike(this, '${article.link}')">👍 <span>0</span></button>
+                <button class="dislike-btn" onclick="toggleDislike(this, '${article.link}')">👎 <span>0</span></button>
+            </div>
+            <div class="share-dropdown">
+                <button class="share-btn">📤 Compartilhar</button>
+                <div class="share-options">
+                    <a href="#" onclick="shareOnFacebook('${article.link}', '${article.title}')">Facebook</a>
+                    <a href="#" onclick="shareOnInstagram('${article.link}', '${article.title}')">Instagram</a>
+                    <a href="#" onclick="shareOnTwitter('${article.link}', '${article.title}')">X (Twitter)</a>
+                    <a href="#" onclick="shareOnWhatsApp('${article.link}', '${article.title}')">WhatsApp</a>
+                    <a href="#" onclick="shareByEmail('${article.link}', '${article.title}')">E-mail</a>
+                    <a href="#" onclick="copyLink('${article.link}')">Copiar Link</a>
+                </div>
+            </div>
+            <a href="${article.link}" target="_blank" class="read-more">Leia mais</a>
         `;
         newsContainer.appendChild(div);
     });
+    updatePaginationControls(newsList.length);
 }
+
+// Paginação
+function updatePaginationControls(totalItems) {
+    const totalPages = Math.min(Math.ceil(totalItems / CONFIG.ITEMS_PER_PAGE), CONFIG.MAX_PAGES);
+    const pagination = document.createElement('div');
+    pagination.className = 'pagination';
+    pagination.innerHTML = `
+        <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} title="Página Anterior">&lt;</button>
+        <span>${currentPage}/${totalPages}</span>
+        <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} title="Próxima Página">&gt;</button>
+    `;
+    newsContainer.appendChild(pagination);
+}
+
+function changePage(page) {
+    if (page >= 1 && page <= Math.min(Math.ceil(allNews.length / CONFIG.ITEMS_PER_PAGE), CONFIG.MAX_PAGES)) {
+        currentPage = page;
+        displayNews(allNews);
+    }
+}
+
+// Busca
+function searchNews() {
+    const query = searchInput.value.toLowerCase();
+    const filteredNews = allNews.filter(news => 
+        news.title.toLowerCase().includes(query) || 
+        news.description.toLowerCase().includes(query)
+    );
+    currentPage = 1;
+    displayNews(filteredNews);
+}
+
+// Likes/Dislikes
+function toggleLike(button, articleLink) {
+    const likeCount = button.querySelector('span');
+    if (button.classList.contains('liked')) {
+        likeCount.textContent = parseInt(likeCount.textContent)-1;
+        button.classList.remove('liked');
+    } else {
+        likeCount.textContent = parseInt(likeCount.textContent)+1;
+        button.classList.add('liked');
+    }
+}
+
+function toggleDislike(button, articleLink) {
+    const dislikeCount = button.querySelector('span');
+    if (button.classList.contains('disliked')) {
+        dislikeCount.textContent = parseInt(dislikeCount.textContent)-1;
+        button.classList.remove('disliked');
+    } else {
+        dislikeCount.textContent = parseInt(dislikeCount.textContent)+1;
+        button.classList.add('disliked');
+    }
+}
+
+// Compartilhamento
+function shareOnFacebook(url, title) {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodeURIComponent(title)}`, '_blank');
+}
+function shareOnInstagram(url, title) { alert('Compartilhe no Instagram manualmente!'); }
+function shareOnTwitter(url, title) {
+    window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, '_blank');
+}
+function shareOnWhatsApp(url, title) {
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(title + ' - ' + url)}`, '_blank');
+}
+function shareByEmail(url, title) { window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(url)}`; }
+function copyLink(url) { navigator.clipboard.writeText(url).then(()=>{alert('Link copiado!')}); }
+
+// Inicialização
+fetchCryptoPrices();
+fetchChartData('bitcoin');
+fetchRSSFeeds();
+setInterval(fetchCryptoPrices, CONFIG.UPDATE_INTERVAL);
+setInterval(fetchRSSFeeds, CONFIG.UPDATE_INTERVAL);
+searchInput.addEventListener('input', searchNews);
+chartSelect.addEventListener('change', () => fetchChartData(chartSelect.value, parseInt(chartPeriodSelect.value)));
+chartPeriodSelect.addEventListener('change', () => fetchChartData(chartSelect.value, parseInt(chartPeriodSelect.value)));
