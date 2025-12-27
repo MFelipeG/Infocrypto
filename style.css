@@ -434,8 +434,7 @@ footer a:hover {
 }
 
 .share-options {
-    display: none !important;    position: absolute;
-    bottom: 100%;
+    display: none;    bottom: 100%;
     left: 0;
     background: var(--card-bg);
     border: 1px solid var(--secondary);
