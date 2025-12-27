@@ -2,9 +2,9 @@
 const CONFIG = {
     UPDATE_INTERVAL: 600000,
     NEWS_CACHE_TIME: 600000,
-    MAX_NEWS: 100,        // aumentei de 45 para 100
-    ITEMS_PER_PAGE: 25,   // aumentei de 15 para 25
-    MAX_PAGES: 4          // aumentei de 3 para 4
+    MAX_NEWS: 60,  // aumentei a quantidade de notícias
+    ITEMS_PER_PAGE: 15,
+    MAX_PAGES: 4
 };
 
 const CRYPTO_LIST = [
@@ -39,30 +39,19 @@ themeToggle.addEventListener('click', () => {
     localStorage.setItem('theme', document.body.classList.contains('light') ? 'light' : 'dark');
 });
 
-const walletAddresses = {
-    bitcoin: '1Lkpq3cwVi7wYzN3zC38padBk2Sz58Df1j',
-    ethereum: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05',
-    solana: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05',
-    bnb: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05',
-    polygon: '0xeE06196aDfb6c2f459dB30FC01CeCa55Ff4FcF05'
+const WALLET_ADDRESSES = {
+    bitcoin: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+    ethereum: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
+    solana: 'DYw8jCTfwHNRJhhmFcbXvVDTqWMEVFBX6ZKUmG5CNSKK',
+    bnb: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
+    polygon: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
 };
 
-function showWallet(coin) {
-    walletText.innerHTML = `<strong>Endereço de Carteira ${coin.charAt(0).toUpperCase() + coin.slice(1)}:</strong><br>${walletAddresses[coin]}<br><br><em>Obrigado pelo apoio! Ajude-nos a manter o site com suas doações. Toda contribuição é valorizada! 💚</em>`;
-    walletAddress.style.display = 'block';
-}
-
-function hideWallet() {
-    walletAddress.style.display = 'none';
-}
-
+// ================= FUNÇÕES CRIPTO =================
 function toggleFavorite(coinId) {
     const index = favorites.indexOf(coinId);
-    if (index > -1) {
-        favorites.splice(index, 1);
-    } else {
-        favorites.push(coinId);
-    }
+    if (index > -1) favorites.splice(index, 1);
+    else favorites.push(coinId);
     localStorage.setItem('favorites', JSON.stringify(favorites));
     fetchCryptoPrices();
 }
@@ -77,11 +66,8 @@ async function fetchCryptoPrices() {
         const response = await fetch(
             `https://api.coingecko.com/api/v3/simple/price?ids=${cryptoIds}&vs_currencies=usd&include_24hr_change=true&include_market_cap=true`
         );
-        
-        if (!response.ok) throw new Error('Erro ao buscar preços');
-        
         const data = await response.json();
-        
+
         let html = '';
         const displayList = favorites.length > 0 
             ? CRYPTO_LIST.filter(c => isFavorite(c.id))
@@ -100,27 +86,24 @@ async function fetchCryptoPrices() {
                         </button>
                         <h2>${crypto.name} (${crypto.symbol})</h2>
                         <p class="price">$${priceInfo.usd.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
-                        <p class="change ${changeClass}">
-                            ${changeSymbol} ${Math.abs(change).toFixed(2)}% (24h)
-                        </p>
+                        <p class="change ${changeClass}">${changeSymbol} ${Math.abs(change).toFixed(2)}% (24h)</p>
                         <p class="market-cap">Cap: $${(priceInfo.usd_market_cap / 1e9).toFixed(2)}B</p>
                     </div>
                 `;
             }
         });
-        
         html += `<p class="timestamp">Última atualização: ${new Date().toLocaleTimeString('pt-BR')}</p>`;
-        pricesContainer.innerHTML = `<div class="prices-track">${html}${html}</div>`;        
+        pricesContainer.innerHTML = `<div class="prices-track">${html}${html}</div>`;
     } catch (error) {
         pricesContainer.innerHTML = '<p class="error">⚠️ Erro ao carregar preços. Tente novamente mais tarde.</p>';
         console.error('Erro ao buscar preços:', error);
     }
 }
 
+// ================= FUNÇÕES GRÁFICO =================
 async function fetchChartData(coin, days = 30) {
     try {
         const response = await fetch(`https://api.coingecko.com/api/v3/coins/${coin}/market_chart?vs_currency=usd&days=${days}`);
-        if (!response.ok) throw new Error('Erro ao buscar dados do gráfico');
         const data = await response.json();
         
         let step = days === 365 ? 7 : days === 90 ? 3 : 1;
@@ -136,11 +119,9 @@ async function fetchChartData(coin, days = 30) {
             }),
             data: filtered.map(p => p[1])
         };
-        
         renderChart(coin, processedData, days);
     } catch (error) {
         console.error('Erro ao carregar gráfico:', error);
-        document.querySelector('.chart-container').innerHTML += '<p style="color: var(--secondary);">⚠️ Erro ao carregar gráfico.</p>';
     }
 }
 
@@ -155,7 +136,7 @@ function renderChart(coin, processedData, days) {
     const gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
     gradientFill.addColorStop(0, isPositive ? 'rgba(80, 250, 123, 0.3)' : 'rgba(255, 107, 107, 0.3)');
     gradientFill.addColorStop(1, 'rgba(80, 250, 123, 0)');
-    
+
     chartInstance = new Chart(ctx, {
         type: 'line',
         data: {
@@ -180,54 +161,24 @@ function renderChart(coin, processedData, days) {
             maintainAspectRatio: true,
             interaction: { intersect: false, mode: 'index' },
             plugins: {
-                legend: {
-                    display: true,
-                    position: 'top',
-                    labels: {
-                        color: getComputedStyle(document.body).getPropertyValue('--text-color'),
-                        font: { size: 12 }
-                    }
-                },
+                legend: { display: true, position: 'top' },
                 tooltip: {
-                    enabled: true,
-                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                    titleColor: '#fff',
-                    bodyColor: '#fff',
-                    borderColor: lineColor,
-                    borderWidth: 1,
-                    displayColors: false,
                     callbacks: {
                         label: function(context) {
-                            return `Preço: $${context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+                            return `$${context.parsed.y.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
                         }
                     }
                 }
             },
             scales: {
-                x: {
-                    grid: { display: false },
-                    ticks: {
-                        color: getComputedStyle(document.body).getPropertyValue('--text-color'),
-                        maxTicksLimit: days === 7 ? 7 : days === 30 ? 10 : 12,
-                        font: { size: 10 }
-                    }
-                },
-                y: {
-                    beginAtZero: false,
-                    grid: { color: 'rgba(255, 255, 255, 0.1)', borderDash: [5, 5] },
-                    ticks: {
-                        color: getComputedStyle(document.body).getPropertyValue('--text-color'),
-                        callback: function(value) {
-                            return '$' + value.toLocaleString('pt-BR', {minimumFractionDigits: 0, maximumFractionDigits: 0});
-                        },
-                        font: { size: 10 }
-                    }
-                }
+                x: { grid: { display: false } },
+                y: { beginAtZero: false }
             }
         }
     });
 }
 
+// ================= FUNÇÕES NOTÍCIAS =================
 async function fetchRSSFeeds() {
     const now = new Date();
     if (lastFetchTime && (now - lastFetchTime) < CONFIG.NEWS_CACHE_TIME) {
@@ -245,7 +196,7 @@ async function fetchRSSFeeds() {
             const data = await response.json();
             if (data.items) allNews.push(...data.items);
         }
-        allNews = allNews.filter(news => (now - new Date(news.pubDate)) / (1000 * 60 * 60 * 24) <= 4);
+        allNews.sort((a,b)=>new Date(b.pubDate)-new Date(a.pubDate));
         if (allNews.length > CONFIG.MAX_NEWS) allNews = allNews.slice(0, CONFIG.MAX_NEWS);
         lastFetchTime = now;
         displayNews(allNews);
@@ -272,26 +223,8 @@ function displayNews(newsList) {
             <img src="${imageUrl}" alt="Imagem da notícia" loading="lazy">
             <h3>${article.title}</h3>
             <p>${description}</p>
-            <div class="like-dislike-container">
-                <button class="like-btn" onclick="toggleLike(this, '${article.link}')">👍 <span>0</span></button>
-                <button class="dislike-btn" onclick="toggleDislike(this, '${article.link}')">👎 <span>0</span></button>
-            </div>
-            <div class="share-dropdown">
-                <button class="share-btn">📤 Compartilhar</button>
-                <div class="share-options">
-                    <a href="#" onclick="shareOnFacebook('${article.link}', '${article.title}')">Facebook</a>
-                    <a href="#" onclick="shareOnInstagram('${article.link}', '${article.title}')">Instagram</a>
-                    <a href="#" onclick="shareOnTwitter('${article.link}', '${article.title}')">X (Twitter)</a>
-                    <a href="#" onclick="shareOnWhatsApp('${article.link}', '${article.title}')">WhatsApp</a>
-                    <a href="#" onclick="shareByEmail('${article.link}', '${article.title}')">E-mail</a>
-                    <a href="#" onclick="copyLink('${article.link}')">Copiar Link</a>
-                </div>
-            </div>
             <a href="${article.link}" target="_blank" class="read-more-btn">Leia mais</a>
         `;
         newsContainer.appendChild(div);
     });
-    updatePaginationControls(newsList.length);
 }
-
-// ============================ restante do código permanece igual ============================
