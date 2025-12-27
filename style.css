@@ -547,7 +547,7 @@ footer a:hover {
 }
 
     /* TEMPORÁRIO: Esconde opções de compartilhamento até deploy completo */
-.share-button + a,
-.share-button ~ a[href="/#"] {
+.news-item button:nth-of-type(3) + a,
+.news-item a[href="/#"] {
     display: none !important;
-}
+}}
