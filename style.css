@@ -2,7 +2,7 @@
     --bg-color: #121212;
     --text-color: #fff;
     --card-bg: #1e1e2f;
-    --header-text: #fff;
+    --header-text: #121212;
     --highlight: #50fa7b;
     --secondary: #6272a4;
     --footer-bg: #282a36;
@@ -12,7 +12,7 @@ body.light {
     --bg-color: #f0f0f0;
     --text-color: #121212;
     --card-bg: #fff;
-    --header-text: #121212;
+    --header-text: #fff;
     --highlight: #45e06f;
     --secondary: #8a9cc2;
     --footer-bg: #e0e0e0;
@@ -42,7 +42,7 @@ header h1 {
 }
 
 header p {
-    font-size: 0.9em;
+    font-size: .9em;
     color: #f8f8f8;
     margin-top: 5px;
 }
@@ -57,6 +57,11 @@ header p {
     border-radius: 5px;
     cursor: pointer;
     font-size: 1em;
+    margin-left: 10px;
+}
+
+#theme-icon {
+    font-size: 1.5em;
 }
 
 .container {
@@ -67,18 +72,19 @@ header p {
 
 /* Ticker horizontal contínuo */
 .prices-container {
-    overflow: hidden;
+    overflow: visible;
     width: 100%;
     background: var(--card-bg);
-    padding: 15px 0;
+    padding: 20px 0;
     margin: 20px 0;
     border-radius: 10px;
+    position: relative;
 }
 
 .prices-track {
     display: flex;
     gap: 15px;
-    animation: scroll-left 25s linear infinite;
+    animation: scroll-left 30s linear infinite;
     will-change: transform;
 }
 
@@ -109,17 +115,27 @@ header p {
     box-shadow: 0 4px 12px rgba(80, 250, 123, 0.2);
 }
 
-.price-card h2 {
-    font-size: 1em;
-    margin: 0 0 5px 0;
+.crypto-name {
+    font-size: 0.95em;
+    font-weight: bold;
     color: var(--highlight);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.crypto-symbol {
+    font-size: 0.75em;
+    color: var(--secondary);
+    opacity: 0.8;
 }
 
 .price {
     font-size: 1.1em;
     font-weight: bold;
     color: var(--text-color);
-    margin: 3px 0;
+    margin: 4px 0;
 }
 
 .price-change {
@@ -139,12 +155,6 @@ header p {
     background: rgba(255, 85, 85, 0.1);
 }
 
-.market-cap {
-    font-size: 0.85em;
-    color: var(--secondary);
-    margin-top: 3px;
-}
-
 /* Gráfico */
 .chart-container {
     background: var(--card-bg);
@@ -154,17 +164,127 @@ header p {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
+.chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.chart-header h2 {
+    margin: 0;
+    font-size: 1.4em;
+    color: var(--highlight);
+}
+
+.chart-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#crypto-select, #chart-period {
+    padding: 6px 10px;
+    background: var(--bg-color);
+    color: var(--text-color);
+    border: 1px solid var(--secondary);
+    border-radius: 5px;
+    font-size: 0.9em;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#crypto-select:hover, #chart-period:hover {
+    border-color: var(--highlight);
+    background: rgba(80, 250, 123, 0.1);
+}
+
+#crypto-select:focus, #chart-period:focus {
+    outline: none;
+    border-color: var(--highlight);
+}
+
 #crypto-chart {
-    height: 200px !important;
+    height: 200px;
+}
+
+/* Estatísticas */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 20px 0;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+}
+
+.stat-label {
+    font-size: 0.85em;
+    color: var(--secondary);
+    margin-bottom: 6px;
+}
+
+.stat-value {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: var(--highlight);
+}
+
+/* Footer */
+footer {
+    background: var(--footer-bg);
+    text-align: center;
+    padding: 20px;
+    margin-top: 40px;
+    color: var(--text-color);
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+footer a {
+    color: var(--highlight);
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    header h1 { font-size: 1.5em; }
+    .container { padding: 0 10px; }
+    .price-card { min-width: 180px; padding: 10px; }
+    .crypto-name { font-size: 0.9em; }
+    .price { font-size: 1em; }
+    #crypto-chart { height: 180px; }
+    .chart-header { flex-direction: column; align-items: flex-start; }
+    .stat-card { padding: 12px; }
+    .stat-value { font-size: 1.3em; }
 }
 
 /* Notícias */
 .news-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+    gap: 15px;
     margin: 20px 0;
-    padding: 20px;
+    padding: 0;
 }
 
 .news-item {
@@ -178,8 +298,8 @@ header p {
 }
 
 .news-item:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 4px 20px rgba(80, 250, 123, 0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 4px 15px rgba(80, 250, 123, 0.2);
 }
 
 .news-item img {
@@ -196,10 +316,11 @@ header p {
 }
 
 .news-item p {
-    padding: 0 15px 10px;
+    padding: 0 15px;
     margin: 0;
     font-size: 0.85em;
     color: var(--secondary);
+    flex-grow: 1;
 }
 
 .news-item a {
@@ -211,21 +332,18 @@ header p {
     text-decoration: none;
     font-weight: bold;
     transition: background 0.3s;
+    margin-top: auto;
+    border-radius: 0 0 10px 10px;
 }
 
 .news-item a:hover {
     background: var(--secondary);
 }
 
-/* Dropdown de compartilhamento */
-.share-dropdown {
-    position: relative;
-    display: inline-block;
-    margin: 10px 0;
-}
-
+/* Botão compartilhar com dropdown */
+.share-dropdown { position: relative; display: inline-block; }
 .share-btn {
-    padding: 6px 12px;
+    padding: 6px 10px;
     background: var(--highlight);
     color: var(--header-text);
     border: none;
@@ -234,10 +352,7 @@ header p {
     font-weight: bold;
     transition: background 0.3s;
 }
-
-.share-btn:hover {
-    background: var(--secondary);
-}
+.share-btn:hover { background: var(--secondary); }
 
 .share-options {
     display: none;
@@ -248,14 +363,14 @@ header p {
     border: 1px solid var(--secondary);
     border-radius: 5px;
     padding: 10px;
-    min-width: 150px;
+    min-width: 160px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
     z-index: 1000;
+    margin-bottom: 5px;
 }
 
-.share-dropdown:hover .share-options {
-    display: block;
-}
+.share-dropdown:hover .share-options,
+.share-options.show { display: block; }
 
 .share-options a {
     display: block;
@@ -270,7 +385,7 @@ header p {
     background: rgba(80, 250, 123, 0.2);
 }
 
-/* Apoie o canal no rodapé */
+/* Apoie o canal */
 .support-section {
     background: var(--card-bg);
     padding: 15px 20px;
@@ -283,7 +398,7 @@ header p {
 
 .support-section h3 {
     color: var(--highlight);
-    font-size: 1.5em;
+    font-size: 1.6em;
     margin-bottom: 15px;
 }
 
@@ -292,6 +407,7 @@ header p {
     justify-content: center;
     gap: 15px;
     flex-wrap: wrap;
+    margin: 15px 0;
 }
 
 .crypto-wallet {
@@ -301,7 +417,7 @@ header p {
     background-position: center;
     background-repeat: no-repeat;
     cursor: pointer;
-    border-radius: 10px;
+    border-radius: 8px;
     transition: transform 0.3s, box-shadow 0.3s;
     border: 2px solid transparent;
 }
@@ -327,9 +443,7 @@ header p {
     text-align: center;
 }
 
-.wallet-address.show {
-    display: block;
-}
+.wallet-address.show { display: block; }
 
 .wallet-address p {
     color: var(--text-color);
@@ -339,7 +453,7 @@ header p {
 }
 
 .wallet-address button {
-    padding: 8px 16px;
+    padding: 8px 15px;
     background: var(--highlight);
     color: var(--header-text);
     border: none;
@@ -349,40 +463,12 @@ header p {
     margin-top: 10px;
 }
 
-.wallet-address button:hover {
-    background: var(--secondary);
-}
+.wallet-address button:hover { background: var(--secondary); }
 
-/* Footer */
-footer {
-    background: var(--footer-bg);
+/* Mensagens de erro */
+.error {
+    color: #ff6b6b;
     text-align: center;
-    padding: 20px;
-    margin-top: 40px;
-    color: var(--text-color);
-}
-
-footer p {
-    margin: 5px 0;
-}
-
-/* Responsivo */
-@media (max-width: 768px) {
-    header h1 {
-        font-size: 1.5em;
-    }
-
-    .price-card {
-        min-width: 180px;
-        padding: 10px;
-    }
-
-    .crypto-wallet {
-        width: 50px;
-        height: 50px;
-    }
-
-    #crypto-chart {
-        height: 180px !important;
-    }
+    padding: 15px;
+    font-weight: bold;
 }
