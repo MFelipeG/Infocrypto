@@ -277,9 +277,7 @@ function displayNews(newsList) {
                 <button class="like-btn" onclick="toggleLike(this, '${article.link}')">👍 <span>0</span></button>
                 <button class="dislike-btn" onclick="toggleDislike(this, '${article.link}')">👎 <span>0</span></button>
             </div>
-            <div class="share-container">
-                <button class="share-button">📤 Compartilhar</button>
-                <div class="share-options">
+              <button class="share-btn">📤 Compartilhar</button>                <div class="share-options">
                     <a href="#" onclick="shareOnFacebook('${article.link}', '${article.title}')">Facebook</a>
                     <a href="#" onclick="shareOnInstagram('${article.link}', '${article.title}')">Instagram</a>
                     <a href="#" onclick="shareOnTwitter('${article.link}', '${article.title}')">X (Twitter)</a>
