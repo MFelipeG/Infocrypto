@@ -385,3 +385,42 @@ if (chartPeriodSelect) {
         fetchChartData(chartSelect.value, currentChartPeriod);
     });
 }
+
+
+// ============= FUNÇÕES PARA APOIE O CANAL =============
+const WALLET_ADDRESSES = {
+    bitcoin: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa',
+    ethereum: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
+    solana: 'DYw8jCTfwHNRJhhmFcbXvVDTqWMEVFBX6ZKUmG5CNSKK',
+    bnb: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb',
+    polygon: '0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb'
+};
+
+function showWallet(crypto) {
+    const address = WALLET_ADDRESSES[crypto];
+    const walletDiv = document.getElementById('wallet-address');
+    const walletText = document.getElementById('wallet-text');
+    
+    walletText.innerHTML = `
+        <h3>Endereço ${crypto.toUpperCase()}</h3>
+        <p>${address}</p>
+        <button onclick="copyAddress('${address}')">📋 Copiar Endereço</button>
+    `;
+    
+    walletDiv.classList.add('show');
+    walletDiv.style.display = 'block';
+}
+
+function hideWallet() {
+    const walletDiv = document.getElementById('wallet-address');
+    walletDiv.classList.remove('show');
+    walletDiv.style.display = 'none';
+}
+
+function copyAddress(address) {
+    navigator.clipboard.writeText(address).then(() => {
+        alert('💰 Endereço copiado! Obrigado pelo apoio!');
+    }).catch(() => {
+        alert('Erro ao copiar. Por favor, copie manualmente: ' + address);
+    });
+}
