@@ -36,48 +36,55 @@
         <p>Preços ao vivo e as últimas notícias sobre criptomoedas!</p>
         <button class="theme-toggle" id="theme-toggle">Alternar Tema</button>
     </header>
+
     <div class="prices-container" id="prices-container">
         <p>Carregando preços...</p>
     </div>
+
     <div class="chart-container">
         <select id="chart-select">
             <option value="bitcoin">Bitcoin (BTC)</option>
             <option value="ethereum">Ethereum (ETH)</option>
             <option value="solana">Solana (SOL)</option>
         </select>
-                <select id="chart-period">
+        <select id="chart-period">
             <option value="7">7 Dias</option>
             <option value="30" selected>30 Dias</option>
             <option value="90">90 Dias</option>
             <option value="365">1 Ano</option>
         </select>
-        <canvas id="crypto-chart" width="400" height="200"></canvas>
+        <canvas id="crypto-chart" width="400" height="150"></canvas>
     </div>
+
     <div class="search-container">
         <label for="search-input" class="sr-only">Buscar notícias</label>
         <input type="text" id="search-input" placeholder="Buscar notícias...">
         <button onclick="searchNews()">Buscar</button>
     </div>
+
     <div class="news-container" id="news-container">
         <p>Carregando notícias...</p>
     </div>
-    <div class="support-section">
-        <h3>Apoie Nosso Canal</h3>
-        <div class="crypto-wallets">
-            <div class="crypto-wallet" style="background-image: url('imagens/btc.png')" onclick="showWallet('bitcoin')"></div>
-            <div class="crypto-wallet" style="background-image: url('imagens/eth.png')" onclick="showWallet('ethereum')"></div>
-            <div class="crypto-wallet" style="background-image: url('imagens/sol.png')" onclick="showWallet('solana')"></div>
-            <div class="crypto-wallet" style="background-image: url('imagens/bnb.png')" onclick="showWallet('bnb')"></div>
-            <div class="crypto-wallet" style="background-image: url('imagens/pol.png')" onclick="showWallet('polygon')"></div>
-        </div>
-    </div>
+
     <footer>
+        <div class="support-section">
+            <h3>Apoie Nosso Canal</h3>
+            <div class="crypto-wallets">
+                <div class="crypto-wallet" style="background-image: url('imagens/btc.png')" onclick="showWallet('bitcoin')"></div>
+                <div class="crypto-wallet" style="background-image: url('imagens/eth.png')" onclick="showWallet('ethereum')"></div>
+                <div class="crypto-wallet" style="background-image: url('imagens/sol.png')" onclick="showWallet('solana')"></div>
+                <div class="crypto-wallet" style="background-image: url('imagens/bnb.png')" onclick="showWallet('bnb')"></div>
+                <div class="crypto-wallet" style="background-image: url('imagens/pol.png')" onclick="showWallet('polygon')"></div>
+            </div>
+        </div>
         <p>Desenvolvido por: Marlon Grochoska | Dados fornecidos por CoinGecko, CoinDesk, CoinTelegraph e Livecoins.</p>
     </footer>
+
     <div id="wallet-address" class="wallet-address">
         <p id="wallet-text"></p>
         <button onclick="hideWallet()">Fechar</button>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
