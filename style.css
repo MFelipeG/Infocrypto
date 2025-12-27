@@ -104,13 +104,13 @@ header p {
 .price-card {
     flex-shrink: 0;
     min-width: 250px;
-        min-height: 150px;
-
+    min-height: 170px;
     background: rgba(30, 47, 79, 0.4);
     border: 1px solid rgba(80, 250, 123, 0.2);
     border-radius: 8px;
-    padding: 8px 15px;    transition: all 0.3s ease;
-    position: relative;
+    padding: 15px;
+        transition: all 0.3s ease;
+        position: relative;
 }
 
 .price-card:hover {
