@@ -105,6 +105,7 @@ header p {
     flex-shrink: 0;
     min-width: 250px;
         max-height: 130px;
+        overflow: hidden;
     background: rgba(30, 47, 79, 0.4);
     border: 1px solid rgba(80, 250, 123, 0.2);
     border-radius: 8px;
@@ -394,8 +395,6 @@ footer a:hover {
     margin: 0;
     font-size: 0.9em;
     color: var(--secondary);
-    flex-grow: 1;
-}
 
 .news-item a {
     display: block;
@@ -472,10 +471,8 @@ footer a:hover {
 /* Seção Apoie o Canal */
 .support-section {
     background: var(--card-bg);
-    padding: 30px 20px;
-    border-radius: 10px;
-    margin: 40px auto;
-    max-width: 800px;
+    padding: 15px 20px;    border-radius: 10px;
+    margin: 20px auto;    max-width: 800px;
     text-align: center;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
