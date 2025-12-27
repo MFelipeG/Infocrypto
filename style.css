@@ -550,4 +550,34 @@ footer a:hover {
 .news-item button:nth-of-type(3) + a,
 .news-item a[href="/#"] {
     display: none !important;
+
+    /* Estilos para dropdown de compartilhar */
+.share-options {
+    display: none;
+    position: absolute;
+    background: var(--card-bg);
+    border: 1px solid var(--secondary);
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 5px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    z-index: 100;
+}
+
+.share-options.show {
+    display: block;
+}
+
+.share-options a {
+    display: block;
+    padding: 8px 12px;
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s;
+}
+
+.share-options a:hover {
+    background: var(--highlight);
+}
 }}
