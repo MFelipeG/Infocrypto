@@ -545,3 +545,9 @@ footer a:hover {
 .wallet-address button:hover {
     background: var(--secondary);
 }
+
+    /* TEMPORÁRIO: Esconde opções de compartilhamento até deploy completo */
+.share-button + a,
+.share-button ~ a[href="/#"] {
+    display: none !important;
+}
