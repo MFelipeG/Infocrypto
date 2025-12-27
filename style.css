@@ -104,8 +104,8 @@ header p {
 .price-card {
     flex-shrink: 0;
     min-width: 250px;
-        max-height: 130px;
-        overflow: hidden;
+        min-height: 150px;
+
     background: rgba(30, 47, 79, 0.4);
     border: 1px solid rgba(80, 250, 123, 0.2);
     border-radius: 8px;
@@ -208,8 +208,7 @@ header p {
 }
 
 #crypto-chart {
-    height: 300px;    margin-top: 15px;
-}
+    height: 250px;}
 
 /* Estatísticas */
 .stats-container {
@@ -436,8 +435,7 @@ footer a:hover {
 }
 
 .share-options {
-    display: none;
-    position: absolute;
+    display: none !important;    position: absolute;
     bottom: 100%;
     left: 0;
     background: var(--card-bg);
