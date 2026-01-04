@@ -332,8 +332,7 @@ footer a:hover {
 .news-item a {
     display: block;
     padding: 10px 15px;
-    background: var(--highlight);
-    color: var(--header-text);
+    background: #45b366;    color: var(--header-text);
     text-align: center;
     text-decoration: none;
     font-weight: bold;
@@ -343,8 +342,7 @@ footer a:hover {
 }
 
 .news-item a:hover {
-    background: var(--secondary);
-}
+    background: #3a9952;}
 
 /* Botão compartilhar com dropdown */
 .share-dropdown { position: relative; display: inline-block; }
