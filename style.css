@@ -72,8 +72,7 @@ header p {
 
 /* Ticker horizontal contínuo */
 .prices-container {
-    overflow: visible;
-    width: 100%;
+    overflow: hidden;    width: 100%;
     background: var(--card-bg);
     padding: 20px 0;
     margin: 20px 0;
